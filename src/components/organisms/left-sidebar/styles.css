@@ -1,0 +1,14 @@
+:global {
+  .sidebar-leave.sidebar-leave-active,
+  .sidebar-appear,
+  .sidebar-enter {
+    max-height: 0;
+    overflow: hidden;
+  }
+
+  .sidebar-leave,
+  .sidebar-appear.sidebar-appear-active,
+  .sidebar-enter.sidebar-enter-active {
+    max-height: 100px;
+  }
+}
