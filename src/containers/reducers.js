@@ -1,5 +1,5 @@
 import { THEME } from './constants';
-import { themes } from '../constants';
+import themes from '../themes';
 
 
 export default function theme(

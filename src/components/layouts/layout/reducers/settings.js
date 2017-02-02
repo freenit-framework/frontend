@@ -1,11 +1,11 @@
-import { LEFT_SIDEBAR } from '../constants';
+import { SETTINGS } from '../constants';
 
-export default function leftSidebar(
+export default function settings(
   state = { open: false },
   action
 ) {
   switch (action.type) {
-    case LEFT_SIDEBAR:
+    case SETTINGS:
       return action.payload;
     default:
       return state;

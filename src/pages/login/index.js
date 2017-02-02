@@ -1,32 +1,60 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
-import { history, errors } from '../../constants';
+import { errors } from '../../constants';
 import { isLoggedIn } from '../../utils';
 import actions from './actions';
-import styles from './styles';
-
+import radium from 'radium';
 
 function mapStateToProps(state) {
   return {
     token: state.login.token,
+    status: state.login.status,
+    error: state.login.error,
   };
 }
 
 
-const Login = React.createClass({
-  propTypes: {
-    dispatch: React.PropTypes.func.isRequired,
+const styles = {
+  root: {
+    display: 'flex',
+    height: '100vh',
+    width: '100vw',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
-  getDefaultProps() {
-    return {
-      loginClass: 'user',
-    };
+  form: {
+    padding: '20px 50px',
+  },
+
+  button: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '20px',
+  },
+
+  title: {
+    textAlign: 'center',
+    fontFamily: 'inherit',
+  },
+};
+
+
+const Login = React.createClass({
+  propTypes: {
+    children: React.PropTypes.node,
+    status: React.PropTypes.string,
+    error: React.PropTypes.string,
+    reset: React.PropTypes.func.isRequired,
+    login: React.PropTypes.func.isRequired,
+  },
+
+  contextTypes: {
+    router: React.PropTypes.object.isRequired,
   },
 
   getInitialState() {
@@ -38,20 +66,20 @@ const Login = React.createClass({
 
   componentWillMount() {
     if (isLoggedIn()) {
-      history.push('/');
+      this.context.router.push('/');
     }
   },
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.status === 'error') {
       this.setState({ status: 'error', message: nextProps.error });
-      this.props.dispatch(actions.reset());
+      this.props.reset();
     }
   },
 
   shouldComponentUpdate() {
     if (isLoggedIn()) {
-      history.push('/');
+      this.context.router.push('/');
       return false;
     }
     return true;
@@ -67,12 +95,7 @@ const Login = React.createClass({
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.dispatch(
-      actions.login(
-        this.state.email,
-        this.state.password,
-      )
-    );
+    this.props.login(this.state.email, this.state.password);
   },
 
   handleNotificationClose() {
@@ -86,7 +109,7 @@ const Login = React.createClass({
       <div style={styles.root}>
         <Paper zDepth={3}>
           <form style={styles.form} onSubmit={this.handleSubmit}>
-            <h1 style={styles.title}>ImagineVR</h1>
+            <h1 style={styles.title}>Login</h1>
             <div>
               <TextField
                 floatingLabelText="Email"
@@ -107,12 +130,6 @@ const Login = React.createClass({
               <RaisedButton label="login" type="submit" />
             </div>
           </form>
-          <div style={styles.register}>
-            Do not have an account?
-            <Link style={styles.register.link} to="/register">
-              Register
-            </Link>
-          </div>
         </Paper>
         <Snackbar
           open={notificationOpen}
@@ -128,4 +145,4 @@ const Login = React.createClass({
 });
 
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps, actions)(radium(Login));

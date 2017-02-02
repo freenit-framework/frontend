@@ -13,7 +13,7 @@ const begin = createAction(LOGIN, () => ({
 
 const success = createAction(LOGIN, json => {
   // eslint-disable-next-line no-undef
-  window.localStorage.ImagineVRAuthToken = json.token;
+  window.localStorage.OneLoveAuthToken = json.token;
   return {
     token: json.token,
     status: 'success',
@@ -36,6 +36,7 @@ const login = (email, password) =>
         email,
         password,
       },
+      contentType: 'application/json',
       method: 'POST',
     })
       .then(token => {

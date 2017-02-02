@@ -1,16 +1,14 @@
 import React from 'react';
-import { Router } from 'react-router';
+import { Router, hashHistory } from 'react-router';
 import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { history } from '../constants';
-import Layout from '../components/layouts/layout';
-import NotFound from '../pages/not-found';
-import Login from '../pages/login';
-import Register from '../pages/register';
+import { StyleRoot } from 'radium';
+import { requireAuth } from '../utils';
 import Landing from '../pages/landing';
-import Home from '../pages/home';
+import Login from '../pages/login';
+import NotFound from '../pages/not-found';
+import Layout from '../components/layouts/layout';
 import App from './app';
-import '../reset.css';
 
 
 const routes = {
@@ -19,21 +17,17 @@ const routes = {
     {
       path: '/',
       component: Layout,
+      onEnter: requireAuth,
       childRoutes: [
-        Home,
       ],
-    },
-    {
-      path: '/landing',
-      component: Landing,
     },
     {
       path: '/login',
       component: Login,
     },
     {
-      path: '/register',
-      component: Register,
+      path: '/landing',
+      component: Landing,
     },
     {
       path: '*',
@@ -50,15 +44,17 @@ const mapStateToProps = (state) => ({
 
 function Main(props) {
   return (
-    <MuiThemeProvider muiTheme={props.theme}>
-      <Router history={history} routes={routes} />
-    </MuiThemeProvider>
+    <StyleRoot>
+      <MuiThemeProvider muiTheme={props.theme}>
+        <Router history={hashHistory} routes={routes} />
+      </MuiThemeProvider>
+    </StyleRoot>
   );
 }
 
 
 Main.propTypes = {
-  theme: React.PropTypes.object.isRequired,
+  theme: React.PropTypes.object,
 };
 
 

@@ -7,4 +7,7 @@ config.plugins = [
 ];
 
 
+config.devtool = 'cheap-module-source-map';
+
+
 module.exports = config;

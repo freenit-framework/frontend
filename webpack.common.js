@@ -2,9 +2,9 @@ const path = require('path');
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 
+const localIdentName = '[path]___[name]__[local]___[hash:base64:5]';
 
 module.exports = {
-  devtool: 'cheap-module-source-map',
   entry: ['./src/index'],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -23,7 +23,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loaders: ['react-hot', 'babel'],
+        loaders: ['babel'],
         exclude: /node_modules/,
         include: path.join(__dirname, 'src'),
       },
@@ -31,7 +31,8 @@ module.exports = {
         test: /\.css$/,
         loaders: [
           'style?sourceMap',
-          'css?sourceMap',
+          `css?sourceMap&modules&importLoaders=1&localIdentName=${localIdentName}`,
+          'resolve-url',
           'postcss',
         ],
       },
@@ -41,6 +42,10 @@ module.exports = {
           'file?hash=sha512&digest=hex&name=[hash].[ext]',
           'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false',
         ],
+      },
+      {
+        test: /\.(png|woff(2)?|eot|ttf|)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'base64-font-loader',
       },
     ],
   },

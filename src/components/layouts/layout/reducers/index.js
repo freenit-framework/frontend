@@ -1,12 +1,8 @@
-import me from './me';
-import leftSidebar from './left-sidebar';
-import rightSidebar from './right-sidebar';
+import settings from './settings';
 
 
 const reducers = [
-  me,
-  leftSidebar,
-  rightSidebar,
+  settings,
 ];
 
 

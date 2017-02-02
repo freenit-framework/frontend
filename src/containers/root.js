@@ -1,9 +1,6 @@
-let root;
+/* eslint global-require: 0 */
 if (process.env.NODE_ENV === 'production') {
-  root = require('./root.prod');
+  module.exports = require('./root.prod');
 } else {
-  root = require('./root.dev');
+  module.exports = require('./root.dev');
 }
-
-
-export default root.default;

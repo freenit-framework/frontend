@@ -15,7 +15,7 @@ const close = createAction(NOTIFICATIONS, () => ({
 
 
 const setBackendUrl = createAction(BACKEND, hostname => ({
-  apiUrl: `http://${hostname}:5000/api/v1`,
+  apiUrl: `http://${hostname}:5000/api/v0`,
 }));
 
 
