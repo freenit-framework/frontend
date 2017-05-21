@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -44,38 +45,43 @@ const styles = {
 };
 
 
-const Login = React.createClass({
-  propTypes: {
-    children: React.PropTypes.node,
-    status: React.PropTypes.string,
-    error: React.PropTypes.string,
-    reset: React.PropTypes.func.isRequired,
-    login: React.PropTypes.func.isRequired,
-  },
-
-  contextTypes: {
-    router: React.PropTypes.object.isRequired,
-  },
-
-  getInitialState() {
-    return {
+class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       email: '',
       password: '',
     };
-  },
+    this.handleEmailChange = (event) => {
+      this.setState({ email: event.target.value });
+    };
+
+    this.handlePasswordChange = (event) => {
+      this.setState({ password: event.target.value });
+    };
+
+    this.handleSubmit = (event) => {
+      event.preventDefault();
+      this.props.login(this.state.email, this.state.password);
+    };
+
+    this.handleNotificationClose = () => {
+      this.setState({ status: '', message: '' });
+    };
+  }
 
   componentWillMount() {
     if (isLoggedIn()) {
       this.context.router.push('/');
     }
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.status === 'error') {
       this.setState({ status: 'error', message: nextProps.error });
       this.props.reset();
     }
-  },
+  }
 
   shouldComponentUpdate() {
     if (isLoggedIn()) {
@@ -83,24 +89,8 @@ const Login = React.createClass({
       return false;
     }
     return true;
-  },
+  }
 
-  handleEmailChange(event) {
-    this.setState({ email: event.target.value });
-  },
-
-  handlePasswordChange(event) {
-    this.setState({ password: event.target.value });
-  },
-
-  handleSubmit(event) {
-    event.preventDefault();
-    this.props.login(this.state.email, this.state.password);
-  },
-
-  handleNotificationClose() {
-    this.setState({ status: '', message: '' });
-  },
 
   render() {
     const notificationOpen = this.state.status === 'error';
@@ -141,8 +131,21 @@ const Login = React.createClass({
         />
       </div>
     );
-  },
-});
+  }
+}
+
+
+Login.propTypes = {
+  children: PropTypes.node,
+  status: PropTypes.string,
+  error: PropTypes.string,
+  reset: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+};
+
+Login.contextTypes = {
+  router: PropTypes.object.isRequired,
+};
 
 
 export default connect(mapStateToProps, actions)(radium(Login));

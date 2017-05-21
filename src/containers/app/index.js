@@ -1,10 +1,11 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Snackbar from 'material-ui/Snackbar';
 import reset from '../../reset.js';
 import fonts from '../../fonts/fonts.js';
 import { connect } from 'react-redux';
 import actions from './actions';
 import { Style } from 'radium';
-import React from 'react';
 
 const mapStateToProps = (state) => ({
   notifications: state.notifications.notifications,
@@ -13,28 +14,16 @@ const mapStateToProps = (state) => ({
 });
 
 
-const App = React.createClass({
-  propTypes: {
-    children: React.PropTypes.node,
-    notifications: React.PropTypes.node,
-    notificationsOpen: React.PropTypes.bool,
-    close: React.PropTypes.func.isRequired,
-    setBackendUrl: React.PropTypes.func.isRequired,
-  },
-
-  childContextTypes: {
-    socket: React.PropTypes.object,
-  },
-
+class App extends Component {
   componentWillMount() {
     // eslint-disable-next-line no-undef
     const hostname = window.location.hostname;
     this.props.setBackendUrl(hostname);
-  },
+  }
 
   handleNotificationClose() {
     this.props.close();
-  },
+  }
 
   render() {
     return (
@@ -52,8 +41,21 @@ const App = React.createClass({
         />
       </div>
     );
-  },
-});
+  }
+}
+
+
+App.propTypes = {
+  children: PropTypes.node,
+  notifications: PropTypes.node,
+  notificationsOpen: PropTypes.bool,
+  close: PropTypes.func.isRequired,
+  setBackendUrl: PropTypes.func.isRequired,
+};
+
+App.childContextTypes = {
+  socket: PropTypes.object,
+};
 
 
 export default connect(mapStateToProps, actions)(App);

@@ -1,22 +1,27 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import getStyles from './styles';
+import Template from '../../templates/default';
 
 
-const Landing = React.createClass({
-  contextTypes: {
-    muiTheme: React.PropTypes.object.isRequired,
-  },
-
+class Landing extends Component {
   render() {
     const styles = getStyles(this.context.muiTheme);
     return (
-      <Paper style={styles.root}>
-        Landing
-      </Paper>
+      <Template>
+        <Paper style={styles.root}>
+          Landing
+        </Paper>
+      </Template>
     );
-  },
-});
+  }
+}
+
+
+Landing.contextTypes = {
+  muiTheme: PropTypes.object.isRequired,
+};
 
 
 export default Landing;

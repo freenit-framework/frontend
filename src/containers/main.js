@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Router, hashHistory } from 'react-router';
 import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -7,7 +8,7 @@ import { requireAuth } from '../utils';
 import Landing from '../pages/landing';
 import Login from '../pages/login';
 import NotFound from '../pages/not-found';
-import Layout from '../components/layouts/layout';
+import Template from '../templates/default';
 import App from './app';
 
 
@@ -16,7 +17,7 @@ const routes = {
   childRoutes: [
     {
       path: '/',
-      component: Layout,
+      component: Template,
       onEnter: requireAuth,
       childRoutes: [
       ],
@@ -54,7 +55,7 @@ function Main(props) {
 
 
 Main.propTypes = {
-  theme: React.PropTypes.object,
+  theme: PropTypes.object,
 };
 
 

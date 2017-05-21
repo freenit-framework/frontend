@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 
 
-const Home = React.createClass({
+class Home extends Component {
   render() {
     return (
       <Paper>
         Home
       </Paper>
     );
-  },
-});
+  }
+}
 
 
 export default Home;

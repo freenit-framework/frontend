@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import LogoutIcon from 'material-ui/svg-icons/action/input';
 import MenuItem from 'material-ui/MenuItem';
 import { postLogoutURL } from '../../../constants';
@@ -13,16 +14,12 @@ const styles = {
 };
 
 
-const Settings = React.createClass({
-  contextTypes: {
-    router: React.PropTypes.object.isRequired,
-  },
-
+class Settings extends Component {
   handleLogout() {
     // eslint-disable-next-line no-undef
     window.localStorage.removeItem('MaterialUIStarter');
     this.context.router.push(postLogoutURL);
-  },
+  }
 
   render() {
     return (
@@ -33,8 +30,11 @@ const Settings = React.createClass({
         style={styles.settings.item}
       />
     );
-  },
-});
+  }
+}
 
+Settings.contextTypes = {
+  router: PropTypes.object.isRequired,
+};
 
 export default Settings;

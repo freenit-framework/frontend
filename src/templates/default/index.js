@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -9,8 +10,8 @@ import HomeIcon from 'material-ui/svg-icons/action/home';
 import ReorderIcon from 'material-ui/svg-icons/action/reorder';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
-import Home from '../../../pages/home';
-import Settings from '../../molecules/settings';
+import Home from '../../pages/home';
+import Settings from '../../components/molecules/settings';
 import actions from './actions/settings';
 
 
@@ -20,40 +21,22 @@ const mapStateToProps = (state) => ({
 });
 
 
-const Layout = React.createClass({
-  propTypes: {
-    children: React.PropTypes.node,
-    settings: React.PropTypes.node,
-    settingsOpen: React.PropTypes.bool,
-    location: React.PropTypes.object,
-    dispatch: React.PropTypes.func.isRequired,
-  },
-
-  contextTypes: {
-    router: React.PropTypes.object.isRequired,
-    muiTheme: React.PropTypes.object.isRequired,
-  },
-
-  getDefaultProps() {
-    return {
-      notifications: '',
-      location: {
-        pathname: '',
-      },
+class Template extends Component {
+  constructor(props) {
+    super(props);
+    this.handleHomeTouchTap = () => {
+      this.context.router.push('/');
     };
-  },
 
-  handleHomeTouchTap() {
-    this.context.router.push('/');
-  },
+    this.handleOpenSettings = () => {
+      this.props.dispatch(actions.open(<Settings />));
+    };
 
-  handleOpenSettings() {
-    this.props.dispatch(actions.open(<Settings />));
-  },
+    this.handleCloseSettings = () => {
+      this.props.dispatch(actions.close());
+    };
+  }
 
-  handleCloseSettings() {
-    this.props.dispatch(actions.close());
-  },
 
   render() {
     const theme = this.context.muiTheme;
@@ -136,10 +119,29 @@ const Layout = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
+Template.propTypes = {
+  children: PropTypes.node,
+  settings: PropTypes.node,
+  settingsOpen: PropTypes.bool,
+  location: PropTypes.object,
+  dispatch: PropTypes.func.isRequired,
+};
+
+Template.contextTypes = {
+  router: PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired,
+};
+
+Template.defaultProps = {
+  notifications: '',
+  location: {
+    pathname: '',
+  },
+};
 
 // eslint-disable-next-line new-cap
-const LayoutDND = DragDropContext(HTML5Backend)(Layout);
-export default connect(mapStateToProps)(LayoutDND);
+const TemplateDND = DragDropContext(HTML5Backend)(Template);
+export default connect(mapStateToProps)(TemplateDND);

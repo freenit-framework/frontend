@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import login from './pages/login/reducers';
-import settings from './components/layouts/layout/reducers';
+import settings from './templates/default/reducers';
 import theme from './containers/reducers';
 import { backend, notifications } from './containers/app/reducers';
 
