@@ -1,9 +1,9 @@
 import isomorphicFetch from 'isomorphic-fetch';
 
+export const tokenName = 'auth';
 
 export function getAuthToken() {
-  // eslint-disable-next-line no-undef
-  return window.localStorage.MaterialUIStarter;
+  return window.localStorage[tokenName];
 }
 
 
