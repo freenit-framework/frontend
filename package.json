@@ -22,6 +22,7 @@
     "redux-devtools": "^3.4.0",
     "redux-devtools-diff-monitor": "^5.0.5",
     "redux-devtools-dock-monitor": "^1.1.2",
+    "redux-devtools-extension": "^2.13.2",
     "resolve-url-loader": "^1.6.1"
   },
   "dependencies": {
