@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -8,44 +8,29 @@ import Paper from 'material-ui/Paper';
 import { errors } from '../../constants';
 import { isLoggedIn } from '../../utils';
 import actions from './actions';
-import radium from 'radium';
-
-function mapStateToProps(state) {
-  return {
-    token: state.login.token,
-    status: state.login.status,
-    error: state.login.error,
-  };
-}
+import styles from './styles';
 
 
-const styles = {
-  root: {
-    display: 'flex',
-    height: '100vh',
-    width: '100vw',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  form: {
-    padding: '20px 50px',
-  },
-
-  button: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '20px',
-  },
-
-  title: {
-    textAlign: 'center',
-    fontFamily: 'inherit',
-  },
-};
+const mapStateToProps = (state) => ({
+  token: state.login.token,
+  status: state.login.status,
+  error: state.login.error,
+});
 
 
-class Login extends Component {
+class Login extends React.Component {
+  static contextTypes = {
+    router: PropTypes.object.isRequired,
+  }
+
+  static propTypes = {
+    children: PropTypes.node,
+    status: PropTypes.string,
+    error: PropTypes.string,
+    reset: PropTypes.func.isRequired,
+    login: PropTypes.func.isRequired,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -72,7 +57,7 @@ class Login extends Component {
 
   componentWillMount() {
     if (isLoggedIn()) {
-      this.context.router.push('/');
+      this.context.router.history.push('/');
     }
   }
 
@@ -85,7 +70,7 @@ class Login extends Component {
 
   shouldComponentUpdate() {
     if (isLoggedIn()) {
-      this.context.router.push('/');
+      this.context.router.history.push('/');
       return false;
     }
     return true;
@@ -134,18 +119,4 @@ class Login extends Component {
   }
 }
 
-
-Login.propTypes = {
-  children: PropTypes.node,
-  status: PropTypes.string,
-  error: PropTypes.string,
-  reset: PropTypes.func.isRequired,
-  login: PropTypes.func.isRequired,
-};
-
-Login.contextTypes = {
-  router: PropTypes.object.isRequired,
-};
-
-
-export default connect(mapStateToProps, actions)(radium(Login));
+export default connect(mapStateToProps, actions)(Login);

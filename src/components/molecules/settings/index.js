@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import LogoutIcon from 'material-ui/svg-icons/action/input';
 import MenuItem from 'material-ui/MenuItem';
+import { isLoggedIn } from '../../../utils';
 import { postLogoutURL } from '../../../constants';
 
 
@@ -14,27 +15,43 @@ const styles = {
 };
 
 
-class Settings extends Component {
-  handleLogout() {
-    // eslint-disable-next-line no-undef
-    window.localStorage.removeItem('MaterialUIStarter');
-    this.context.router.push(postLogoutURL);
+class Settings extends React.Component {
+  static contextTypes = {
+    router: PropTypes.object.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.handleLogout = () => {
+      window.localStorage.removeItem('auth');
+      this.context.router.history.push(postLogoutURL);
+    };
+
+    this.handleLogin = () => {
+      this.context.router.history.push('/login');
+    };
   }
 
   render() {
-    return (
-      <MenuItem
-        primaryText="Logout"
-        leftIcon={<LogoutIcon />}
-        onTouchTap={this.handleLogout}
-        style={styles.settings.item}
-      />
-    );
+    const content = isLoggedIn() 
+                  ? (
+                    <MenuItem
+                      primaryText="Logout"
+                      leftIcon={<LogoutIcon />}
+                      onTouchTap={this.handleLogout}
+                      style={styles.settings.item}
+                    />
+                  ) : (
+                    <MenuItem
+                      primaryText="Login"
+                      leftIcon={<LogoutIcon />}
+                      onTouchTap={this.handleLogin}
+                      style={styles.settings.item}
+                    />
+                  );
+    return content;
   }
 }
-
-Settings.contextTypes = {
-  router: PropTypes.object.isRequired,
-};
 
 export default Settings;

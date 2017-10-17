@@ -1,1 +1,1 @@
-export const SETTINGS = 'SETTINGS';
+export default 'SETTINGS';

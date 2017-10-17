@@ -1,8 +1,13 @@
 import isomorphicFetch from 'isomorphic-fetch';
 
+
 export const tokenName = 'auth';
 
+
 export function getAuthToken() {
+  if (!window.localStorage[tokenName]) {
+    return undefined;
+  }
   return window.localStorage[tokenName];
 }
 
@@ -14,7 +19,7 @@ export function isLoggedIn() {
 
 export function requireAuth(nextState, replace) {
   if (!isLoggedIn()) {
-    replace('/login');
+    replace('/landing');
   }
 }
 

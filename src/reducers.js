@@ -1,20 +1,20 @@
 import { combineReducers } from 'redux';
-import login from './pages/login/reducers';
-import settings from './templates/default/reducers';
+
+// Containers
 import theme from './containers/reducers';
-import { backend, notifications } from './containers/app/reducers';
+
+// Templates
+import settings from './templates/default/reducers';
+
+// Pages
+import login from './pages/login/reducers';
 
 
 const reducers = {
-  backend,
   login,
-  notifications,
+  settings,
   theme,
 };
 
-settings.forEach(reducer => { reducers[reducer.name] = reducer; });
 
-
-const rootReducer = combineReducers(reducers);
-
-export default rootReducer;
+export default combineReducers(reducers);

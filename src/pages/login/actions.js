@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
 import { fetch, tokenName } from '../../utils';
+import { apiUrl } from '../../constants';
 import LOGIN from './constants';
 
 
@@ -12,7 +13,6 @@ const begin = createAction(LOGIN, () => ({
 }));
 
 const success = createAction(LOGIN, json => {
-  // eslint-disable-next-line no-undef
   window.localStorage[tokenName] = json.token;
   return {
     token: json.token,
@@ -27,16 +27,14 @@ const fail = createAction(LOGIN, error => ({
 
 
 const login = (email, password) =>
-  (dispatch, getState) => {
+  (dispatch) => {
     dispatch(begin());
-    const apiUrl = getState().backend.apiUrl;
     fetch({
       url: `${apiUrl}/auth/tokens`,
       body: {
         email,
         password,
       },
-      contentType: 'application/json',
       method: 'POST',
     })
       .then(token => {

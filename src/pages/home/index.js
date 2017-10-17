@@ -1,13 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Paper from 'material-ui/Paper';
+import Template from '../../templates/default';
+import AuthenticatedComponent from '../../components/atoms/authenticated-component';
 
 
-class Home extends Component {
+class Home extends AuthenticatedComponent {
   render() {
     return (
-      <Paper>
-        Home
-      </Paper>
+      <Template>
+        <Paper>
+          Home
+        </Paper>
+      </Template>
     );
   }
 }

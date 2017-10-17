@@ -10,7 +10,6 @@ export default {
 		margin: 0,
 		padding: 0,
 		border: 0,
-		verticalAlign: 'baseline'
 	},
 	'article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section': {
 		display: 'block'

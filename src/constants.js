@@ -1,4 +1,4 @@
-export const postLogoutURL = '/login/';
+export const postLogoutURL = '/landing/';
 
 
 export const errors = {
@@ -6,3 +6,6 @@ export const errors = {
     UNAUTHORIZED: 'Unable to log you in. Wrong email or password',
   },
 };
+
+
+export const apiUrl = '/api/v0';
