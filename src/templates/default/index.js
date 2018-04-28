@@ -6,7 +6,6 @@ import ReorderIcon from 'material-ui/svg-icons/action/reorder';
 import HomeIcon from 'material-ui/svg-icons/action/home';
 import IconButton from 'material-ui/IconButton';
 import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import Settings from '../../components/molecules/settings';
 import styles from './styles';
@@ -19,27 +18,8 @@ const mapStateToProps = (state) => ({
 
 
 class Template extends React.Component {
-  static propTypes = {
-    children: PropTypes.node,
-    close: PropTypes.func.isRequired,
-    settingsOpen: PropTypes.bool,
-    toggleSettings: PropTypes.func.isRequired,
-  }
-
-  static contextTypes = {
-    router: PropTypes.object.isRequired,
-  }
-
-  static defaultProps = {
-    settingsOpen: false,
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.handleHomeTouchTap = () => {
-      this.context.router.history.push('/');
-    };
+  handleHomeTouchTap = () => {
+    this.context.router.history.push('/');
   }
 
   componentWillMount() {
@@ -53,9 +33,13 @@ class Template extends React.Component {
           openSecondary
           open={this.props.settingsOpen}
         >
-          <MenuItem
-            primaryText="&nbsp;"
-            rightIcon={<CloseIcon onClick={this.props.toggleSettings} />}
+          <AppBar
+            title="menu"
+            iconElementLeft={
+              <IconButton onClick={this.props.toggleSettings} >
+                <CloseIcon />
+              </IconButton>
+            }
           />
           <Settings />
         </Drawer>
@@ -63,12 +47,12 @@ class Template extends React.Component {
         <AppBar
           title="Tilda Center"
           iconElementLeft={
-            <IconButton onTouchTap={this.handleHomeTouchTap} >
+            <IconButton onClick={this.handleHomeTouchTap} >
               <HomeIcon />
             </IconButton>
           }
           iconElementRight={
-            <IconButton onTouchTap={this.props.toggleSettings} >
+            <IconButton onClick={this.props.toggleSettings} >
               <ReorderIcon />
             </IconButton>
           }
@@ -77,6 +61,24 @@ class Template extends React.Component {
       </div>
     );
   }
+}
+
+
+Template.propTypes = {
+  children: PropTypes.node,
+  close: PropTypes.func.isRequired,
+  settingsOpen: PropTypes.bool,
+  toggleSettings: PropTypes.func.isRequired,
+}
+
+
+Template.contextTypes = {
+  router: PropTypes.object.isRequired,
+}
+
+
+Template.defaultProps = {
+  settingsOpen: false,
 }
 
 export default connect(mapStateToProps, actions)(Template)
