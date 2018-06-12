@@ -1,9 +1,13 @@
+.provisioned
 build
 cbsd.conf
 ansible/group_vars/all
 ansible/inventory/inventory
 ansible/roles/*
 !ansible/roles/.keep
+!ansible/roles/devel
 ansible/site.yml
 vars.mk
 site.retry
+node_modules
+yarn.lock

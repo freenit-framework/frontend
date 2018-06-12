@@ -18,9 +18,7 @@
     "redux-thunk": "^2.2.0"
   },
   "scripts": {
-    "prestart": "bin/setup.sh start",
     "start": "react-scripts start",
-    "prebuild": "bin/setup.sh build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
