@@ -1,34 +1,23 @@
 {
-  "name": "materialui-startkit",
+  "name": "onelove-frontend",
   "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "material-ui": "^0.20.0",
-    "radium": "^0.24.0",
-    "react": "^16.3.2",
-    "react-dnd": "^2.6.0",
-    "react-dnd-html5-backend": "^2.6.0",
-    "react-dom": "^16.3.2",
+    "@material-ui/core": "^1.3.0",
+    "@material-ui/icons": "^1.1.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
-    "react-router-dom": "^4.2.2",
-    "react-scripts": "^1.1.4",
-    "react-tap-event-plugin": "^3.0.2",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.4",
     "redux": "^4.0.0",
-    "redux-actions": "^2.3.0",
-    "redux-devtools-extension": "^2.13.2",
-    "redux-thunk": "^2.2.0"
+    "redux-devtools-extension": "^2.13.5",
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  },
-  "proxy": {
-    "/api": {
-      "target": "http://localhost:5000"
-    },
-    "/swaggerui": {
-      "target": "http://localhost:5000"
-    }
   }
 }
