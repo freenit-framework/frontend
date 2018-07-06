@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import store from './store';
+import { Provider } from 'react-redux'
+import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import Landing from 'pages/landing'
+import store from './store'
 
 
 class App extends Component {
@@ -9,9 +10,9 @@ class App extends Component {
     return (
     <Provider store={store}>
       <BrowserRouter>
-        <div>
-          Hello World!
-        </div>
+        <Switch>
+          <Route exact path="/landing" component={Landing} />
+        </Switch>
       </BrowserRouter>
     </Provider>
     )
