@@ -3,7 +3,7 @@ import { Provider } from 'react-redux'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import Landing from 'pages/landing'
 import Login from 'pages/login'
-import store from './store'
+import store from 'store'
 
 
 class App extends Component {
