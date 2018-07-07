@@ -1,8 +1,16 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
 import styles from './styles'
+import actions from './actions'
+
+
+const mapStateToProps = (state) => ({
+  token: state.login.token,
+})
 
 
 class Login extends Component {
@@ -13,7 +21,10 @@ class Login extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault()
-    console.log(this.state.email, this.state.password)
+    this.props.requestLogin({
+      email: this.state.email,
+      password: this.state.password,
+    })
   }
 
   handleEmail = (event) => {
@@ -65,4 +76,10 @@ class Login extends Component {
 }
 
 
-export default Login
+Login.propTypes = {
+  requestLogin: PropTypes.func.isRequired,
+  token: PropTypes.string,
+}
+
+
+export default connect(mapStateToProps, actions)(Login);

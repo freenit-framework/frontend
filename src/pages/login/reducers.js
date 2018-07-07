@@ -1,4 +1,8 @@
-import { LOGIN } from './actions'
+import {
+  LOGIN,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+} from './actions'
 import initialState from './state'
 
 
@@ -7,9 +11,24 @@ export default function loginReducer(state = initialState, action) {
     case LOGIN:
       return {
         ...state,
-        isLoading: true,
-        isAuthenticated: false,
+        peding: true,
         error: null,
+      }
+    case LOGIN_SUCCESS:
+      const token = action.result.token
+      window.localStorage['auth'] = token
+      return {
+        ...state,
+        pending: false,
+        error: null,
+      }
+    case LOGIN_FAILURE:
+      const { description, error, status_code } = action.error.response.data
+      return {
+        ...state,
+        description,
+        error,
+        status_code,
       }
     default:
       return state

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 
-const API_ROOT = 'http://10.0.0.13/api/v0'
+const API_ROOT = ' http://backend.thinker.my.domain:5000/api/v0'
 
 
 const login = async function({ email, password }) {

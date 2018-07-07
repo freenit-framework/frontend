@@ -9,3 +9,8 @@ export function requestLogin(creds) {
     creds,
   }
 }
+
+
+export default {
+  requestLogin,
+}
