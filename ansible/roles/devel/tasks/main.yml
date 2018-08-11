@@ -3,9 +3,26 @@
   with_items: "{{ devel_packages }}"
   pkgng:
     name: "{{ item.name }}"
+  notify:
+    - restart secadm
 
 - name: configure development locale
   template:
     src: login_conf.j2
     dest: /usr/home/devel/.login_conf
   removes: /usr/home/devel
+
+
+- name: configure secadm rules
+  template:
+    src: secadm.rules.j2
+    dest: /usr/local/etc/secadm.rules
+  notify:
+    - restart secadm
+
+- name: enable secadm
+  template:
+    src: secadm
+    dest: /etc/rc.conf.d/secadm
+  notify:
+    - restart secadm
