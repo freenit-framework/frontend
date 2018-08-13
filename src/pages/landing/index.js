@@ -8,7 +8,7 @@ class Landing extends Component {
     return (
       <Template>
         <Button variant="contained">
-          Hello World
+          Landing
         </Button>
       </Template>
     )

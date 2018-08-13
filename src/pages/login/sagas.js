@@ -12,5 +12,3 @@ export function* requestLogin(action) {
     yield put({ type: LOGIN_FAILURE, error })
   }
 }
-
-

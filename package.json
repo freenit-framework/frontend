@@ -1,23 +1,24 @@
 {
-  "name": "onelove-frontend",
+  "name": "frontend-startkit",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^1.3.0",
-    "@material-ui/icons": "^1.1.0",
+    "@material-ui/core": "^1.5.0",
+    "@material-ui/icons": "^2.0.2",
     "axios": "^0.18.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4",
+    "react-scripts": "^1.1.4",
     "redux": "^4.0.0",
-    "redux-actions": "^2.4.0",
+    "redux-actions": "^2.6.1",
     "redux-devtools-extension": "^2.13.5",
     "redux-saga": "^0.16.0"
   },
   "scripts": {
     "start": "react-scripts start",
+    "prebuild": "cp src/prod-conf.js src/local-conf.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

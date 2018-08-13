@@ -7,8 +7,10 @@ ansible/roles/*
 !ansible/roles/.keep
 !ansible/roles/devel
 ansible/site.yml
-vars.mk
-site.retry
 node_modules
-yarn.lock
+project.conf
+site.retry
+src/local-conf.js
+vars.mk
 yarn-error.log
+yarn.lock
