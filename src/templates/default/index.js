@@ -10,24 +10,33 @@ import styles from './styles'
 
 
 class Template extends Component {
+  redirectLogin = () => {
+    this.context.router.history.push('/login')
+  }
+
   render() {
     return (
       <div>
         <AppBar position="static">
           <Toolbar>
             <IconButton color="inherit" aria-label="Menu">
-              <MenuIcon />
+              <MenuIcon/>
             </IconButton>
             <Typography variant="title" color="inherit" style={styles.flex}>
               Title
             </Typography>
-            <Button color="inherit">Login</Button>
+            <Button color="inherit" onClick={this.redirectLogin}>Login</Button>
           </Toolbar>
         </AppBar>
         {this.props.children}
       </div>
     )
   }
+}
+
+
+Template.contextTypes = {
+  router: PropTypes.object.isRequired,
 }
 
 

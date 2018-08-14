@@ -10,6 +10,9 @@ import actions from './actions'
 
 const mapStateToProps = (state) => ({
   token: state.login.token,
+  error: state.login.error,
+  errorDescription: state.login.description,
+  status: state.login.status_code,
 })
 
 
@@ -36,6 +39,8 @@ class Login extends Component {
   }
 
   render() {
+    const { token, error, errorDescription, status } = this.props
+    console.log(token, error, errorDescription, status)
     return (
       <div style={styles.root}>
         <Paper style={styles.paper}>
@@ -48,6 +53,7 @@ class Login extends Component {
                   margin="normal"
                   onChange={this.handleEmail}
                   value={this.state.email}
+                  type="email"
                   required
                   autoFocus
                 />
