@@ -14,7 +14,7 @@ fi
 
 cd ${PROJECT_ROOT}
 echo "export const API_ROOT='${API_ROOT}'" >src/local-conf.js
-yarn install
+npm install
 echo "Frontend"
 echo "========"
-yarn start
+npm start
