@@ -21,6 +21,11 @@ else
 	exit 1
 fi
 
+if [ -z "${PACKAGE_MANAGER}" ]; then
+  echo "Install npm or yarn" >&2
+  exit 1
+fi
+
 cd ${PROJECT_ROOT}
 echo "export const API_ROOT='${API_ROOT}'" >src/local-conf.js
 ${PACKAGE_MANAGER} install
