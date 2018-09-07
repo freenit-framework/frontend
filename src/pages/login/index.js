@@ -95,4 +95,5 @@ Login.contextTypes = {
   router: PropTypes.object.isRequired,
 }
 
-export default connect(mapStateToProps, actions)(Login);
+
+export default connect(mapStateToProps, actions)(Login)
