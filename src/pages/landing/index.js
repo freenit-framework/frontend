@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button'
 import Template from 'templates/default'
 
 
-class Landing extends Component {
+export default class Landing extends Component {
   render() {
     return (
       <Template>
@@ -14,6 +14,3 @@ class Landing extends Component {
     )
   }
 }
-
-
-export default Landing

@@ -9,10 +9,8 @@ import actions from './actions'
 
 
 const mapStateToProps = (state) => ({
-  token: state.login.token,
   error: state.login.error,
-  errorDescription: state.login.description,
-  status: state.login.status_code,
+  status: state.login.status,
 })
 
 
@@ -38,9 +36,13 @@ class Login extends Component {
     this.setState({ password: event.target.value })
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.status === 200) {
+      this.context.router.history.push('/')
+    }
+  }
+
   render() {
-    const { token, error, errorDescription, status } = this.props
-    console.log(token, error, errorDescription, status)
     return (
       <div style={styles.root}>
         <Paper style={styles.paper}>
@@ -84,8 +86,13 @@ class Login extends Component {
 
 Login.propTypes = {
   requestLogin: PropTypes.func.isRequired,
-  token: PropTypes.string,
+  error: PropTypes.string,
+  status: PropTypes.number,
 }
 
+
+Login.contextTypes = {
+  router: PropTypes.object.isRequired,
+}
 
 export default connect(mapStateToProps, actions)(Login);
