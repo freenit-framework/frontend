@@ -1,34 +1,40 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { PropTypes } from 'prop-types'
+import { connect } from 'react-redux';
+import actions from './actions'
 
 
 const mapStateToProps = (state) => ({
-  error: state.login.error,
-  status: state.login.status,
+  error: state.me.error,
+  status: state.me.status,
 })
 
 
-class Protected extends Component {
+class ProtectedComponent extends Component {
 	componentWillMount() {
-    this.props.me()
+    this.props.requestMe()
 	}
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps === 403) {
+    if (nextProps.status === 403) {
       this.context.router.history.push('/login')
     }
+  }
+
+  render() {
+    return null
   }
 }
 
 
-Protected.propTypes = {
+ProtectedComponent.propTypes = {
   status: PropTypes.number,
 }
 
 
-Protected.contextTypes = {
+ProtectedComponent.contextTypes = {
 	router: PropTypes.object.isRequired,
 }
 
 
-export default connect(mapStateToProps, actions)(Protected)
+export default connect(mapStateToProps, actions)(ProtectedComponent)

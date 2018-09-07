@@ -23,8 +23,9 @@ export default function meReducer(state = initialState, action) {
         status: 200,
       }
     case ME_FAILURE:
-      const error = action.error.response.data.message
-      const status = action.error.response.status
+      console.log(action)
+      const error = 'some error'
+      const status = 403
       return {
         ...state,
         error,

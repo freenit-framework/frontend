@@ -2,19 +2,14 @@ import React, { Component } from 'react'
 import { PropTypes } from 'prop-types'
 import Button from '@material-ui/core/Button'
 import Template from 'templates/default'
-import { isLoggedIn } from 'utils'
+import ProtectedComponent from 'components/atoms/protected'
 
 
 export default class Home extends Component {
-	componentWillMount() {
-		if (!isLoggedIn()) {
-			this.context.router.history.push('/landing')
-		}
-	}
-
   render() {
     return (
       <Template>
+        <ProtectedComponent />
         <Button variant="contained">
           Home
         </Button>

@@ -8,7 +8,7 @@ const login = async function({ email, password }) {
     {
       email,
       password,
-    }
+    },
   )
   return response.data
 }
