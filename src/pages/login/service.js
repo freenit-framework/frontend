@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { API_ROOT } from 'local-conf'
+import { API_ROOT } from 'utils'
 
 
 const login = async function({ email, password }) {

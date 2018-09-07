@@ -8,6 +8,7 @@ ansible/roles/*
 !ansible/roles/devel
 ansible/site.yml
 node_modules
+package.json
 project.conf
 site.retry
 src/local-conf.js
