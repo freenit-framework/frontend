@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
 import { PropTypes } from 'prop-types'
+import { connect } from 'react-redux'
 import Button from '@material-ui/core/Button'
 import Template from 'templates/default'
-import ProtectedComponent from 'components/atoms/protected'
+import errorActions from 'templates/empty/actions'
 
 
-export default class Home extends Component {
+const mapStateToProps = (state) => ({})
+
+
+class Home extends Component {
   render() {
     return (
-      <Template>
-        <ProtectedComponent />
-        <Button variant="contained">
-          Home
+      <Template secure>
+        <Button variant="contained" onClick={() => this.props.requestError('Error message')}>
+          Display Error
         </Button>
       </Template>
     )
@@ -22,3 +25,6 @@ export default class Home extends Component {
 Home.contextTypes = {
 	router: PropTypes.object.isRequired,
 }
+
+
+export default connect(mapStateToProps, errorActions)(Home)

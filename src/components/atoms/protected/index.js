@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { PropTypes } from 'prop-types'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import actions from './actions'
 
 
@@ -48,6 +48,9 @@ class ProtectedComponent extends Component {
 
 ProtectedComponent.propTypes = {
   status: PropTypes.number,
+  requestMe: PropTypes.func.isRequired,
+  requestRefresh: PropTypes.func.isRequired,
+  requestRefreshReset: PropTypes.func.isRequired,
 }
 
 
