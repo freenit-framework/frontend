@@ -3,15 +3,14 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
 } from './actions'
-import initialState from './state'
 
 
-export default function loginReducer(state = initialState, action) {
+export default function loginReducer(state = {}, action) {
   switch (action.type) {
     case LOGIN:
       return {
         ...state,
-        peding: true,
+        pending: true,
         error: null,
         status: null,
       }
