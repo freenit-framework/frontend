@@ -16,6 +16,16 @@
     "redux-devtools-extension": "^2.13.5",
     "redux-saga": "^0.16.0"
   },
+  "devDependencies": {
+    "babel-eslint": "^9.0.0",
+    "enzyme": "^3.6.0",
+    "enzyme-adapter-react-16": "^1.5.0",
+    "eslint": "^5.6.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "prebuild": "cp src/prod-conf.js src/local-conf.js",

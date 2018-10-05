@@ -3,9 +3,9 @@ import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import greenApp from './reducers'
 import greenSaga from './sagas'
-import initialState from './state'
 
 
+const initialState = {}
 const greenMiddleware = createSagaMiddleware()
 
 
