@@ -6,6 +6,7 @@
     "@material-ui/core": "^3.0.2",
     "@material-ui/icons": "^3.0.1",
     "axios": "^0.18.0",
+    "prop-types": "^15.6.2",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-redux": "^5.0.7",
@@ -28,7 +29,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "prebuild": "cp src/prod-conf.js src/local-conf.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

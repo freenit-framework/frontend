@@ -1,6 +1,8 @@
 import { call, put } from 'redux-saga/effects'
-import service from './service'
+import ProtectedService from './service'
 import {
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
   ME_SUCCESS,
   ME_FAILURE,
   REFRESH_SUCCESS,
@@ -8,9 +10,19 @@ import {
 } from './actions'
 
 
-export function* requestMe(action) {
+export function* logoutSaga() {
   try {
-    const result = yield call(service.me)
+    const result = yield call(ProtectedService.logout)
+    yield put({ type: LOGOUT_SUCCESS, result })
+  } catch (error) {
+    yield put({ type: LOGOUT_FAILURE, error })
+  }
+}
+
+
+export function* meSaga() {
+  try {
+    const result = yield call(ProtectedService.me)
     yield put({ type: ME_SUCCESS, result })
   } catch (error) {
     yield put({ type: ME_FAILURE, error })
@@ -18,9 +30,9 @@ export function* requestMe(action) {
 }
 
 
-export function* requestRefresh(action) {
+export function* refreshSaga() {
   try {
-    const result = yield call(service.refresh)
+    const result = yield call(ProtectedService.refresh)
     yield put({ type: REFRESH_SUCCESS, result })
   } catch (error) {
     yield put({ type: REFRESH_FAILURE, error })

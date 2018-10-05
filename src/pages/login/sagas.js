@@ -3,7 +3,7 @@ import AuthService from './service'
 import { LOGIN_SUCCESS, LOGIN_FAILURE } from './actions'
 
 
-export function* requestLogin(action) {
+export default function* loginSaga(action) {
   try {
     const result = yield call(AuthService.login, action.creds)
 
