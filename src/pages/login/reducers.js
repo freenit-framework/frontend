@@ -21,14 +21,15 @@ export default function loginReducer(state = {}, action) {
         error: null,
         status: 200,
       }
-    case LOGIN_FAILURE:
+    case LOGIN_FAILURE: {
       const error = action.error.response.data.message
-      const status = action.error.response.status
+      const { status } = action.error.response.status
       return {
         ...state,
         error,
         status,
       }
+    }
     default:
       return state
   }
