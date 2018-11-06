@@ -96,14 +96,17 @@ export function refreshReducer(state = {}, action) {
         refreshExpire: null,
       }
     case REFRESH_SUCCESS:
+    {
+      const { accessExpire, refreshExpire } = action.result
       return {
         ...state,
         pending: false,
         error: null,
         status: 200,
-        accessExpire: action.result.access_expire,
-        refreshExpire: action.result.refresh_expire,
+        accessExpire,
+        refreshExpire,
       }
+    }
     case REFRESH_FAILURE:
       return {
         ...state,

@@ -5,9 +5,10 @@ import Button from '@material-ui/core/Button'
 import Snackbar from '@material-ui/core/Snackbar'
 import ProtectedComponent from 'components/atoms/protected'
 import actions from './actions'
+import styles from './styles'
 
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   open: state.error.open,
   error: state.error.message,
 })
@@ -15,11 +16,9 @@ const mapStateToProps = (state) => ({
 
 class EmptyTemplate extends Component {
   render() {
-    const Secure = this.props.secure
-                 ? <ProtectedComponent />
-                 : <div />
+    const Secure = this.props.secure ? <ProtectedComponent /> : <div />
     return (
-      <div>
+      <div style={styles.root}>
         {Secure}
         {this.props.children}
         <Snackbar
@@ -27,15 +26,16 @@ class EmptyTemplate extends Component {
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={this.props.open}
           onClose={this.props.requestErrorReset}
-          ContentProps={{
-            'aria-describedby': 'message-id',
-          }}
           message={this.props.error}
-          action={
-            <Button color="secondary" size="small" onClick={this.props.requestErrorReset}>
+          action={(
+            <Button
+              color="secondary"
+              size="small"
+              onClick={this.props.requestErrorReset}
+            >
               CLOSE
             </Button>
-          }
+          )}
         />
       </div>
     )
@@ -45,9 +45,8 @@ class EmptyTemplate extends Component {
 
 EmptyTemplate.propTypes = {
   children: PropTypes.node,
-  message: PropTypes.string,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
   open: PropTypes.bool,
-  requestError: PropTypes.func.isRequired,
   requestErrorReset: PropTypes.func.isRequired,
   secure: PropTypes.bool,
 }

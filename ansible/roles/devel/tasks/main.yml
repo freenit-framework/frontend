@@ -6,13 +6,6 @@
   notify:
     - restart secadm
 
-- name: configure development locale
-  template:
-    src: login_conf.j2
-    dest: /usr/home/devel/.login_conf
-  removes: /usr/home/devel
-
-
 - name: configure secadm rules
   template:
     src: secadm.rules.j2
