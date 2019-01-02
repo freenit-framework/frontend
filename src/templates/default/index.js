@@ -19,7 +19,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard'
 import MenuIcon from '@material-ui/icons/Menu'
 
 import EmptyTemplate from 'templates/empty'
-import store from 'store/mobx'
+import store from 'store'
 import styles from './styles'
 
 
@@ -38,6 +38,8 @@ class Template extends Component {
 
   handleLogout = () => {
     this.props.store.auth.auth = false
+    this.props.store.auth.email = ''
+    this.props.store.auth.password = ''
     this.props.history.push('/landing')
   }
 
@@ -63,7 +65,7 @@ class Template extends Component {
             </IconButton>
             <Typography variant="title" color="inherit" style={styles.flex}>
               {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-              Frontend Startkit - {this.props.title}
+              Frontend Startkit - {this.props.store.title.title}
             </Typography>
             {AuthButton}
           </Toolbar>
@@ -115,6 +117,9 @@ Template.propTypes = {
       email: PropTypes.string.isRequired,
       login: PropTypes.func.isRequired,
       password: PropTypes.string.isRequired,
+    }).isRequired,
+    title: PropTypes.shape({
+      title: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
   title: PropTypes.string,

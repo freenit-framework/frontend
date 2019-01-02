@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { PropTypes } from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
-import store from 'store/mobx'
+import store from 'store'
 import styles from './styles'
 
 
@@ -18,17 +18,17 @@ class ProtectedComponent extends Component {
     clearInterval(this.interval)
   }
 
-  componentWillReact() {
-    console.log('reacting')
-    const { auth } = this.props.store
+  render() {
+    const { auth, error } = this.props.store
     if (auth.status === 200) {
       if (2 * auth.accessExpire > auth.refreshExpire) {
-        const error = (
+        error.message = (
           <div>
             Refresh token is soon to expire. Please go to &nbsp;
             <Link to="/login" style={styles.link}>Login</Link>
           </div>
         )
+        error.open = true
       }
       if (!this.logged) {
         this.interval = setInterval(
@@ -41,20 +41,18 @@ class ProtectedComponent extends Component {
     } else if (auth.status !== null) {
       auth.auth = false
       if (this.logged) {
-        const error = (
+        error.message = (
           <div>
             Error refreshing login token. Please go to &nbsp;
             <Link to="/login" style={styles.link}>Login</Link>
           </div>
         )
+        error.open = true
         clearInterval(this.interval)
       } else {
         this.props.history.push('/landing')
       }
     }
-  }
-
-  render() {
     return null
   }
 }
@@ -69,6 +67,10 @@ ProtectedComponent.propTypes = {
       refresh: PropTypes.func.isRequired,
       refreshExpire: PropTypes.number.isRequired,
       refreshToken: PropTypes.string.isRequired,
+    }).isRequired,
+    error: PropTypes.shape({
+      message: PropTypes.string.isRequired,
+      open: PropTypes.bool.isRequired,
     }).isRequired,
   }).isRequired,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,

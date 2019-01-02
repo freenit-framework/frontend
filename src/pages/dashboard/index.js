@@ -1,18 +1,15 @@
 import React, { Component } from 'react'
-import { PropTypes } from 'prop-types'
-import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 import { withTheme } from '@material-ui/core/styles'
 import Template from 'templates/default'
-import titleActions from 'templates/default/actions'
+import store from 'store'
 import getStyles from './styles'
-
-
-const mapStateToProps = () => ({})
 
 
 class Dashboard extends Component {
   componentWillMount() {
-    this.props.requestTitle('Dashboard')
+    this.props.store.title.title = 'Dashboard'
   }
 
   render() {
@@ -30,8 +27,12 @@ class Dashboard extends Component {
 
 Dashboard.propTypes = {
   secure: PropTypes.bool,
+  store: PropTypes.shape({
+    title: PropTypes.shape({
+      title: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
   theme: PropTypes.shape().isRequired,
-  requestTitle: PropTypes.func.isRequired,
 }
 
 
@@ -40,6 +41,4 @@ Dashboard.defaultProps = {
 }
 
 
-export default connect(mapStateToProps, titleActions)(
-  withTheme()(Dashboard),
-)
+export default withTheme()(observer((props) => <Dashboard {...props} store={store} />))

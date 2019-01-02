@@ -1,22 +1,22 @@
 import React, { Component } from 'react'
-import { PropTypes } from 'prop-types'
-import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 import Button from '@material-ui/core/Button'
 import Snackbar from '@material-ui/core/Snackbar'
 import ProtectedComponent from 'components/atoms/protected'
-import actions from './actions'
+import store from 'store'
 import styles from './styles'
 
 
-const mapStateToProps = state => ({
-  open: state.error.open,
-  error: state.error.message,
-})
-
-
 class EmptyTemplate extends Component {
+  handleClose = () => {
+    const { error } = this.props.store
+    error.open = false
+  }
+
   render() {
     const Secure = this.props.secure ? <ProtectedComponent /> : <div />
+    const { error } = this.props.store
     return (
       <div style={styles.root}>
         {Secure}
@@ -24,14 +24,14 @@ class EmptyTemplate extends Component {
         <Snackbar
           autoHideDuration={5000}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          open={this.props.open}
-          onClose={this.props.requestErrorReset}
-          message={this.props.error}
+          open={error.open}
+          onClose={this.handleClose}
+          message={error.message}
           action={(
             <Button
               color="secondary"
               size="small"
-              onClick={this.props.requestErrorReset}
+              onClick={this.handleClose}
             >
               CLOSE
             </Button>
@@ -46,10 +46,14 @@ class EmptyTemplate extends Component {
 EmptyTemplate.propTypes = {
   children: PropTypes.node,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
-  open: PropTypes.bool,
-  requestErrorReset: PropTypes.func.isRequired,
   secure: PropTypes.bool,
+  store: PropTypes.shape({
+    error: PropTypes.shape({
+      message: PropTypes.string.isRequired,
+      open: PropTypes.bool.isRequired,
+    }).isRequired,
+  }).isRequired,
 }
 
 
-export default connect(mapStateToProps, actions)(EmptyTemplate)
+export default observer((props) => <EmptyTemplate {...props} store={store} />)

@@ -11,13 +11,8 @@
     "prop-types": "^15.6.2",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
-    "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^1.1.5",
-    "redux": "^4.0.0",
-    "redux-actions": "^2.6.1",
-    "redux-devtools-extension": "^2.13.5",
-    "redux-saga": "^0.16.0"
+    "react-scripts": "^1.1.5"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",

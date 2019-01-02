@@ -6,29 +6,32 @@ import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
 import EmptyTemplate from 'templates/empty'
-import store from 'store/mobx'
+import store from 'store'
 import styles from './styles'
 
 
 class Login extends Component {
   handleSubmit = async (event) => {
     event.preventDefault()
-    await this.props.store.auth.login()
-    if (this.props.store.auth.auth) {
+    const { auth, error } = this.props.store
+    await auth.login()
+    auth.password = ''
+    if (auth.auth) {
       this.props.history.push('/')
+    } else {
+      error.message = auth.error
+      error.open = true
     }
   }
 
   handleEmail = (event) => {
-    this.props.store.auth.email = event.target.value
+    const { auth } = this.props.store
+    auth.email = event.target.value
   }
 
   handlePassword = (event) => {
-    this.props.store.auth.password = event.target.value
-  }
-
-  componentWillReact() {
-    console.log(this.props.store.auth)
+    const { auth } = this.props.store
+    auth.password = event.target.value
   }
 
   render() {
@@ -86,6 +89,10 @@ Login.propTypes = {
       email: PropTypes.string.isRequired,
       login: PropTypes.func.isRequired,
       password: PropTypes.string.isRequired,
+    }).isRequired,
+    error: PropTypes.shape({
+      message: PropTypes.string.isRequired,
+      open: PropTypes.bool.isRequired,
     }).isRequired,
   }).isRequired,
 }
