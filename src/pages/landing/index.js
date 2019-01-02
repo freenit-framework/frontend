@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import Button from '@material-ui/core/Button'
 import Template from 'templates/default'
 import store from 'store'
 
@@ -11,17 +10,10 @@ class Landing extends Component {
     this.props.store.title.title = 'Landing'
   }
 
-  handleClick = () => {
-    this.props.store.todo.addTodo('cvrc')
-  }
-
   render() {
     return (
       <Template>
-        <Button variant="contained" onClick={this.handleClick}>
-          Landing
-        </Button>
-        <span>{this.props.store.todo.todos.length}</span>
+        Landing Page
       </Template>
     )
   }

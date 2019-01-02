@@ -5,20 +5,20 @@ import Button from '@material-ui/core/Button'
 import Snackbar from '@material-ui/core/Snackbar'
 import ProtectedComponent from 'components/atoms/protected'
 import store from 'store'
-import styles from './styles'
 
 
 class EmptyTemplate extends Component {
   handleClose = () => {
-    this.props.store.error.message = ''
-    this.props.store.error.open = false
+    const { error } = this.props.store
+    error.message = ''
+    error.open = false
   }
 
   render() {
     const Secure = this.props.secure ? <ProtectedComponent /> : <div />
     const { error } = this.props.store
     return (
-      <div style={styles.root}>
+      <div style={this.props.style}>
         {Secure}
         {this.props.children}
         <Snackbar
@@ -53,6 +53,14 @@ EmptyTemplate.propTypes = {
       open: PropTypes.bool.isRequired,
     }).isRequired,
   }).isRequired,
+  style: PropTypes.shape({}),
+}
+
+
+EmptyTemplate.defaultProps = {
+  style: {
+    padding: 20,
+  },
 }
 
 
