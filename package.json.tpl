@@ -6,6 +6,8 @@
     "@material-ui/core": "^3.0.2",
     "@material-ui/icons": "^3.0.1",
     "axios": "^0.18.0",
+    "mobx": "^5.8.0",
+    "mobx-react": "^5.4.3",
     "prop-types": "^15.6.2",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",

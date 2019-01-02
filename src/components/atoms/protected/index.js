@@ -1,67 +1,57 @@
 import React, { Component } from 'react'
 import { PropTypes } from 'prop-types'
-import { connect } from 'react-redux'
-import { Link, withRouter } from 'react-router-dom'
-import errorActions from 'templates/empty/actions'
-import actions from './actions'
+import { withRouter, Link } from 'react-router-dom'
+import { observer } from 'mobx-react'
+import store from 'store/mobx'
 import styles from './styles'
 
 
-const mapStateToProps = (state) => ({
-  expire: state.refresh.accessExpire,
-  refreshExpire: state.refresh.refreshExpire,
-  status: state.refresh.status,
-})
-
-
 class ProtectedComponent extends Component {
-  state = {
-    logged: false,
-  }
+  logged = false
 
   componentWillMount() {
-    this.props.requestRefresh()
+    this.props.store.auth.refresh()
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.status === 200) {
-      if (2 * nextProps.expire > nextProps.refreshExpire) {
+  componentWillUnmount() {
+    this.logged = false
+    clearInterval(this.interval)
+  }
+
+  componentWillReact() {
+    console.log('reacting')
+    const { auth } = this.props.store
+    if (auth.status === 200) {
+      if (2 * auth.accessExpire > auth.refreshExpire) {
         const error = (
           <div>
             Refresh token is soon to expire. Please go to &nbsp;
             <Link to="/login" style={styles.link}>Login</Link>
           </div>
         )
-        this.props.requestError(error)
       }
-      if (!this.state.logged) {
+      if (!this.logged) {
         this.interval = setInterval(
-          () => { this.props.requestRefresh() },
-          (nextProps.expire - 1) * 1000,
+          () => { auth.refresh() },
+          (auth.accessExpire - 1) * 1000,
         )
-        this.setState({ logged: true })
-        this.props.auth(true)
+        this.logged = true
+        auth.auth = true
       }
-    } else if (nextProps.status !== null) {
-      this.props.auth(false)
-      if (this.state.logged) {
+    } else if (auth.status !== null) {
+      auth.auth = false
+      if (this.logged) {
         const error = (
           <div>
             Error refreshing login token. Please go to &nbsp;
             <Link to="/login" style={styles.link}>Login</Link>
           </div>
         )
-        this.props.requestError(error)
         clearInterval(this.interval)
       } else {
         this.props.history.push('/landing')
       }
     }
-  }
-
-  componentWillUnmount() {
-    this.setState({ logged: false })
-    clearInterval(this.interval)
   }
 
   render() {
@@ -71,16 +61,18 @@ class ProtectedComponent extends Component {
 
 
 ProtectedComponent.propTypes = {
-  auth: PropTypes.func.isRequired,
-  expire: PropTypes.number,
+  store: PropTypes.shape({
+    auth: PropTypes.shape({
+      status: PropTypes.number.isRequired,
+      accessExpire: PropTypes.number.isRequired,
+      accessToken: PropTypes.string.isRequired,
+      refresh: PropTypes.func.isRequired,
+      refreshExpire: PropTypes.number.isRequired,
+      refreshToken: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
-  refreshExpire: PropTypes.number,
-  requestError: PropTypes.func.isRequired,
-  requestRefresh: PropTypes.func.isRequired,
-  status: PropTypes.number,
 }
 
 
-export default connect(mapStateToProps, { ...errorActions, ...actions })(
-  withRouter(ProtectedComponent),
-)
+export default withRouter(observer((props) => <ProtectedComponent {...props} store={store} />))

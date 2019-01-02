@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { PropTypes } from 'prop-types'
-import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
+import { observer } from 'mobx-react'
 
 // Components
 import AppBar from '@material-ui/core/AppBar'
@@ -19,15 +19,8 @@ import DashboardIcon from '@material-ui/icons/Dashboard'
 import MenuIcon from '@material-ui/icons/Menu'
 
 import EmptyTemplate from 'templates/empty'
-import actions from 'components/atoms/protected/actions'
+import store from 'store/mobx'
 import styles from './styles'
-
-
-const mapStateToProps = state => ({
-  open: state.error.open,
-  authState: state.auth.state,
-  title: state.title.title,
-})
 
 
 class Template extends Component {
@@ -44,10 +37,8 @@ class Template extends Component {
   }
 
   handleLogout = () => {
-    const { auth, requestLogout, history } = this.props
-    auth(false)
-    requestLogout()
-    history.push('/landing')
+    this.props.store.auth.auth = false
+    this.props.history.push('/landing')
   }
 
   render() {
@@ -61,8 +52,8 @@ class Template extends Component {
         Logout
       </Button>
     )
-    const AuthButton = this.props.authState ? LoggedinButton : AnonButton
-    const menuButtonAction = this.props.authState ? this.handleMenuOpen : null
+    const AuthButton = this.props.store.auth.auth ? LoggedinButton : AnonButton
+    const menuButtonAction = this.props.store.auth.auth ? this.handleMenuOpen : null
     return (
       <div>
         <AppBar position="static">
@@ -115,14 +106,19 @@ class Template extends Component {
 
 
 Template.propTypes = {
-  auth: PropTypes.func.isRequired,
-  authState: PropTypes.bool,
   children: PropTypes.node,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
-  requestLogout: PropTypes.func.isRequired,
   secure: PropTypes.bool,
+  store: PropTypes.shape({
+    auth: PropTypes.shape({
+      auth: PropTypes.bool.isRequired,
+      email: PropTypes.string.isRequired,
+      login: PropTypes.func.isRequired,
+      password: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
   title: PropTypes.string,
 }
 
 
-export default connect(mapStateToProps, actions)(withRouter(Template))
+export default withRouter(observer((props) => <Template {...props} store={store} />))
