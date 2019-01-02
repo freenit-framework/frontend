@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { PropTypes } from 'prop-types'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import store from 'store'
-import styles from './styles'
 
 
 class ProtectedComponent extends Component {
@@ -21,37 +20,31 @@ class ProtectedComponent extends Component {
   render() {
     const { auth, error } = this.props.store
     if (auth.status === 200) {
-      if (2 * auth.accessExpire > auth.refreshExpire) {
-        error.message = (
-          <div>
-            Refresh token is soon to expire. Please go to &nbsp;
-            <Link to="/login" style={styles.link}>Login</Link>
-          </div>
-        )
-        error.open = true
-      }
       if (!this.logged) {
+        this.logged = true
         this.interval = setInterval(
-          () => { auth.refresh() },
+          async () => {
+            await auth.refresh()
+            if (2 * auth.accessExpire > auth.refreshExpire) {
+              error.message = 'Refresh token is soon to expire! Please go to login page.'
+              error.open = true
+            }
+          },
           (auth.accessExpire - 1) * 1000,
         )
-        this.logged = true
         auth.auth = true
       }
-    } else if (auth.status !== null) {
-      auth.auth = false
+    } else if (auth.status >= 400) {
       if (this.logged) {
-        error.message = (
-          <div>
-            Error refreshing login token. Please go to &nbsp;
-            <Link to="/login" style={styles.link}>Login</Link>
-          </div>
-        )
-        error.open = true
         clearInterval(this.interval)
+        this.logged = false
+        error.message = 'Error refreshing login token! Please login!'
+        error.open = true
+        this.props.history.push('/login')
       } else {
         this.props.history.push('/landing')
       }
+      auth.auth = false
     }
     return null
   }

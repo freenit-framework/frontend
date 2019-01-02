@@ -10,8 +10,8 @@ import styles from './styles'
 
 class EmptyTemplate extends Component {
   handleClose = () => {
-    const { error } = this.props.store
-    error.open = false
+    this.props.store.error.message = ''
+    this.props.store.error.open = false
   }
 
   render() {
@@ -45,7 +45,7 @@ class EmptyTemplate extends Component {
 
 EmptyTemplate.propTypes = {
   children: PropTypes.node,
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]),
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   secure: PropTypes.bool,
   store: PropTypes.shape({
     error: PropTypes.shape({

@@ -54,12 +54,10 @@ export default decorate(
         this.status = 200
         this.accessToken = result.access
         this.accessExpire = result.accessExpire
+        this.refreshExpire = result.refreshExpire
       } catch (error) {
-        this.auth = false
         this.error = error.response.data.message
         this.status = error.response.status
-        this.accessToken = null
-        this.accessExpire = null
       }
     }
   },
