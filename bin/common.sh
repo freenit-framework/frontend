@@ -3,6 +3,7 @@
 
 export BIN_DIR=`dirname $0`
 export PROJECT_ROOT=`readlink -f "${BIN_DIR}/.."`
+export OFFLINE=${OFFLINE:=no}
 NPM=`which npm 2>/dev/null`
 YARN=`which yarn 2>/dev/null`
 
@@ -32,5 +33,7 @@ setup() {
 
   cd ${PROJECT_ROOT}
   sed -e "s;HTTP_PROXY;${HTTP_PROXY};g" package.json.tpl >package.json
-  "${PACKAGE_MANAGER}" install
+  if [ "${OFFLINE}" != "yes" ]; then
+    "${PACKAGE_MANAGER}" install
+  fi
 }
