@@ -1,10 +1,6 @@
-import { decorate, observable } from 'mobx'
+import { observable } from 'mobx'
 
 
-export default decorate(
-  class TitleStore {
-    title = ''
-  },
-
-  { title: observable },
-)
+export default class TitleStore {
+  @observable title = ''
+}
