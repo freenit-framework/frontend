@@ -5,9 +5,10 @@ import Template from 'templates/default'
 import store from 'store'
 
 
+@observer
 class Landing extends Component {
   componentWillMount() {
-    this.props.store.title.title = 'Landing'
+    store.title.title = 'Landing'
   }
 
   render() {
@@ -20,17 +21,4 @@ class Landing extends Component {
 }
 
 
-Landing.propTypes = {
-  store: PropTypes.shape({
-    title: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-    }).isRequired,
-    todo: PropTypes.shape({
-      addTodo: PropTypes.func.isRequired,
-      todos: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-    }).isRequired,
-  }),
-}
-
-
-export default observer((props) => <Landing {...props} store={store} />)
+export default Landing
