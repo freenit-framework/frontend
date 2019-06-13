@@ -63,9 +63,9 @@ class Template extends Component {
             <IconButton color="inherit" onClick={menuButtonAction}>
               <MenuIcon />
             </IconButton>
-            <Typography variant="title" color="inherit" style={styles.flex}>
+            <Typography variant="h5" color="inherit" style={styles.flex}>
               {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-              Frontend Startkit - {this.props.store.title.title}
+              Insurance - {this.props.store.title.title}
             </Typography>
             {AuthButton}
           </Toolbar>
@@ -75,7 +75,7 @@ class Template extends Component {
           <Drawer open={this.state.showMenu} onClose={this.handleMenuClose}>
             <AppBar position="static">
               <Toolbar>
-                <Typography variant="title" color="inherit" style={styles.flex}>
+                <Typography variant="h5" color="inherit" style={styles.flex}>
                   &nbsp;
                 </Typography>
                 <IconButton color="inherit" onClick={this.handleMenuClose}>

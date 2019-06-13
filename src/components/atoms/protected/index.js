@@ -1,15 +1,16 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { PropTypes } from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import store from 'store'
 
 
-class ProtectedComponent extends Component {
+@observer
+class ProtectedComponent extends React.Component {
   logged = false
 
   componentWillMount() {
-    this.props.store.auth.refresh()
+    store.auth.refresh()
   }
 
   componentWillUnmount() {
@@ -18,7 +19,7 @@ class ProtectedComponent extends Component {
   }
 
   render() {
-    const { auth, error } = this.props.store
+    const { auth, error } = store
     if (auth.status === 200) {
       if (!this.logged) {
         this.logged = true
@@ -52,22 +53,8 @@ class ProtectedComponent extends Component {
 
 
 ProtectedComponent.propTypes = {
-  store: PropTypes.shape({
-    auth: PropTypes.shape({
-      status: PropTypes.number.isRequired,
-      accessExpire: PropTypes.number.isRequired,
-      accessToken: PropTypes.string.isRequired,
-      refresh: PropTypes.func.isRequired,
-      refreshExpire: PropTypes.number.isRequired,
-      refreshToken: PropTypes.string.isRequired,
-    }).isRequired,
-    error: PropTypes.shape({
-      message: PropTypes.string.isRequired,
-      open: PropTypes.bool.isRequired,
-    }).isRequired,
-  }).isRequired,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
 }
 
 
-export default withRouter(observer((props) => <ProtectedComponent {...props} store={store} />))
+export default withRouter(ProtectedComponent)

@@ -56,8 +56,14 @@ export default decorate(
         this.accessExpire = result.accessExpire
         this.refreshExpire = result.refreshExpire
       } catch (error) {
-        this.error = error.response.data.message
-        this.status = error.response.status
+        if (error.response) {
+          this.status = error.response.status
+          if (error.response.data) {
+            this.error = error.response.data.message
+          }
+        } else {
+          this.status = 401
+        }
       }
     }
   },

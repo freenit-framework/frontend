@@ -1,7 +1,7 @@
-import App from './App';
-import BrowserRouter from 'react-router-dom/BrowserRouter';
-import React from 'react';
-import { hydrate } from 'react-dom';
+import App from './App'
+import { BrowserRouter } from 'react-router-dom'
+import React from 'react'
+import { hydrate } from 'react-dom'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from 'theme'
 
@@ -12,8 +12,8 @@ hydrate(
     </BrowserRouter>
   </MuiThemeProvider>,
   document.getElementById('root')
-);
+)
 
 if (module.hot) {
-  module.hot.accept();
+  module.hot.accept()
 }

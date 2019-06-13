@@ -1,31 +1,28 @@
 import App from './App'
 import React from 'react'
-import { StaticRouter } from 'react-router-dom'
+// import { StaticRouter } from 'react-router-dom'
 import express from 'express'
-import { renderToString } from 'react-dom/server'
+// import { renderToString } from 'react-dom/server'
 import proxy from 'http-proxy-middleware'
 
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST)
+const server = express()
 
-const server = express();
+
 server
   .disable('x-powered-by')
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
-  .use('/api', proxy({
-    target: process.env.BACKEND_URL,
-    changeOrigin: true
-  }))
   .get('/*', (req, res) => {
-    const context = {};
-    const markup = renderToString(
-      <StaticRouter context={context} location={req.url}>
-        <App />
-      </StaticRouter>
-    );
+    const context = {}
+    // const markup = renderToString(
+      // <StaticRouter context={context} location={req.url}>
+        // <App />
+      // </StaticRouter>
+    // )
 
     if (context.url) {
-      res.redirect(context.url);
+      res.redirect(context.url)
     } else {
       res.status(200).send(
         `<!doctype html>
@@ -33,7 +30,7 @@ server
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta charset="utf-8" />
-        <title>Welcome to Razzle</title>
+        <title>Insurance</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         ${
           assets.client.css
@@ -47,11 +44,18 @@ server
         }
     </head>
     <body>
-        <div id="root">${markup}</div>
+        <div id="root"></div>
     </body>
 </html>`
-      );
+      )
     }
-  });
+  })
 
-export default server;
+if (process.env.BACKEND_URL) {
+  server.use('/api', proxy({
+    target: process.env.BACKEND_URL,
+    changeOrigin: true
+  }))
+}
+
+export default server
