@@ -9,13 +9,29 @@ import store from 'store'
 class ProtectedComponent extends React.Component {
   logged = false
 
+  refreshExecute = async (timeout) => {
+    await store.auth.refresh()
+    if (2 * store.auth.accessExpire > store.auth.refreshExpire) {
+      store.error.message = 'Refresh token is soon to expire! Please go to login page.'
+      store.error.open = true
+    }
+    this.refreshTimeout()
+  }
+
+  refreshTimeout = () => {
+    const accessTimeout = store.auth.accessExpire === 0
+      ? 0
+      : (store.auth.accessExpire - 5) * 1000
+    this.timeout = setTimeout(this.refreshExecute, accessTimeout)
+  }
+
   componentWillMount() {
-    store.auth.refresh()
+    this.refreshExecute()
   }
 
   componentWillUnmount() {
     this.logged = false
-    clearInterval(this.interval)
+    clearTimeout(this.timeout)
   }
 
   render() {
@@ -23,21 +39,10 @@ class ProtectedComponent extends React.Component {
     if (auth.status === 200) {
       if (!this.logged) {
         this.logged = true
-        this.interval = setInterval(
-          async () => {
-            await auth.refresh()
-            if (2 * auth.accessExpire > auth.refreshExpire) {
-              error.message = 'Refresh token is soon to expire! Please go to login page.'
-              error.open = true
-            }
-          },
-          (auth.accessExpire - 1) * 1000,
-        )
-        auth.auth = true
       }
+      auth.auth = true
     } else if (auth.status >= 400) {
       if (this.logged) {
-        clearInterval(this.interval)
         this.logged = false
         error.message = 'Error refreshing login token! Please login!'
         error.open = true
