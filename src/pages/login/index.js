@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
 import EmptyTemplate from 'templates/empty'
 import store from 'store'
+import { refreshExecute } from 'utils'
 import styles from './styles'
 
 
@@ -17,6 +18,7 @@ class Login extends Component {
     await auth.login()
     auth.password = ''
     if (auth.auth) {
+      refreshExecute()
       this.props.history.push('/')
     } else {
       error.message = auth.error

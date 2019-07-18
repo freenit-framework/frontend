@@ -3,35 +3,20 @@ import { PropTypes } from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import store from 'store'
+import { refreshExecute, timeoutClear } from 'utils'
 
 
 @observer
 class ProtectedComponent extends React.Component {
   logged = false
 
-  refreshExecute = async (timeout) => {
-    await store.auth.refresh()
-    if (2 * store.auth.accessExpire > store.auth.refreshExpire) {
-      store.error.message = 'Refresh token is soon to expire! Please go to login page.'
-      store.error.open = true
-    }
-    this.refreshTimeout()
-  }
-
-  refreshTimeout = () => {
-    const accessTimeout = store.auth.accessExpire === 0
-      ? 0
-      : (store.auth.accessExpire - 5) * 1000
-    this.timeout = setTimeout(this.refreshExecute, accessTimeout)
-  }
-
   componentWillMount() {
-    this.refreshExecute()
+    refreshExecute()
   }
 
   componentWillUnmount() {
     this.logged = false
-    clearTimeout(this.timeout)
+    timeoutClear()
   }
 
   render() {
@@ -42,6 +27,7 @@ class ProtectedComponent extends React.Component {
       }
       auth.auth = true
     } else if (auth.status >= 400) {
+      timeoutClear()
       if (this.logged) {
         this.logged = false
         error.message = 'Error refreshing login token! Please login!'
