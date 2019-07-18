@@ -15,7 +15,10 @@ class ProtectedComponent extends React.Component {
       store.error.message = 'Refresh token is soon to expire! Please go to login page.'
       store.error.open = true
     }
-    this.refreshTimeout()
+    if (store.auth.status === 200)
+    {
+      this.refreshTimeout()
+    }
   }
 
   refreshTimeout = () => {

@@ -1,82 +1,68 @@
-import { decorate, observable } from 'mobx'
+import { observable } from 'mobx'
 import service from './service'
 
 
-export default decorate(
-  class AuthStore {
-    accessToken = ''
+export default class AuthStore {
+  @observable accessToken = ''
 
-    accessExpire = 0
+  @observable accessExpire = 0
 
-    refreshToken = ''
+  @observable refreshToken = ''
 
-    refreshExpire = 0
+  @observable refreshExpire = 0
 
-    auth = false
+  @observable auth = false
 
-    error = null
+  @observable error = null
 
-    status = 0
+  @observable status = 0
 
-    email = ''
+  @observable email = ''
 
-    password = ''
+  @observable password = ''
 
-    async login() {
-      try {
-        const result = await service.login({
-          email: this.email,
-          password: this.password,
-        })
-        this.auth = true
-        this.error = null
-        this.status = 200
-        this.accessToken = result.access
-        this.accessExpire = result.accessExpire
-        this.refreshToken = result.refresh
-        this.refreshExpire = result.refreshExpire
-      } catch (error) {
-        this.auth = false
-        this.error = error.response.data.message
+  async login() {
+    try {
+      const result = await service.login({
+        email: this.email,
+        password: this.password,
+      })
+      this.auth = true
+      this.error = null
+      this.status = 200
+      this.accessToken = result.access
+      this.accessExpire = result.accessExpire
+      this.refreshToken = result.refresh
+      this.refreshExpire = result.refreshExpire
+    } catch (error) {
+      this.auth = false
+      this.error = error.response.data.message
+      this.status = error.response.status
+      this.access = null
+      this.accessExpire = null
+      this.refresh = null
+      this.refreshExpire = null
+    }
+  }
+
+  async refresh() {
+    try {
+      const result = await service.refresh()
+      this.auth = true
+      this.error = null
+      this.status = 200
+      this.accessToken = result.access
+      this.accessExpire = result.accessExpire
+      this.refreshExpire = result.refreshExpire
+    } catch (error) {
+      if (error.response) {
         this.status = error.response.status
-        this.access = null
-        this.accessExpire = null
-        this.refresh = null
-        this.refreshExpire = null
-      }
-    }
-
-    async refresh() {
-      try {
-        const result = await service.refresh()
-        this.auth = true
-        this.error = null
-        this.status = 200
-        this.accessToken = result.access
-        this.accessExpire = result.accessExpire
-        this.refreshExpire = result.refreshExpire
-      } catch (error) {
-        if (error.response) {
-          this.status = error.response.status
-          if (error.response.data) {
-            this.error = error.response.data.message
-          }
-        } else {
-          this.status = 401
+        if (error.response.data) {
+          this.error = error.response.data.message
         }
+      } else {
+        this.status = 401
       }
     }
-  },
-
-  {
-    accessExpire: observable,
-    accessToken: observable,
-    auth: observable,
-    email: observable,
-    error: observable,
-    password: observable,
-    refreshExpire: observable,
-    refreshToken: observable,
-    status: observable,
-  },
-)
+  }
+}
