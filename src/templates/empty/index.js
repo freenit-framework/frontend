@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { observer } from 'mobx-react'
 import Button from '@material-ui/core/Button'
 import Snackbar from '@material-ui/core/Snackbar'
 import ProtectedComponent from 'components/atoms/protected'
-import store from 'store'
+import { withStore } from 'store'
 
 
 class EmptyTemplate extends Component {
@@ -16,7 +15,7 @@ class EmptyTemplate extends Component {
 
   render() {
     const Secure = this.props.secure ? <ProtectedComponent /> : <div />
-    const { error } = this.props.store
+    const error = { open: false }
     return (
       <div style={this.props.style}>
         {Secure}
@@ -47,12 +46,7 @@ EmptyTemplate.propTypes = {
   children: PropTypes.node,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   secure: PropTypes.bool,
-  store: PropTypes.shape({
-    error: PropTypes.shape({
-      message: PropTypes.string.isRequired,
-      open: PropTypes.bool.isRequired,
-    }).isRequired,
-  }).isRequired,
+  store: PropTypes.shape({}).isRequired,
   style: PropTypes.shape({}),
 }
 
@@ -64,4 +58,4 @@ EmptyTemplate.defaultProps = {
 }
 
 
-export default observer((props) => <EmptyTemplate {...props} store={store} />)
+export default withStore(EmptyTemplate)

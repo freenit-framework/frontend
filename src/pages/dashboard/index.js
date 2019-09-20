@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { observer } from 'mobx-react'
 import { withTheme } from '@material-ui/core/styles'
 import Template from 'templates/default'
 import store from 'store'
 import getStyles from './styles'
 
 
-@observer
 class Dashboard extends Component {
   componentWillMount() {
     store.title.title = 'Dashboard'

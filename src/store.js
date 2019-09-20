@@ -1,10 +1,28 @@
-import Auth from 'pages/login/store'
-import Error from 'templates/empty/store'
-import Title from 'templates/default/store'
+import React from 'react'
 
 
-export default {
-  auth: new Auth(),
-  error: new Error(),
-  title: new Title(),
+const Store = React.createContext({})
+
+
+export const withStore = (Component) => (props) => {
+  return (
+    <Store.Consumer>
+      {store => <Component {...props} store={store} />}
+    </Store.Consumer>
+  )
 }
+
+
+export class BaseStore {
+  constructor(detail, list = null) {
+    this.detail = detail[0]
+    this.setDetail = detail[1]
+    if (list !== null) {
+      this.list = list[0]
+      this.setList = list[1]
+    }
+  }
+}
+
+
+export default Store
