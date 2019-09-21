@@ -1,18 +1,12 @@
-import store from './store'
 import detail from './detail'
+import initial from './initial'
 import list from './list'
+import store from './store'
 
 
 export default {
-  store,
   detail,
+  initial,
   list,
-  initial: {
-    detail: {},
-    list: {
-      data: [],
-      page: 0,
-      total: 0,
-    },
-  },
+  store,
 }

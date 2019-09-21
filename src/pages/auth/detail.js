@@ -20,7 +20,11 @@ class Login extends Component {
     const { auth } = this.props.store
     const { email, password } = this.state
     const response = await auth.login(email, password)
-    console.log(response.ok)
+    if (response.ok) {
+      console.log(response)
+    } else {
+      console.log(response)
+    }
   }
 
   handleEmail = (event) => {

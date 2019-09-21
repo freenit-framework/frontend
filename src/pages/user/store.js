@@ -1,5 +1,5 @@
 import { BaseStore } from 'store'
 
 
-export default class AuthStore extends BaseStore {
+export default class UserStore extends BaseStore {
 }

@@ -14,11 +14,10 @@ class EmptyTemplate extends Component {
   }
 
   render() {
-    const Secure = this.props.secure ? <ProtectedComponent /> : <div />
     const error = { open: false }
     return (
       <div style={this.props.style}>
-        {Secure}
+        <ProtectedComponent secure={this.props.secure} />
         {this.props.children}
         <Snackbar
           autoHideDuration={5000}
