@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Store from 'store'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 // Pages
 import Auth from 'pages/auth'
@@ -21,13 +21,15 @@ function App() {
   return (
     <Store.Provider value={store}>
       <Router>
-        <Route exact path="/" component={Landing} />
-        <Route exact path="/dashboard" component={Dashboard} />
-        <Route exact path="/login" component={Auth.detail} />
-        <Route exact path="/users" component={User.list} />
-        <Route exact path="/users/:page" component={User.list} />
-        <Route exact path="/user/:id" component={User.detail} />
-        <Route path="*" component={NoPage} />
+        <Switch>
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/login" component={Auth.detail} />
+          <Route exact path="/users" component={User.list} />
+          <Route exact path="/users/:page" component={User.list} />
+          <Route exact path="/user/:id" component={User.detail} />
+          <Route path="*" component={NoPage} />
+        </Switch>
       </Router>
     </Store.Provider>
   )
