@@ -21,7 +21,8 @@ class Login extends Component {
     const { email, password } = this.state
     const response = await auth.login(email, password)
     if (response.ok) {
-      console.log(response)
+      this.props.history.push('/dashboard')
+      auth.refresh()
     } else {
       console.log(response)
     }

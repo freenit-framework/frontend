@@ -2,19 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withTheme } from '@material-ui/core/styles'
 import Template from 'templates/default'
-import store from 'store'
 import getStyles from './styles'
 
 
 class Dashboard extends Component {
-  componentWillMount() {
-    store.title.title = 'Dashboard'
-  }
-
   render() {
     const styles = getStyles(this.props.theme, 4)
     return (
-      <Template secure={this.props.secure}>
+      <Template secure>
         <div style={styles.root}>
           Dashboard
         </div>
@@ -27,11 +22,6 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
   secure: PropTypes.bool,
   theme: PropTypes.shape().isRequired,
-}
-
-
-Dashboard.defaultProps = {
-  secure: true,
 }
 
 

@@ -16,11 +16,16 @@ class ProtectedComponent extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { auth } = this.props.auth.detail
+    const { auth } = this.props.store.auth.detail
+    const prevAuth = prevProps.store.auth.detail.auth
     const { secure } = this.props
-    if (!auth && !prevProps.auth.detail.auth && secure) {
+    if (!auth && !prevAuth && secure) {
       this.props.history.push('/')
     }
+  }
+
+  render() {
+    return null
   }
 }
 
