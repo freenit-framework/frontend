@@ -21,7 +21,7 @@ export default class AuthStore extends BaseStore {
         clearTimeout(this.timeoutHandler)
       }
       this.timeoutHandler = setTimeout(
-        this.refresh,
+        () => {this.refresh()},
         result.accessExpire * 1000,
       )
       this.setDetail(result)
@@ -54,7 +54,7 @@ export default class AuthStore extends BaseStore {
         clearTimeout(this.timeoutHandler)
       }
       this.timeoutHandler = setTimeout(
-        this.refresh,
+        () => {this.refresh()},
         result.accessExpire * 1000,
       )
       this.setDetail(result)
