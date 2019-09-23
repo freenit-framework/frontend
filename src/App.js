@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Store from 'store'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import './App.css'
 
 // Pages
 import Auth from 'pages/auth'

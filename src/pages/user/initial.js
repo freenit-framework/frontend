@@ -2,7 +2,7 @@ export default {
   detail: {},
   list: {
     data: [],
-    page: 0,
+    pages: 0,
     total: 0,
   },
 }
