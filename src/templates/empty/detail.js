@@ -7,11 +7,6 @@ import { withStore } from 'store'
 
 
 class EmptyTemplate extends Component {
-  constructor(props) {
-    super(props)
-    props.store.notification.show('Here we are')
-  }
-
   render() {
     const { notification } = this.props.store
     return (

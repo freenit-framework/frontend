@@ -24,7 +24,7 @@ class Login extends Component {
       this.props.history.push('/dashboard')
       auth.refresh(/* notify callback */)
     } else {
-      notification.show('Login failed')
+      notification.show(response.response.data.message)
     }
   }
 
