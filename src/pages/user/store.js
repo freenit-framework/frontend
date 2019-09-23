@@ -1,24 +1,34 @@
 import { BaseStore } from 'store'
 import service from './service'
+import initial from './initial'
 
 
 export default class UserStore extends BaseStore {
-  async fetch(id) {
+  fetch = async (id) => {
     try {
       const response = await service.fetch(id)
-      return {
+      const result = {
         ...response,
         ok: true
       }
+      this.setDetail(result)
+      return result
     } catch (error) {
+      const result = {
+        ok: false,
+      }
+      this.setDetail({
+        ...initial.detail,
+        ...result,
+      })
       return {
         ...error,
-        ok: false,
+        ...result,
       }
     }
   }
 
-  async fetchAll(page = 0, perpage = 10) {
+  fetchAll = async (page = 0, perpage = 10) => {
     try {
       const response = await service.fetchAll(page, perpage)
       this.setList(response)
@@ -34,7 +44,7 @@ export default class UserStore extends BaseStore {
     }
   }
 
-  async create(data) {
+  create = async (data) => {
     try {
       const response = await service.create(data)
       return {
@@ -49,13 +59,26 @@ export default class UserStore extends BaseStore {
     }
   }
 
-  async edit(id, data) {
+  edit = async (id, data) => {
     try {
       const response = await service.edit(id, data)
-      return {
+      const result = {
         ...response,
         ok: true
       }
+      if (this.detail.id === id) {
+        this.setDetail(result)
+      }
+      const listData = {...this.list}
+      listData.data.forEach(user => {
+        if (user.id === id) {
+          user.email = response.email
+          user.active = response.active
+          user.admin = response.admin
+        }
+      })
+      this.setList(listData)
+      return result
     } catch (error) {
       return {
         ...error,
@@ -64,7 +87,7 @@ export default class UserStore extends BaseStore {
     }
   }
 
-  async delete(id) {
+  delete = async (id) => {
     try {
       const response = await service.delete(id)
       return {

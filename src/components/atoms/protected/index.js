@@ -7,20 +7,11 @@ import { withRouter } from 'react-router'
 class ProtectedComponent extends React.Component {
   async componentDidMount() {
     const { auth } = this.props.store
-    const response = await auth.refresh()
+    const response = await auth.refresh(/* notify callback */)
     if (!response.ok) {
       if (this.props.secure) {
         this.props.history.push('/')
       }
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    const { auth } = this.props.store.auth.detail
-    const prevAuth = prevProps.store.auth.detail.auth
-    const { secure } = this.props
-    if (!auth && !prevAuth && secure) {
-      this.props.history.push('/')
     }
   }
 

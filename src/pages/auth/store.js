@@ -5,16 +5,13 @@ import { BaseStore } from 'store'
 export default class AuthStore extends BaseStore {
   timeoutHandler = null
 
-  async login(email, password) {
+  login = async (email, password) => {
     try {
       const response = await service.login(email, password)
-      const { access, accessExpire, refresh, refreshExpire } = response
+      const { accessExpire, refreshExpire } = response
       const result = {
-        access,
         accessExpire,
-        refresh,
         refreshExpire,
-        auth: true,
         ok: true,
       }
       if (this.timeoutHandler) {
@@ -28,26 +25,41 @@ export default class AuthStore extends BaseStore {
       return result
     } catch (error) {
       const result = {
-        ...error,
-        auth: false,
         ok: false,
       }
       this.setDetail(result)
-      return result
+      return {
+        ...error,
+        ...result,
+      }
     }
   }
 
-  async refresh() {
+  logout = async () => {
+    try {
+      await service.logout()
+      const result = {}
+      this.setDetail(result)
+      return result
+    } catch (error) {
+      const result = {
+        ok: false,
+      }
+      this.setDetail(result)
+      return {
+        ...error,
+        ...result,
+      }
+    }
+  }
+
+  refresh = async () => {
     try {
       const response = await service.refresh()
-      const { access, accessExpire, refreshExpire } = response
-      const { refresh } = this.detail
+      const { accessExpire, refreshExpire } = response
       const result = {
-        access,
         accessExpire,
-        refresh,
         refreshExpire,
-        auth: true,
         ok: true,
       }
       if (this.timeoutHandler) {
@@ -62,12 +74,13 @@ export default class AuthStore extends BaseStore {
     } catch (error) {
       this.timeoutHandler = null
       const result = {
-        ...error,
-        auth: false,
         ok: false,
       }
       this.setDetail(result)
-      return result
+      return {
+        ...error,
+        ...result,
+      }
     }
   }
 }

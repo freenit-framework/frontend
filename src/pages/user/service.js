@@ -67,6 +67,8 @@ async function fetchAll(page = 0, perpage = 10) {
     {
       headers: {
         'X-CSRF-TOKEN': csrf,
+        Page: page,
+        PerPage: perpage,
       },
     }
   )

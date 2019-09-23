@@ -10,10 +10,16 @@ import Landing from 'pages/landing'
 import NoPage from 'pages/nopage'
 import User from 'pages/user'
 
+// Templates
+import Notification from 'templates/empty'
+
 
 function App() {
   const store = {
     auth: new Auth.store(useState(Auth.initial.detail)),
+    notification: new Notification.store(
+      useState(Notification.initial.detail),
+    ),
     user: new User.store(
       useState(User.initial.detail),
       useState(User.initial.list),

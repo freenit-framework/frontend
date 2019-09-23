@@ -1,5 +1,8 @@
 export default {
-  detail: {},
+  detail: {
+    email: '',
+  },
+
   list: {
     data: [],
     pages: 0,

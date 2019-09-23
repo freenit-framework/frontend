@@ -23,8 +23,8 @@ class UserList extends React.Component {
   render() {
     return (
       <Badge
-        badgeContent={this.props.store.user.list.total}
         color="primary"
+        badgeContent={this.props.store.user.list.total}
       >
         <Card style={styles.card}>
           <CardContent>

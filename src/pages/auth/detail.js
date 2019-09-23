@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
-import EmptyTemplate from 'templates/empty'
+import EmptyTemplate from 'templates/empty/detail'
 import styles from './styles'
 import { withStore } from 'store'
 
@@ -17,14 +17,14 @@ class Login extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault()
-    const { auth } = this.props.store
+    const { auth, notification } = this.props.store
     const { email, password } = this.state
     const response = await auth.login(email, password)
     if (response.ok) {
       this.props.history.push('/dashboard')
-      auth.refresh()
+      auth.refresh(/* notify callback */)
     } else {
-      console.log(response)
+      notification.show('Login failed')
     }
   }
 
