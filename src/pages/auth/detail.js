@@ -38,7 +38,7 @@ class Login extends Component {
 
   render() {
     return (
-      <EmptyTemplate>
+      <EmptyTemplate style={{}}>
         <div style={styles.root}>
           <Paper style={styles.paper}>
             <div>

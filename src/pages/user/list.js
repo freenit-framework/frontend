@@ -66,9 +66,14 @@ class UserList extends React.Component {
             <Switch
               onChange={this.handleUserActive(user)}
               checked={user.active}
+              disabled={user.id === this.props.store.me.detail.id}
             />
             <Link to={`/user/${user.id}`}>
-              <Button style={styles.details} variant="outlined" color="primary">
+              <Button
+                style={styles.details}
+                variant="outlined"
+                color="primary"
+              >
                 Details
               </Button>
             </Link>
