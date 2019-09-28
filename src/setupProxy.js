@@ -6,4 +6,10 @@ module.exports = function(app) {
       target: process.env.BACKEND_URL,
     }
   ))
+  app.use(proxy(
+    '/media',
+    {
+      target: process.env.BACKEND_URL,
+    }
+  ))
 }
