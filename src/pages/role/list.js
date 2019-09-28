@@ -67,7 +67,7 @@ class RoleList extends React.Component {
           &lt;
         </Button>
       )
-    const next = page < this.props.store.role.list.pages
+    const next = page < this.props.store.role.list.pages - 1
       ? (
         <Link to={`/roles/${page + 1}`}>
           <Button variant="outlined">

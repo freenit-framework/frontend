@@ -1,3 +1,10 @@
+const center = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+}
+
+
 export default {
   item: {
     marginBottom: 5,
@@ -10,5 +17,14 @@ export default {
 
   avatar: {
     marginRight: 10,
-  }
+  },
+
+  center: {
+    ...center,
+  },
+
+  page: {
+    marginLeft: 10,
+    marginRight: 10,
+  },
 }

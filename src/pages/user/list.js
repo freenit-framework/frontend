@@ -30,6 +30,33 @@ class UserList extends React.Component {
   }
 
   render() {
+    const page = Number(this.props.match.params.page || '0')
+    const previous = page !== 0
+      ? (
+        <Link to={page !== 1 ? `/users/${page - 1}` : '/users'}>
+          <Button variant="outlined">
+            &lt;
+          </Button>
+        </Link>
+      )
+      : (
+        <Button variant="outlined" disabled>
+          &lt;
+        </Button>
+      )
+    const next = page < this.props.store.user.list.pages - 1
+      ? (
+        <Link to={`/users/${page + 1}`}>
+          <Button variant="outlined">
+            &gt;
+          </Button>
+        </Link>
+      )
+      : (
+        <Button variant="outlined" disabled>
+          &gt;
+        </Button>
+      )
     const userList = this.props.store.user.list.data.map(user => (
       <List style={styles.item} key={user.id}>
         <ListItem dense button>
@@ -52,6 +79,11 @@ class UserList extends React.Component {
     return (
       <Template secure>
         {userList}
+        <div style={styles.center}>
+          {previous}
+          <Avatar style={styles.page}>{String(page)}</Avatar>
+          {next}
+        </div>
       </Template>
     )
   }
