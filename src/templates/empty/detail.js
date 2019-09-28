@@ -17,7 +17,7 @@ class EmptyTemplate extends Component {
           autoHideDuration={5000}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={notification.detail.show}
-          onClose={this.handleClose}
+          onClose={notification.close}
           message={notification.detail.message}
           action={(
             <Button

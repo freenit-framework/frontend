@@ -3,7 +3,7 @@ import service from './service'
 import initial from './initial'
 
 
-export default class UserStore extends BaseStore {
+export default class RoleStore extends BaseStore {
   fetch = async (id) => {
     try {
       const response = await service.fetch(id)
@@ -47,6 +47,7 @@ export default class UserStore extends BaseStore {
   create = async (data) => {
     try {
       const response = await service.create(data)
+      this.list.data.push(response)
       return {
         ...response,
         ok: true
@@ -102,14 +103,14 @@ export default class UserStore extends BaseStore {
     }
   }
 
-  async assign(roleId) {
+  async assign(userId) {
     try {
-      const response = await service.assign(this.detail.id, roleId)
+      const response = await service.assign(this.detail.id, userId)
       const data = {
         ...this.detail,
         ok: true,
       }
-      data.roles.push(response)
+      data.users.push(response)
       this.setDetail(data)
       return data
     } catch (error) {
@@ -120,14 +121,14 @@ export default class UserStore extends BaseStore {
     }
   }
 
-  async deassign(roleId) {
+  async deassign(userId) {
     try {
-      const result = await service.deassign(this.detail.id, roleId)
+      const result = await service.deassign(this.detail.id, userId)
       const data = {
         ...this.detail,
         ok: true,
       }
-      data.roles = this.detail.roles.filter(
+      data.users = this.detail.users.filter(
         user => user.id !== result.id,
       )
       this.setDetail(data)
