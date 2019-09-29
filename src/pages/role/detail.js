@@ -41,29 +41,37 @@ class RoleDetail extends React.Component {
   }
 
   render() {
-    const userList = this.props.store.user.list.data.map(user => {
-      const activated = this.props.store.role.detail.users.filter(
-        roleUser => roleUser.id === user.id,
-      ).length > 0
-      return (
-        <ListItem key={user.id} style={styles.item} dense button>
-          <Avatar style={styles.avatar}>{user.id}</Avatar>
-          <ListItemText primary={user.email} />
-          <ListItemSecondaryAction>
-            <Switch
-              onChange={this.handleUserActive(user)}
-              checked={activated}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
-      )
-    })
-    return this.props.store.me.detail.admin
+    let userList
+    const { me, role, user } = this.props.store
+    if (user.list.data.length === 0) {
+      userList = null
+    } else if (role.detail.users.length === 0) {
+      userList = null
+    } else {
+      userList = user.list.data.map(user => {
+        const activated = role.detail.users.filter(
+          roleUser => roleUser.id === user.id,
+        ).length > 0
+        return (
+          <ListItem key={user.id} style={styles.item} dense button>
+            <Avatar style={styles.avatar}>{user.id}</Avatar>
+            <ListItemText primary={user.email} />
+            <ListItemSecondaryAction>
+              <Switch
+                onChange={this.handleUserActive(user)}
+                checked={activated}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
+        )
+      })
+    }
+    return me.detail.admin
       ? (
         <Template style={{}}>
           <Paper style={styles.root}>
             <h1 style={styles.h1.small}>
-              {this.props.store.role.detail.name}
+              {role.detail.name}
             </h1>
             <List>
               {userList}
@@ -71,7 +79,7 @@ class RoleDetail extends React.Component {
           </Paper>
         </Template>
       )
-      : <NoPage />
+      : <NoPage secure />
   }
 }
 
@@ -86,3 +94,4 @@ RoleDetail.propTypes = {
 
 
 export default withStore(RoleDetail)
+

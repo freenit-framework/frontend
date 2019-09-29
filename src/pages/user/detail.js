@@ -11,6 +11,7 @@ import {
   Switch,
 } from '@material-ui/core'
 
+import NoPage from 'pages/nopage'
 import Template from 'templates/default'
 import styles from './styles'
 
@@ -31,31 +32,41 @@ class UserDetail extends React.Component {
   }
 
   render() {
-    const roleList = this.props.store.role.list.data.map(role => {
-      const activated = this.props.store.user.detail.roles.filter(
-        userRole => userRole.id === role.id,
-      ).length > 0
-      return (
-        <ListItem key={role.id} style={styles.item} dense button>
-          <Avatar style={styles.avatar}>{role.id}</Avatar>
-          <ListItemText primary={role.name} />
-          <ListItemSecondaryAction>
-            <Switch
-              onChange={this.handleRoleActive(role)}
-              checked={activated}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
+    let roleList
+    const { me, role, user } = this.props.store
+    if (role.list.data.length === 0) {
+      roleList = null
+    } else if (user.detail.roles.length === 0) {
+      roleList = null
+    } else {
+      roleList = role.list.data.map(role => {
+        const activated = user.detail.roles.filter(
+          userRole => userRole.id === role.id,
+        ).length > 0
+        return (
+          <ListItem key={role.id} style={styles.item} dense button>
+            <Avatar style={styles.avatar}>{role.id}</Avatar>
+            <ListItemText primary={role.name} />
+            <ListItemSecondaryAction>
+              <Switch
+                onChange={this.handleRoleActive(role)}
+                checked={activated}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
+        )
+      })
+    }
+    return me.detail.admin
+      ? (
+        <Template secure>
+          email: {user.detail.email}
+          <List>
+            {roleList}
+          </List>
+        </Template>
       )
-    })
-    return (
-      <Template secure>
-        email: {this.props.store.user.detail.email}
-        <List>
-          {roleList}
-        </List>
-      </Template>
-    )
+      : <NoPage secure />
   }
 }
 
@@ -78,3 +89,4 @@ UserDetail.propTypes = {
 
 
 export default withStore(UserDetail)
+
