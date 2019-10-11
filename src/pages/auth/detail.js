@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import Button from '@material-ui/core/Button'
-import Paper from '@material-ui/core/Paper'
-import TextField from '@material-ui/core/TextField'
+
+// Components
+import {
+  Button,
+  Paper,
+  TextField,
+} from '@material-ui/core'
+
 import EmptyTemplate from 'templates/empty/detail'
 import styles from './styles'
 import { withStore } from 'store'

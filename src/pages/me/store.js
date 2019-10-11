@@ -4,9 +4,9 @@ import initial from './initial'
 
 
 export default class MeStore extends BaseStore {
-  fetch = async (id) => {
+  fetch = async () => {
     try {
-      const response = await service.fetch(id)
+      const response = await service.fetch()
       const result = {
         ...response,
         ok: true

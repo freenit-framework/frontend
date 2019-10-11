@@ -1,12 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import Button from '@material-ui/core/Button'
-import Snackbar from '@material-ui/core/Snackbar'
+
+// Components
+import {
+  Button,
+  Snackbar,
+} from '@material-ui/core'
+
 import ProtectedComponent from 'components/atoms/protected'
 import { withStore } from 'store'
 
 
-class EmptyTemplate extends Component {
+class EmptyTemplate extends React.Component {
   render() {
     const { notification } = this.props.store
     return (

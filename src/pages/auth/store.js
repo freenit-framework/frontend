@@ -1,5 +1,6 @@
 import service from './service'
 import { BaseStore } from 'store'
+import initial from './initial'
 
 
 export default class AuthStore extends BaseStore {
@@ -14,17 +15,11 @@ export default class AuthStore extends BaseStore {
         refreshExpire,
         ok: true,
       }
-      if (this.timeoutHandler) {
-        clearTimeout(this.timeoutHandler)
-      }
-      this.timeoutHandler = setTimeout(
-        () => {this.refresh()},
-        result.accessExpire * 1000,
-      )
       this.setDetail(result)
       return result
     } catch (error) {
       const result = {
+        ...initial,
         ok: false,
       }
       this.setDetail(result)
@@ -54,26 +49,40 @@ export default class AuthStore extends BaseStore {
   }
 
   refresh = async () => {
+    if (this.detail.refreshing) {
+      return {
+        ...this.detail,
+        ok: true,
+      }
+    }
     try {
       const response = await service.refresh()
       const { accessExpire, refreshExpire } = response
       const result = {
+        ...this.detail,
         accessExpire,
         refreshExpire,
+        refreshing: true,
         ok: true,
       }
-      if (this.timeoutHandler) {
-        clearTimeout(this.timeoutHandler)
-      }
+      this.setDetail(result)
+      clearTimeout(this.timeoutHandler)
       this.timeoutHandler = setTimeout(
-        () => {this.refresh()},
+        () => {
+          this.setDetail({
+            ...this.detail,
+            refreshing: false,
+          })
+          this.refresh()
+        },
         result.accessExpire * 1000,
       )
-      this.setDetail(result)
       return result
     } catch (error) {
+      clearTimeout(this.timeoutHandler)
       this.timeoutHandler = null
       const result = {
+        ...initial,
         ok: false,
       }
       this.setDetail(result)

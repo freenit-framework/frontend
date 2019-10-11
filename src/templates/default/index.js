@@ -1,17 +1,19 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import { withStore } from 'store'
 
 // Components
-import AppBar from '@material-ui/core/AppBar'
-import Button from '@material-ui/core/Button'
-import Drawer from '@material-ui/core/Drawer'
-import IconButton from '@material-ui/core/IconButton'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import MenuItem from '@material-ui/core/MenuItem'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
+import {
+  AppBar,
+  Button,
+  Drawer,
+  IconButton,
+  ListItemIcon,
+  MenuItem,
+  Toolbar,
+  Typography,
+} from '@material-ui/core'
 
 // Icons
 import CloseIcon from '@material-ui/icons/Clear'
@@ -21,7 +23,7 @@ import EmptyTemplate from 'templates/empty/detail'
 import styles from './styles'
 
 
-class Template extends Component {
+class Template extends React.Component {
   state = {
     showMenu: false,
   }
@@ -52,8 +54,9 @@ class Template extends Component {
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h5" color="inherit" style={styles.flex}>
-              {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-              Startkit
+              <Link to="/">
+                Startkit
+              </Link>
             </Typography>
             {AuthButton}
           </Toolbar>

@@ -1,3 +1,5 @@
 export default {
-  detail: {},
+  detail: {
+    refreshing: false,
+  },
 }

@@ -12,7 +12,7 @@ class ProtectedComponent extends React.Component {
       if (this.props.secure) {
         this.props.history.push('/')
       }
-    } else {
+    } else if (!me.detail.id) {
       me.fetch()
     }
   }
