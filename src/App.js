@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import Store from 'store'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import './App.css'
+import { ThemeProvider } from '@material-ui/styles'
+import { Style } from 'radium'
 
 // Pages
 import Auth from 'pages/auth'
@@ -14,6 +15,9 @@ import User from 'pages/user'
 
 // Templates
 import Notification from 'templates/empty'
+
+import theme from 'theme'
+import styles from 'styles'
 
 
 function App() {
@@ -38,23 +42,26 @@ function App() {
     ),
   }
   return (
-    <Store.Provider value={store}>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/dashboard" component={Dashboard} />
-          <Route exact path="/login" component={Auth.detail} />
-          <Route exact path="/me" component={Me.detail} />
-          <Route exact path="/roles" component={Role.list} />
-          <Route exact path="/roles/:page" component={Role.list} />
-          <Route exact path="/role/:id" component={Role.detail} />
-          <Route exact path="/users" component={User.list} />
-          <Route exact path="/users/:page" component={User.list} />
-          <Route exact path="/user/:id" component={User.detail} />
-          <Route path="*" component={NoPage} />
-        </Switch>
-      </Router>
-    </Store.Provider>
+    <ThemeProvider theme={theme}>
+      <Style rules={styles} />
+      <Store.Provider value={store}>
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/login" component={Auth.detail} />
+            <Route exact path="/me" component={Me.detail} />
+            <Route exact path="/roles" component={Role.list} />
+            <Route exact path="/roles/:page" component={Role.list} />
+            <Route exact path="/role/:id" component={Role.detail} />
+            <Route exact path="/users" component={User.list} />
+            <Route exact path="/users/:page" component={User.list} />
+            <Route exact path="/user/:id" component={User.detail} />
+            <Route path="*" component={NoPage} />
+          </Switch>
+        </Router>
+      </Store.Provider>
+    </ThemeProvider>
   )
 }
 

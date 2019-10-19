@@ -19,10 +19,18 @@ import styles from './styles'
 
 
 class RoleDetail extends React.Component {
-  constructor(props) {
-    super(props)
-    props.store.role.fetch(this.props.match.params.id)
-    props.store.user.fetchAll()
+  componentDidMount = async () => {
+    const [roleResponse, userResponse] = Promise.all([
+      this.props.store.role.fetch(this.props.match.params.id),
+      this.props.store.user.fetchAll(),
+    ])
+    const { notification } = this.props.store
+    if (!roleResponse.ok) {
+      notification.show(roleResponse.error)
+    }
+    if (!userResponse.ok) {
+      notification.show(userResponse.error)
+    }
   }
 
   handleAdmin = () => {
@@ -94,4 +102,3 @@ RoleDetail.propTypes = {
 
 
 export default withStore(RoleDetail)
-
