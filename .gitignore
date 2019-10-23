@@ -23,3 +23,4 @@ src/local-conf.js
 vars.mk
 yarn-error.log
 yarn.lock
+coverage
