@@ -3,6 +3,7 @@
 
 export BIN_DIR=`dirname $0`
 export PROJECT_ROOT="${BIN_DIR}/.."
+. "${PROJECT_ROOT}/name.ini"
 export OFFLINE=${OFFLINE:=no}
 NPM=`which npm 2>/dev/null`
 YARN=`which yarn 2>/dev/null`
