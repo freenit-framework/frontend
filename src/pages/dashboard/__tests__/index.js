@@ -5,7 +5,7 @@ import TestApp from 'TestApp'
 // import { data } from 'store/provider'
 
 
-it('dashboard page', async () => {
+it('dashboard', async () => {
   let wrapper
   await act(async () => {
     wrapper = await mount(
