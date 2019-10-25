@@ -36,4 +36,12 @@ export default {
     })
     return response.data
   },
+
+  register: async (email, password) => {
+    const response = await axios.post(
+      `${API_ROOT}/auth/register`,
+      { email, password },
+    )
+    return response.data
+  },
 }

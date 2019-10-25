@@ -92,4 +92,28 @@ export default class AuthStore extends BaseStore {
       }
     }
   }
+
+  register = async (email, password) => {
+    try {
+      const response = await service.register(email, password)
+      const { accessExpire, refreshExpire } = response
+      const result = {
+        accessExpire,
+        refreshExpire,
+        ok: true,
+      }
+      this.setDetail(result)
+      return result
+    } catch (error) {
+      const result = {
+        ...initial,
+        ok: false,
+      }
+      this.setDetail(result)
+      return {
+        ...error,
+        ...result,
+      }
+    }
+  }
 }

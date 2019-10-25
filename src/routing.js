@@ -18,6 +18,7 @@ const Routing = () => {
       <Route exact path="/dashboard" component={Dashboard} />
       <Route exact path="/login" component={Auth.detail} />
       <Route exact path="/me" component={Me.detail} />
+      <Route exact path="/register" component={Auth.register} />
       <Route exact path="/roles" component={Role.list} />
       <Route exact path="/roles/:page" component={Role.list} />
       <Route exact path="/role/:id" component={Role.detail} />

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import { errorResponse } from 'utils'
 
 // Components
 import {
@@ -9,7 +10,7 @@ import {
   TextField,
 } from '@material-ui/core'
 
-import EmptyTemplate from 'templates/empty/detail'
+import Template from 'templates/empty/detail'
 import styles from './styles'
 import { withStore } from 'store'
 
@@ -27,9 +28,10 @@ class Login extends React.Component {
     const response = await auth.login(email, password)
     if (response.ok) {
       this.props.history.push('/dashboard')
-      auth.refresh(/* notify callback */)
+      auth.refresh()
     } else {
-      notification.show(response.response.data.message)
+      const error = errorResponse(response)
+      notification.show(error.message)
     }
   }
 
@@ -43,7 +45,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <EmptyTemplate style={{}}>
+      <Template style={{}}>
         <div style={styles.root}>
           <Paper style={styles.paper}>
             <div>
@@ -51,23 +53,25 @@ class Login extends React.Component {
               <form style={styles.form} onSubmit={this.handleSubmit}>
                 <div>
                   <TextField
+                    required
+                    autoFocus
                     label="Email"
                     margin="normal"
+                    data-id="email"
                     value={this.state.email}
                     onChange={this.handleEmail}
                     type="email"
-                    required
-                    autoFocus
                   />
                 </div>
                 <div>
                   <TextField
+                    required
                     label="Password"
                     type="password"
                     margin="normal"
+                    data-id="password"
                     value={this.state.password}
                     onChange={this.handlePassword}
-                    required
                   />
                 </div>
                 <div style={styles.button}>
@@ -79,7 +83,7 @@ class Login extends React.Component {
             </div>
           </Paper>
         </div>
-      </EmptyTemplate>
+      </Template>
     )
   }
 }

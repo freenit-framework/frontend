@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
 
-import EmptyTemplate from 'templates/empty'
+import Template from 'templates/empty/detail'
 import styles from './styles'
 
 
@@ -22,11 +22,16 @@ class Register extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault()
     const { auth, notification } = this.props.store
+    const { password, repeatPassword } = this.state
+    if (password !== repeatPassword) {
+      notification.show('Passwords must match!')
+      return
+    }
     const result = await auth.register(
       this.state.email,
       this.state.password,
     )
-    if (result.status === 200) {
+    if (result.ok) {
       notification.show(
         <div>
           You are now registered!
@@ -60,7 +65,7 @@ class Register extends React.Component {
 
   render() {
     return (
-      <EmptyTemplate>
+      <Template style={{}}>
         <div style={styles.root}>
           <Paper style={styles.paper}>
             <div>
@@ -68,33 +73,36 @@ class Register extends React.Component {
               <form style={styles.form} onSubmit={this.handleSubmit}>
                 <div>
                   <TextField
+                    required
+                    autoFocus
                     label="Email"
                     margin="normal"
+                    data-id="email"
                     onChange={this.handleEmail}
                     value={this.state.email}
                     type="email"
-                    required
-                    autoFocus
                   />
                 </div>
                 <div>
                   <TextField
+                    required
                     label="Password"
                     type="password"
                     margin="normal"
+                    data-id="password"
                     onChange={this.handlePassword}
                     value={this.state.password}
-                    required
                   />
                 </div>
                 <div>
                   <TextField
+                    required
                     label="Repeat Password"
                     type="password"
                     margin="normal"
+                    data-id="repeatPassword"
                     onChange={this.handleRepeatPassword}
                     value={this.state.repeatPassword}
-                    required
                   />
                 </div>
                 <div style={styles.button}>
@@ -106,7 +114,7 @@ class Register extends React.Component {
             </div>
           </Paper>
         </div>
-      </EmptyTemplate>
+      </Template>
     )
   }
 }

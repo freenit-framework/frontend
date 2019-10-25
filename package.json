@@ -24,7 +24,7 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!<rootDir>/node_modules/",
-      "!src/**/{mock,styles}.js"
+      "!src/**/{mock,service,styles}.js"
     ]
   },
   "scripts": {
