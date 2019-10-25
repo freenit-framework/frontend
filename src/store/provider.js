@@ -11,6 +11,11 @@ import User from 'pages/user'
 import Notification from 'templates/empty'
 
 
+export const data = {
+  store: {},
+}
+
+
 export default (props) => {
   const store = {
     auth: new Auth.store(
@@ -32,6 +37,7 @@ export default (props) => {
       useState(User.initial.list),
     ),
   }
+  data.store = store
   return (
     <Store.Provider value={store}>
       {props.children}

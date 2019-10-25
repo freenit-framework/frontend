@@ -54,7 +54,7 @@ class Template extends React.Component {
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h5" color="inherit" style={styles.flex}>
-              <Link to="/">
+              <Link to="/" data-id="app">
                 Startkit
               </Link>
             </Typography>
