@@ -9,7 +9,7 @@ import theme from 'theme'
 import styles from 'styles'
 
 
-function App() {
+export default () => {
   return (
     <ThemeProvider theme={theme}>
       <Style rules={styles} />
@@ -21,6 +21,3 @@ function App() {
     </ThemeProvider>
   )
 }
-
-
-export default App

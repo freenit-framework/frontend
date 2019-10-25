@@ -28,7 +28,7 @@ class RoleList extends React.Component {
       >
         <Card style={styles.card}>
           <CardContent>
-            <Typography variant="h5">
+            <Typography variant="h5" data-id="roles">
               Roles
             </Typography>
             <Typography color="textSecondary">
