@@ -8,4 +8,3 @@ export default createMuiTheme({
     // secondary: { main: '#11cb5f' }, // This is just green.A700 as hex.
   // },
 })
-

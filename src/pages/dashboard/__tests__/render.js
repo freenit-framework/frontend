@@ -1,14 +1,10 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import TestComponent from 'mock'
-import Dashboard from '..'
+import TestApp from 'TestApp'
 
 
 it('dashboard page', () => {
   const wrapper = mount(
-    <TestComponent
-      path="/dashboard"
-      component={Dashboard}
-    />
+    <TestApp />
   )
 })
