@@ -10,7 +10,7 @@ import theme from 'theme'
 import styles from 'styles'
 
 
-function TestApp(props) {
+const TestApp = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <Style rules={styles} />

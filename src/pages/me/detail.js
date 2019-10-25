@@ -1,29 +1,35 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { withStore } from 'store'
 
 // Components
 import {
   Paper,
 } from '@material-ui/core'
 
+import { errorResponse } from 'utils'
 import NoPage from 'pages/nopage'
 import Template from 'templates/default'
 import styles from './styles'
 
 
 class Me extends React.Component {
-  constructor(props) {
-    super(props)
-    props.store.me.fetch()
+  componentDidMount = async () => {
+    const { store } = this.props
+    const response = await store.me.fetch()
+    if (!response.ok) {
+      const error = errorResponse(response)
+      store.notification.show(error.message)
+    }
   }
 
   render() {
-    return this.props.store.me.detail.admin
+    const { me } = this.props.store
+    return me.detail.admin
       ? (
         <Template style={{}}>
           <Paper style={styles.root}>
             <h1 style={styles.h1.small}>
-              {this.props.store.me.detail.email}
+              {me.detail.email}
             </h1>
           </Paper>
         </Template>
@@ -33,13 +39,4 @@ class Me extends React.Component {
 }
 
 
-Me.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-}
-
-
-export default Me
+export default withStore(Me)

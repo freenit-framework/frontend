@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
@@ -14,7 +14,7 @@ import styles from './styles'
 import { withStore } from 'store'
 
 
-class Login extends Component {
+class Login extends React.Component {
   state = {
     email: '',
     password: '',

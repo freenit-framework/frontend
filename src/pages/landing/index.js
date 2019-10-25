@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Template from 'templates/default'
 
 
-class Landing extends Component {
+class Landing extends React.Component {
   render() {
     return (
       <Template>

@@ -12,9 +12,6 @@ it('dashboard page', async () => {
       <TestApp path="/dashboard" />
     )
   })
-  let title = wrapper.find('a[data-id="app"]')
-  expect(title.text()).toEqual('Startkit')
-
   let h5 = wrapper.find('h5[data-id="roles"]')
   expect(h5.text()).toEqual('Roles')
 

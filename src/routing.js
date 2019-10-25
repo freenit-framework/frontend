@@ -11,7 +11,7 @@ import Role from 'pages/role'
 import User from 'pages/user'
 
 
-function Routing() {
+const Routing = () => {
   return (
     <Switch>
       <Route exact path="/" component={Landing} />

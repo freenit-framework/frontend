@@ -81,7 +81,7 @@ class Template extends React.Component {
               tabIndex={0}
               onKeyDown={this.handleMenuClose}
             >
-              <Link to="/" style={styles.a}>
+              <Link to="/">
                 <MenuItem>
                   <ListItemIcon>
                     <DashboardIcon />
