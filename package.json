@@ -26,7 +26,7 @@
       "!<rootDir>/node_modules/",
       "!src/**/{mock,service,styles}.js",
       "!src/{pages,templates}/*/{index,initial}.js",
-      "!src/App.js",
+      "!src/{App,index,theme}.js",
       "!src/serviceWorker.js",
       "!src/setupProxy.js"
     ]

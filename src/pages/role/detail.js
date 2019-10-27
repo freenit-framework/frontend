@@ -13,14 +13,13 @@ import {
   Switch,
 } from '@material-ui/core'
 
-import NoPage from 'pages/nopage/detail'
 import Template from 'templates/default/detail'
 import styles from './styles'
 
 
 class RoleDetail extends React.Component {
   componentDidMount = async () => {
-    const [roleResponse, userResponse] = Promise.all([
+    const [roleResponse, userResponse] = await Promise.all([
       this.props.store.role.fetch(this.props.match.params.id),
       this.props.store.user.fetchAll(),
     ])
@@ -50,7 +49,7 @@ class RoleDetail extends React.Component {
 
   render() {
     let userList
-    const { me, role, user } = this.props.store
+    const { role, user } = this.props.store
     if (user.list.data.length === 0) {
       userList = null
     } else if (role.detail.users.length === 0) {
@@ -74,20 +73,18 @@ class RoleDetail extends React.Component {
         )
       })
     }
-    return me.detail.admin
-      ? (
-        <Template style={{}}>
-          <Paper style={styles.root}>
-            <h1 style={styles.h1.small}>
-              {role.detail.name}
-            </h1>
-            <List>
-              {userList}
-            </List>
-          </Paper>
-        </Template>
-      )
-      : <NoPage secure />
+    return (
+      <Template style={{}}>
+        <Paper style={styles.root}>
+          <h1 style={styles.h1.small}>
+            {role.detail.name}
+          </h1>
+          <List>
+            {userList}
+          </List>
+        </Paper>
+      </Template>
+    )
   }
 }
 

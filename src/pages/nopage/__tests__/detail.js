@@ -2,18 +2,17 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { act } from 'react-dom/test-utils'
 import TestApp from 'TestApp'
-// import { data } from 'store/provider'
 import authService from 'pages/auth/mock'
 
 
-it('landing', async () => {
+it('nopage', async () => {
   let wrapper
   await act(async () => {
     wrapper = await mount(
-      <TestApp path="/" />
+      <TestApp path="/nonexisting" />
     )
   })
-  let title = wrapper.find('a[data-id="app"]')
-  expect(title.text()).toEqual('Startkit')
+  let title = wrapper.find('h1')
+  expect(title.text()).toEqual('No Such Page')
   expect(authService.refresh).toHaveBeenCalled()
 })
