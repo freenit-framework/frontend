@@ -34,4 +34,13 @@ service.fetchAll = jest.fn(() => {
 })
 
 
+service.create = jest.fn(() => {
+  return {
+    id: 2,
+    name: 'newrole',
+    description: 'General role 2',
+  }
+})
+
+
 export default service

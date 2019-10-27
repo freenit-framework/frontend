@@ -102,7 +102,7 @@ class RoleList extends React.Component {
         />
         <Paper style={styles.root}>
           {roleList}
-          <Fab color="primary" onClick={this.handleAdd}>
+          <Fab color="primary" onClick={this.handleAdd} data-id="add">
             <AddIcon />
           </Fab>
           <div style={styles.center}>
