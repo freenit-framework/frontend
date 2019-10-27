@@ -11,7 +11,6 @@ import {
   Switch,
 } from '@material-ui/core'
 
-import NoPage from 'pages/nopage/detail'
 import Template from 'templates/default/detail'
 import styles from './styles'
 
@@ -33,7 +32,7 @@ class UserDetail extends React.Component {
 
   render() {
     let roleList
-    const { me, role, user } = this.props.store
+    const { role, user } = this.props.store
     if (role.list.data.length === 0) {
       roleList = null
     } else if (user.detail.roles.length === 0) {
@@ -57,16 +56,14 @@ class UserDetail extends React.Component {
         )
       })
     }
-    return me.detail.admin
-      ? (
-        <Template secure>
-          email: {user.detail.email}
-          <List>
-            {roleList}
-          </List>
-        </Template>
-      )
-      : <NoPage secure />
+    return (
+      <Template secure>
+        email: <span data-id="email">{user.detail.email}</span>
+        <List>
+          {roleList}
+        </List>
+      </Template>
+    )
   }
 }
 

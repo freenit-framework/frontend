@@ -1,6 +1,7 @@
 export default {
   detail: {
     email: '',
+    roles: [],
   },
 
   list: {

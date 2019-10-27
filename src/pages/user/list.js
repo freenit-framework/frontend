@@ -86,7 +86,7 @@ class UserList extends React.Component {
         {userList}
         <div style={styles.center}>
           {previous}
-          <Avatar style={styles.page}>{String(page)}</Avatar>
+          <Avatar style={styles.page} data-id="page">{String(page)}</Avatar>
           {next}
         </div>
       </Template>
