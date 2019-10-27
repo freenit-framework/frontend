@@ -14,7 +14,7 @@ import {
   Switch,
 } from '@material-ui/core'
 
-import Template from 'templates/default'
+import Template from 'templates/default/detail'
 
 import styles from './styles'
 

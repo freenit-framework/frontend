@@ -32,6 +32,10 @@ it('register', async () => {
   }
   emailInput.simulate('change', emailEvent)
   passwordInput.simulate('change', passwordEvent)
+  await act(async () => {
+    form.simulate('submit')
+  })
+  expect(service.register).not.toHaveBeenCalled()
   repeatPasswordInput.simulate('change', passwordEvent)
   await act(async () => {
     form.simulate('submit')

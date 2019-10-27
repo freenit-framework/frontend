@@ -7,8 +7,8 @@ import {
 } from '@material-ui/core'
 
 import { errorResponse } from 'utils'
-import NoPage from 'pages/nopage'
-import Template from 'templates/default'
+import NoPage from 'pages/nopage/detail'
+import Template from 'templates/default/detail'
 import styles from './styles'
 
 

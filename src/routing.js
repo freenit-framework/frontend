@@ -3,10 +3,10 @@ import { Switch, Route } from 'react-router-dom'
 
 // Pages
 import Auth from 'pages/auth'
-import Dashboard from 'pages/dashboard'
-import Landing from 'pages/landing'
-import Me from 'pages/me'
-import NoPage from 'pages/nopage'
+import Dashboard from 'pages/dashboard/detail'
+import Landing from 'pages/landing/detail'
+import Me from 'pages/me/detail'
+import NoPage from 'pages/nopage/detail'
 import Role from 'pages/role'
 import User from 'pages/user'
 
@@ -16,7 +16,7 @@ const Routing = () => {
     <Switch>
       <Route exact path="/" component={Landing} />
       <Route exact path="/dashboard" component={Dashboard} />
-      <Route exact path="/login" component={Auth.detail} />
+      <Route exact path="/login" component={Auth.login} />
       <Route exact path="/me" component={Me.detail} />
       <Route exact path="/register" component={Auth.register} />
       <Route exact path="/roles" component={Role.list} />

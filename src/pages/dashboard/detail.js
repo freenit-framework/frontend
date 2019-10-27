@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withTheme } from '@material-ui/core/styles'
-import Template from 'templates/default'
+import Template from 'templates/default/detail'
 
 // Components
 import RoleList from 'components/organisms/role-list'
