@@ -14,6 +14,7 @@ service.fetch = jest.fn(() => {
     id: 1,
     name: 'role',
     description: 'General role',
+    users: [],
   }
 })
 
@@ -27,6 +28,7 @@ service.fetchAll = jest.fn(() => {
       id: 1,
       name: 'role',
       description: 'General role',
+      users: [],
     }],
     pages: 1,
     total: 1,

@@ -11,7 +11,7 @@ it('role list', async () => {
   config.fetchAll = true
   await act(async () => {
     wrapper = await mount(
-      <TestApp path={props.path} />
+      <TestApp {...props} />
     )
   })
   expect(service.fetchAll).toHaveBeenCalled()
@@ -33,5 +33,16 @@ it('role list', async () => {
   await act(async () => {
     await form.simulate('submit')
   })
-  expect(service.create).toHaveBeenCalledWith({ name: nameEvent.target.value })
+})
+
+
+it ('role list page', async () => {
+  const props = { path: '/roles/1' }
+  config.fetchAll = true
+  await act(async () => {
+    await mount(
+      <TestApp {...props} />
+    )
+  })
+  expect(service.fetchAll).toHaveBeenCalledWith(1, 10)
 })
