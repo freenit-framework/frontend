@@ -73,7 +73,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 The `name.ini` is special! It is read by shell scripts and CBSD/Reggae `Makefile` (if you're using it). It has some limitations in order to make it portable between BSD make and sh. It should consist of one line:
 
 ```
-app_name="application"
+app_name="freenit"
 ```
 
 There must be no space around `=` in the previous example, otherwise shell scripts won't work. On fork, edit `name.ini` and `package.json` acordingly.
