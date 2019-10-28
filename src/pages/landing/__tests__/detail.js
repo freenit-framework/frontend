@@ -13,6 +13,6 @@ it('landing', async () => {
     )
   })
   let title = wrapper.find('a[data-id="app"]')
-  expect(title.text()).toEqual('Startkit')
+  expect(title.text()).toEqual('Freenit')
   expect(authService.refresh).toHaveBeenCalled()
 })
