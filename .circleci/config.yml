@@ -1,0 +1,29 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:latest
+    steps:
+      - checkout
+  test:
+    docker:
+      - image: node:latest
+    steps:
+      - checkout
+      - run:
+          name: Run tests
+          command: |
+            npm install --global yarn
+            bin/test.sh
+      - run:
+          name: Publish code coverage
+          command: |
+            cat coverage/lcov.info | node_modules/.bin/coveralls || true
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
