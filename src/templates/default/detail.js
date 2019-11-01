@@ -18,8 +18,10 @@ import {
 // Icons
 import CloseIcon from '@material-ui/icons/Clear'
 import DashboardIcon from '@material-ui/icons/Dashboard'
-import MeIcon from '@material-ui/icons/Person'
+import MeIcon from '@material-ui/icons/AccountCircle'
 import ReorderIcon from '@material-ui/icons/Reorder'
+import UserIcon from '@material-ui/icons/PeopleOutline'
+import RoleIcon from '@material-ui/icons/People'
 
 import EmptyTemplate from 'templates/empty/detail'
 import styles from './styles'
@@ -78,6 +80,26 @@ class Template extends React.Component {
                 <MeIcon />
               </ListItemIcon>
               Me
+            </MenuItem>
+          </Link>
+        ),
+        (
+          <Link to="/users" key="users">
+            <MenuItem>
+              <ListItemIcon>
+                <UserIcon />
+              </ListItemIcon>
+              Users
+            </MenuItem>
+          </Link>
+        ),
+        (
+          <Link to="/roles" key="roles">
+            <MenuItem>
+              <ListItemIcon>
+                <RoleIcon />
+              </ListItemIcon>
+              Roles
             </MenuItem>
           </Link>
         ),
