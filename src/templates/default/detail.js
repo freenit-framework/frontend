@@ -18,6 +18,8 @@ import {
 // Icons
 import CloseIcon from '@material-ui/icons/Clear'
 import DashboardIcon from '@material-ui/icons/Dashboard'
+import MeIcon from '@material-ui/icons/Person'
+import ReorderIcon from '@material-ui/icons/Reorder'
 
 import EmptyTemplate from 'templates/empty/detail'
 import styles from './styles'
@@ -36,6 +38,14 @@ class Template extends React.Component {
     }
   }
 
+  handleMenuOpen = () => {
+    this.setState({ showMenu: true })
+  }
+
+  handleMenuClose = () => {
+    this.setState({ showMenu: false })
+  }
+
   render() {
     const { auth  } = this.props.store
     const AnonButton = (
@@ -49,11 +59,38 @@ class Template extends React.Component {
       </Button>
     )
     const AuthButton = auth.detail.ok ? LoggedinButton : AnonButton
+    const AuthMenu = auth.detail.ok
+      ? [
+        (
+          <Link to="/dashboard" key="dashboard">
+            <MenuItem>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              Dashboard
+            </MenuItem>
+          </Link>
+        ),
+        (
+          <Link to="/me" key="me">
+            <MenuItem>
+              <ListItemIcon>
+                <MeIcon />
+              </ListItemIcon>
+              Me
+            </MenuItem>
+          </Link>
+        ),
+      ]
+      : null
     return (
       <div>
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h5" color="inherit" style={styles.flex}>
+              <IconButton color="inherit" onClick={this.handleMenuOpen}>
+                <ReorderIcon />
+              </IconButton>
               <Link to="/" data-id="app">
                 Freenit
               </Link>
@@ -81,14 +118,7 @@ class Template extends React.Component {
               tabIndex={0}
               onKeyDown={this.handleMenuClose}
             >
-              <Link to="/">
-                <MenuItem>
-                  <ListItemIcon>
-                    <DashboardIcon />
-                  </ListItemIcon>
-                  Dashboard
-                </MenuItem>
-              </Link>
+              {AuthMenu}
             </div>
           </Drawer>
         </EmptyTemplate>

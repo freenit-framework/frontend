@@ -60,6 +60,7 @@ class Me extends React.Component {
         <Paper style={styles.root}>
           <form onSubmit={this.handleSubmit} style={styles.form}>
             <TextField
+              required
               label="Email"
               type="email"
               variant="outlined"
