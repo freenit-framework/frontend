@@ -14,8 +14,8 @@ it('me', async () => {
     )
   })
   expect(service.fetch).toHaveBeenCalled()
-  const h1 = wrapper.find('h1')
-  expect(h1.text()).toBe('admin@example.com')
+  const email = wrapper.find('input')
+  expect(email.instance().value).toBe('admin@example.com')
 })
 
 
