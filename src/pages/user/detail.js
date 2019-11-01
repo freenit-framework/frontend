@@ -18,8 +18,21 @@ import styles from './styles'
 class UserDetail extends React.Component {
   constructor(props) {
     super(props)
-    props.store.user.fetch(props.match.params.id)
-    props.store.role.fetchAll()
+    this.fetch()
+  }
+
+  fetch = async () => {
+    const { store } = this.props
+    const [users, roles] = await Promise.all([
+      store.user.fetch(this.props.match.params.id),
+      store.role.fetchAll(),
+    ])
+    if (!users.ok) {
+      store.notification.show('User error')
+    }
+    if (!roles.ok) {
+      store.notification.show('Role error')
+    }
   }
 
   handleRoleActive = (role) => (event, value) => {
@@ -34,8 +47,6 @@ class UserDetail extends React.Component {
     let roleList
     const { role, user } = this.props.store
     if (role.list.data.length === 0) {
-      roleList = null
-    } else if (user.detail.roles.length === 0) {
       roleList = null
     } else {
       roleList = role.list.data.map(role => {

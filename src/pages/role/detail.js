@@ -52,8 +52,6 @@ class RoleDetail extends React.Component {
     const { role, user } = this.props.store
     if (user.list.data.length === 0) {
       userList = null
-    } else if (role.detail.users.length === 0) {
-      userList = null
     } else {
       userList = user.list.data.map(user => {
         const activated = role.detail.users.filter(

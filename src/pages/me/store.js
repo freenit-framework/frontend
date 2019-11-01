@@ -28,9 +28,9 @@ export default class MeStore extends BaseStore {
     }
   }
 
-  edit = async (id, data) => {
+  edit = async (data) => {
     try {
-      const response = await service.edit(id, data)
+      const response = await service.edit(data)
       const result = {
         ...response,
         ok: true

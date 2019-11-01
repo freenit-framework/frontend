@@ -42,4 +42,13 @@ export default {
     },
     textAlign: 'center',
   },
+
+  form: {
+    display: 'flex',
+  },
+
+  button: {
+    marginLeft: 10,
+    width: 80,
+  },
 }

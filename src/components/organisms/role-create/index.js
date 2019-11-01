@@ -30,7 +30,6 @@ class RoleCreate extends React.Component {
     if (response.ok) {
       notification.show('Role created')
     } else {
-      console.log(response)
       notification.show('Error')
     }
     this.props.close()
@@ -39,7 +38,7 @@ class RoleCreate extends React.Component {
   render() {
     return (
       <Dialog
-        onClose={this.handleClose}
+        onClose={this.props.close}
         open={this.props.open}
       >
         <DialogTitle>Create new role</DialogTitle>
@@ -65,7 +64,7 @@ class RoleCreate extends React.Component {
             fullWidth
             color="secondary"
             variant="outlined"
-            onClick={this.handleClose}
+            onClick={this.props.close}
           >
             Cancel
           </Button>
