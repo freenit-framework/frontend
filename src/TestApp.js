@@ -14,12 +14,11 @@ const TestApp = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <Style rules={styles} />
-      <StoreProvider>
-        <Router initialEntries={[props.path]} initialIndex={0}>
+      <Router initialEntries={[props.path]} initialIndex={0}>
+        <StoreProvider>
           <Routing />
-          {props.children}
-        </Router>
-      </StoreProvider>
+        </StoreProvider>
+      </Router>
     </ThemeProvider>
   )
 }

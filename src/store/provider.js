@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Store from './index'
+import { withRouter } from 'react-router-dom'
 
 // Pages
 import Auth from 'pages/auth'
@@ -11,17 +12,16 @@ import User from 'pages/user'
 import Notification from 'templates/empty'
 
 
-export const data = {
-  store: {},
-}
+export const data = {}
 
 
-export default (props) => {
+const StoreProvider = (props) => {
   const store = {
     auth: new Auth.store(
       useState(Auth.initial.detail),
       useState(Auth.initial.register),
     ),
+    history: props.history,
     me: new Me.store(
       useState(Me.initial.detail),
     ),
@@ -44,3 +44,6 @@ export default (props) => {
     </Store.Provider>
   )
 }
+
+
+export default withRouter(StoreProvider)

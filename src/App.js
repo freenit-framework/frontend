@@ -13,11 +13,11 @@ export default () => {
   return (
     <ThemeProvider theme={theme}>
       <Style rules={styles} />
-      <StoreProvider>
         <Router>
-          <Routing />
+          <StoreProvider>
+            <Routing />
+          </StoreProvider>
         </Router>
-      </StoreProvider>
     </ThemeProvider>
   )
 }
