@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
+  Paper,
   Switch,
 } from '@material-ui/core'
 
@@ -22,7 +23,14 @@ import styles from './styles'
 class UserList extends React.Component {
   constructor(props) {
     super(props)
-    this.props.store.user.fetchAll(this.props.match.params.page)
+    this.fetch()
+  }
+
+  fetch = () => {
+    const { auth, user } = this.props.store
+    if (auth.detail.ok) {
+      user.fetchAll(this.props.match.params.page)
+    }
   }
 
   handleUserActive = (user) => () => {
@@ -82,13 +90,15 @@ class UserList extends React.Component {
       </List>
     ))
     return (
-      <Template secure>
-        {userList}
-        <div style={styles.center}>
-          {previous}
-          <Avatar style={styles.page} data-id="page">{String(page)}</Avatar>
-          {next}
-        </div>
+      <Template secure style={{}}>
+        <Paper style={styles.root}>
+          {userList}
+          <div style={styles.center}>
+            {previous}
+            <Avatar style={styles.page} data-id="page">{String(page)}</Avatar>
+            {next}
+          </div>
+        </Paper>
       </Template>
     )
   }

@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
-import { errorResponse } from 'utils'
+import { errors } from 'utils'
 
 // Components
 import {
@@ -23,14 +22,14 @@ class Login extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault()
-    const { auth, notification } = this.props.store
+    const { auth, history, notification } = this.props.store
     const { email, password } = this.state
     const response = await auth.login(email, password)
     if (response.ok) {
-      this.props.history.push('/dashboard')
+      history.push('/dashboard')
       auth.refresh()
     } else {
-      const error = errorResponse(response)
+      const error = errors(response)
       notification.show(error.message)
     }
   }
@@ -90,9 +89,8 @@ class Login extends React.Component {
 
 
 Login.propTypes = {
-  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   store: PropTypes.shape({}).isRequired,
 }
 
 
-export default withRouter(withStore(Login))
+export default withStore(Login)

@@ -7,7 +7,7 @@ import {
   Snackbar,
 } from '@material-ui/core'
 
-import ProtectedComponent from 'components/atoms/protected'
+import ProtectedComponent from 'components/protected'
 import { withStore } from 'store'
 
 

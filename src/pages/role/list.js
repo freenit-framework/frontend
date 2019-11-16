@@ -14,7 +14,7 @@ import {
   ListItemText,
   Paper,
 } from '@material-ui/core'
-import RoleCreate from 'components/organisms/role-create'
+import RoleCreate from 'components/role-create'
 
 // Icons
 import AddIcon from '@material-ui/icons/Add'
@@ -95,7 +95,7 @@ class RoleList extends React.Component {
       </List>
     ))
     return (
-      <Template style={{}}>
+      <Template style={{}} secure>
         <RoleCreate
           open={this.state.open}
           close={this.handleClose}

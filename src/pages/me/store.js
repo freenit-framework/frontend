@@ -1,9 +1,13 @@
-import { BaseStore } from 'store'
 import service from './service'
 import initial from './initial'
 
 
-export default class MeStore extends BaseStore {
+export default class MeStore {
+  constructor(detail) {
+    this.detail = detail[0]
+    this.setDetail = detail[1]
+  }
+
   fetch = async () => {
     try {
       const response = await service.fetch()

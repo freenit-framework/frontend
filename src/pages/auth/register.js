@@ -1,12 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { withRouter, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { withStore } from 'store'
 
 // Components
-import Button from '@material-ui/core/Button'
-import Paper from '@material-ui/core/Paper'
-import TextField from '@material-ui/core/TextField'
+import {
+  Button,
+  Paper,
+  TextField,
+} from '@material-ui/core'
 
 import Template from 'templates/empty/detail'
 import styles from './styles'
@@ -120,11 +121,4 @@ class Register extends React.Component {
 }
 
 
-Register.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-}
-
-
-export default withRouter(withStore(Register))
+export default withStore(Register)

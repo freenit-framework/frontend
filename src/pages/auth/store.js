@@ -1,10 +1,14 @@
 import service from './service'
-import { BaseStore } from 'store'
 import initial from './initial'
 
 
-export default class AuthStore extends BaseStore {
+export default class AuthStore {
   timeoutHandler = null
+
+  constructor(detail) {
+    this.detail = detail[0]
+    this.setDetail = detail[1]
+  }
 
   login = async (email, password) => {
     try {

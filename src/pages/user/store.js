@@ -1,9 +1,15 @@
-import { BaseStore } from 'store'
 import service from './service'
 import initial from './initial'
 
 
-export default class UserStore extends BaseStore {
+export default class UserStore {
+  constructor(detail, list) {
+    this.detail = detail[0]
+    this.setDetail = detail[1]
+    this.list = list[0]
+    this.setList = list[1]
+  }
+
   fetch = async (id) => {
     try {
       const response = await service.fetch(id)

@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom'
 import { withStore } from 'store'
 
 // Components
-import Badge from '@material-ui/core/Badge'
-import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-import Typography from '@material-ui/core/Typography'
+import {
+  Badge,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+} from '@material-ui/core'
 
 import styles from './styles'
 

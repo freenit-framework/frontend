@@ -72,7 +72,7 @@ class RoleDetail extends React.Component {
       })
     }
     return (
-      <Template style={{}}>
+      <Template style={{}} secure>
         <Paper style={styles.root}>
           <h1 style={styles.h1.small}>
             {role.detail.name}

@@ -1,4 +1,31 @@
+import axios from 'axios'
+
+
 export const API_ROOT = '/api/v0'
+
+
+export const rest = axios.create({
+  baseURL: API_ROOT,
+  withCredentials: true,
+})
+
+rest.interceptors.request.use(
+  (config) => {
+    const csrfType = config.url === '/auth/refresh'
+      ? 'csrf_refresh_token'
+      : 'csrf_access_token'
+    const csrf = getCookie(csrfType)
+    config.headers.withCredentials = true
+    if (csrf) {
+      config.headers['X-CSRF-TOKEN'] = csrf
+    }
+    return config
+  },
+
+  (err) => {
+    return Promise.reject(err)
+  },
+)
 
 
 export const getCookie = (name) => {
@@ -8,29 +35,23 @@ export const getCookie = (name) => {
 }
 
 
-export const errorResponse = (response) => {
-  if (!response) {
-    return {
-      message: '',
-    }
-  }
+export const errors = (response) => {
+  const data = response.response && response.response.data
+    ? response.response.data
+    : {}
   if (response.message) {
-    return {
-      message: response.message,
-    }
+    data.message = response.message
+  } else if (data.msg) {
+    data.message = data.msg
+  } else {
+    data.message = data.statusText
   }
-  if (response.response) {
-    const { data, statusText } = response.response
-    if (data && data.status) {
-      return {
-        message: data.status,
+  if (data.errors){
+    Object.getOwnPropertyNames(data.errors).forEach(property => {
+      if (property !== 'message') {
+        data.errors[property] = data.errors[property].join(' ')
       }
-    }
-    return {
-      message: statusText,
-    }
+    })
   }
-  return {
-    message: '',
-  }
+  return data
 }

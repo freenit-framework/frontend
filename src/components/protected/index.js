@@ -5,7 +5,12 @@ import { withRouter } from 'react-router'
 
 
 class ProtectedComponent extends React.Component {
-  async componentDidMount() {
+  constructor(props) {
+    super(props)
+    this.protect()
+  }
+
+  protect = async () => {
     const { auth, me } = this.props.store
     const response = await auth.refresh()
     if (!response.ok) {

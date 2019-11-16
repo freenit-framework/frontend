@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@material-ui/core'
 
-import { errorResponse } from 'utils'
+import { errors } from 'utils'
 import Template from 'templates/default/detail'
 import styles from './styles'
 
@@ -27,7 +27,7 @@ class Me extends React.Component {
     const { store } = this.props
     const response = await store.me.fetch()
     if (!response.ok) {
-      const error = errorResponse(response)
+      const error = errors(response)
       store.notification.show(error.message)
     } else {
       this.setState({

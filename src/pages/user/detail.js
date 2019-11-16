@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  Paper,
   Switch,
 } from '@material-ui/core'
 
@@ -23,15 +24,17 @@ class UserDetail extends React.Component {
 
   fetch = async () => {
     const { store } = this.props
-    const [users, roles] = await Promise.all([
-      store.user.fetch(this.props.match.params.id),
-      store.role.fetchAll(),
-    ])
-    if (!users.ok) {
-      store.notification.show('User error')
-    }
-    if (!roles.ok) {
-      store.notification.show('Role error')
+    if (store.auth.detail.ok) {
+      const [users, roles] = await Promise.all([
+        store.user.fetch(this.props.match.params.id),
+        store.role.fetchAll(),
+      ])
+      if (!users.ok) {
+        store.notification.show('User error')
+      }
+      if (!roles.ok) {
+        store.notification.show('Role error')
+      }
     }
   }
 
@@ -68,11 +71,13 @@ class UserDetail extends React.Component {
       })
     }
     return (
-      <Template secure>
-        email: <span data-id="email">{user.detail.email}</span>
-        <List>
-          {roleList}
-        </List>
+      <Template secure style={{}}>
+        <Paper style={styles.root}>
+          email: <span data-id="email">{user.detail.email}</span>
+          <List>
+            {roleList}
+          </List>
+        </Paper>
       </Template>
     )
   }
