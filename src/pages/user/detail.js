@@ -24,17 +24,15 @@ class UserDetail extends React.Component {
 
   fetch = async () => {
     const { store } = this.props
-    if (store.auth.detail.ok) {
-      const [users, roles] = await Promise.all([
-        store.user.fetch(this.props.match.params.id),
-        store.role.fetchAll(),
-      ])
-      if (!users.ok) {
-        store.notification.show('User error')
-      }
-      if (!roles.ok) {
-        store.notification.show('Role error')
-      }
+    const [users, roles] = await Promise.all([
+      store.user.fetch(this.props.match.params.id),
+      store.role.fetchAll(),
+    ])
+    if (!users.ok) {
+      store.notification.show('User error')
+    }
+    if (!roles.ok) {
+      store.notification.show('Role error')
     }
   }
 

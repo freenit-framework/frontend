@@ -1,4 +1,5 @@
 import React from 'react'
+import { errors } from 'utils'
 import PropTypes from 'prop-types'
 import { withStore } from 'store'
 import { Link } from 'react-router-dom'
@@ -26,10 +27,12 @@ class UserList extends React.Component {
     this.fetch()
   }
 
-  fetch = () => {
-    const { auth, user } = this.props.store
-    if (auth.detail.ok) {
-      user.fetchAll(this.props.match.params.page)
+  fetch = async () => {
+    const { notification, user } = this.props.store
+    const response = await user.fetchAll(this.props.match.params.page)
+    if (!response.ok) {
+      const error = errors(response)
+      notification.show(error.message)
     }
   }
 
