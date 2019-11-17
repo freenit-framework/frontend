@@ -1,4 +1,4 @@
-export const Protected = require('./protected').default
-export const RoleCreate = require('./role-create').default
-export const RoleList= require('./role-list').default
-export const UserList= require('./user-list').default
+export { default as Protected } from './protected'
+export { default as RoleCreate } from './role-create'
+export { default as RoleList } from './role-list'
+export { default as UserList } from './user-list'

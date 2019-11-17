@@ -20,6 +20,7 @@ node_modules
 project.conf
 site.retry
 src/local-conf.js
+project.mk
 vars.mk
 yarn-error.log
 yarn.lock
