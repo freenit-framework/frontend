@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { errors } from 'utils'
 
 // Components
 import {
   Button,
+  Link as MaterialLink,
   Paper,
   TextField,
 } from '@material-ui/core'
@@ -78,6 +80,11 @@ class Login extends React.Component {
                     Login
                   </Button>
                 </div>
+                <Link to="/reset">
+                  <MaterialLink>
+                    forgot password?
+                  </MaterialLink>
+                </Link>
               </form>
             </div>
           </Paper>
