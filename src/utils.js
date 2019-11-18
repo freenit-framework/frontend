@@ -43,8 +43,10 @@ export const errors = (response) => {
     data.message = response.message
   } else if (data.msg) {
     data.message = data.msg
-  } else {
+  } else if (data.statusText) {
     data.message = data.statusText
+  } else {
+    data.message = data.status
   }
   if (data.errors){
     Object.getOwnPropertyNames(data.errors).forEach(property => {

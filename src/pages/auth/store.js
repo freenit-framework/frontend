@@ -120,4 +120,21 @@ export default class AuthStore {
       }
     }
   }
+
+  reset = async (email) => {
+    try {
+      const response = await service.reset(email)
+      const result = {
+        ...response,
+        ok: true,
+      }
+      return result
+    } catch (error) {
+      const result = {
+        ...error,
+        ok: false,
+      }
+      return result
+    }
+  }
 }
