@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import { errors } from 'utils'
 
 // Components
 import {
   Button,
-  Link as MaterialLink,
   Paper,
   TextField,
 } from '@material-ui/core'
@@ -16,28 +14,25 @@ import styles from './styles'
 import { withStore } from 'store'
 
 
-class Login extends React.Component {
+class ChangePassword extends React.Component {
   state = {
-    email: '',
     password: '',
   }
 
   handleSubmit = async (event) => {
     event.preventDefault()
-    const { auth, history, notification } = this.props.store
-    const { email, password } = this.state
-    const response = await auth.login(email, password)
+    const { password } = this.state
+    const { auth, notification } = this.props.store
+    const response = await auth.changePassword(
+      password,
+      this.props.match.params.token,
+    )
     if (response.ok) {
-      history.push('/dashboard')
-      auth.refresh()
+      notification.show('You can login with your new password')
     } else {
       const error = errors(response)
       notification.show(error.message)
     }
-  }
-
-  handleEmail = (event) => {
-    this.setState({ email: event.target.value })
   }
 
   handlePassword = (event) => {
@@ -50,41 +45,24 @@ class Login extends React.Component {
         <div style={styles.root}>
           <Paper style={styles.paper}>
             <div>
-              <h1>Login</h1>
+              <h1>Reset Password</h1>
               <form style={styles.form} onSubmit={this.handleSubmit}>
                 <div>
                   <TextField
                     required
                     autoFocus
-                    label="Email"
-                    margin="normal"
-                    data-id="email"
-                    value={this.state.email}
-                    onChange={this.handleEmail}
-                    type="email"
-                  />
-                </div>
-                <div>
-                  <TextField
-                    required
                     label="Password"
-                    type="password"
-                    margin="normal"
                     data-id="password"
                     value={this.state.password}
                     onChange={this.handlePassword}
+                    type="password"
                   />
                 </div>
                 <div style={styles.button}>
                   <Button variant="contained" type="submit">
-                    Login
+                    Reset Password
                   </Button>
                 </div>
-                <Link to="/reset">
-                  <MaterialLink>
-                    forgot password?
-                  </MaterialLink>
-                </Link>
               </form>
             </div>
           </Paper>
@@ -95,9 +73,9 @@ class Login extends React.Component {
 }
 
 
-Login.propTypes = {
+ChangePassword.propTypes = {
   store: PropTypes.shape({}).isRequired,
 }
 
 
-export default withStore(Login)
+export default withStore(ChangePassword)

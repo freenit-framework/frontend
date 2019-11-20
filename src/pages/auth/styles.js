@@ -15,9 +15,16 @@ export default {
     ...flex,
     width: 400,
     height: 400,
+    textAlign: 'center',
   },
 
   button: {
     ...flex,
+    marginBottom: 10,
+  },
+
+  form: {
+    ...flex,
+    flexDirection: 'column',
   },
 }

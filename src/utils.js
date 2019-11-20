@@ -39,12 +39,14 @@ export const errors = (response) => {
   const data = response.response && response.response.data
     ? response.response.data
     : {}
-  if (response.message) {
-    data.message = response.message
-  } else if (data.msg) {
-    data.message = data.msg
-  } else {
-    data.message = data.statusText
+  if (!data.message) {
+    if (data.msg) {
+      data.message = data.msg
+    } else if (data.statusText) {
+      data.message = data.statusText
+    } else if (data.status) {
+      data.message = data.status
+    }
   }
   if (data.errors){
     Object.getOwnPropertyNames(data.errors).forEach(property => {
