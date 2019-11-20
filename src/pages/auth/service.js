@@ -23,7 +23,12 @@ export default {
   },
 
   reset: async (email) => {
-    const response = await rest.post('/auth/reset', { email })
+    const response = await rest.post('/auth/reset/request', { email })
+    return response.data
+  },
+
+  changePassword: async (password, token) => {
+    const response = await rest.post('/auth/reset', { password, token })
     return response.data
   },
 }
