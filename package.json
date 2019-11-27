@@ -28,7 +28,8 @@
       "!src/{pages,templates}/*/{index,initial}.js",
       "!src/{App,index,theme}.js",
       "!src/serviceWorker.js",
-      "!src/setupProxy.js"
+      "!src/setupProxy.js",
+      "!src/components/index.js"
     ]
   },
   "scripts": {

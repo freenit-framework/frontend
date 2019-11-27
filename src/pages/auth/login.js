@@ -6,7 +6,6 @@ import { errors } from 'utils'
 // Components
 import {
   Button,
-  Link as MaterialLink,
   Paper,
   TextField,
 } from '@material-ui/core'
@@ -81,9 +80,7 @@ class Login extends React.Component {
                   </Button>
                 </div>
                 <Link to="/reset">
-                  <MaterialLink>
-                    forgot password?
-                  </MaterialLink>
+                  forgot password?
                 </Link>
               </form>
             </div>
