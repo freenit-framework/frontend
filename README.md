@@ -1,79 +1,128 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Support
+If you like the project and want to support my work, you can buy me a coffee :)
 
-## Available Scripts
+[![paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://paypal.me/kaihotz)
 
-In the project directory, you can run:
+# Getting started
 
-### `npm start`
+There are two methods for getting started with this repo.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-
-![diagram](https://raw.githubusercontent.com/mekanix/frontend-startkit/master/frontend.png)
-
-## Forking
-The `name.ini` is special! It is read by shell scripts and CBSD/Reggae `Makefile` (if you're using it). It has some limitations in order to make it portable between BSD make and sh. It should consist of one line:
+#### Familiar with Git?
 
 ```
-app_name="freenit"
+  > git clone git@github.com:KaiHotz/react-rollup-boilerplate.git
+  > cd react-rollup-boilerplate
+  > yarn install
 ```
 
-There must be no space around `=` in the previous example, otherwise shell scripts won't work. On fork, edit `name.ini` and `package.json` acordingly.
+#### Not Familiar with Git?
+Click [here](https://github.com/KaiHotz/react-rollup-boilerplate/archive/master.zip) to download the .zip file.  Extract the contents of the zip file, then open your terminal, change to the project directory, and:
+
+```
+  > yarn install
+```
+
+
+## Developing
+
+To start the developing run :
+
+```
+> yarn dev
+```
+
+This will build a version of your library, run the watcher and also run the Styleguide.
+To open the Styleguide manualy open your Browser and navigate to [http://localhost:6060](http://localhost:6060).
+Start developing your components in `src/lib/components` folder and update the `src/lib/index.js` file acordingly.
+Always provide an `YourComponent.examples.md` file, so your component will show up in the Styleguide.
+You can refer to example `Button` component, but i think you'll get the idea.
+
+### Proposals (Babel)
+For smoother development some Babel plugin are included
+- [class-properties](https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-class-properties)
+- [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-object-rest-spread)
+- [optional-chaining](https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-optional-chaining)
+
+## Styling your components
+
+`SCSS` and `CSS` are supported out of the box just import your styles into your component like you normaly would do.
+For the use of  `CSS Modules` refere to [rollup-plugin-postcss](https://github.com/egoist/rollup-plugin-postcss)
+
+## Testing
+
+Testing is done with [Jest](https://facebook.github.io/jest/), [Enzyme](http://airbnb.io/enzyme/) and [Jasmine Matchers](https://github.com/JamieMason/Jasmine-Matchers)
+You can refer to `Button.test.js` as an example.
+```
+> yarn test
+```
+or (for getting coverage)
+```
+> yarn test:coverage
+```
+
+
+## Linting
+
+Linting is set up through [ESLint](https://eslint.org/) and configured with  [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb)
+You can modify linting rules by overriding them in the `.eslintrc.json` file.
+
+```
+> yarn lint
+```
+or (for for automatic fixing if possible)
+```
+> yarn lint:fix
+```
+
+## Publishing your library to NPM
+
+To release your library to NPM or your private Registry, make sure you have an active account at [NPM](https://www.npmjs.com/), your `.npmrc` file is correctly setup and the repository url in `package.json` file is set to your repoitory url, then:
+
+```
+> yarn release
+```
+
+## Styleguide
+
+For custom layouts, styleing and more information about the Styleguide please refer to [React Styleguidist](https://react-styleguidist.js.org/) documentation.
+
+#### Deploy the Styleguide to GitHub Pages
+Make sure the repository url in `package.json` file is set to your repoitory url, then:
+
+```
+> yarn deploy
+```
+
+## Scripts
+
+- `yarn dev` : Executes the develop mode, running watcher and the Stylguide, rebuilding your library on every change.
+- `yarn start` : Only serves the Styleguide.
+- `yarn build` : Builds your library  (build can be faound in `dist` folder).
+- `yarn styleguide:build` : Builds the static Styleguide in case you want to deploy it.
+- `yarn test` : Runs the tests.
+- `yarn test:coverage`: Runs the test and shows the coverage.
+- `yarn lint` : Runs the linter.
+- `yarn lint:fix` : Runs the linter and fixes automatic fixable issues.
+- `yarn release` : Publishes your Library on NPM or your private Registry (depending on your config in your `.npmrc` file).
+- `yarn deploy`: Deploys the Styleguide to GitHub Pages.
+
+
+## Resources
+
+### Bundler
+- [Rollup.js](https://rollupjs.org/guide/en)
+
+### Styleguide
+- [React Styleguidist](https://react-styleguidist.js.org/)
+
+### Testing
+- [Jasmine Matchers](https://github.com/JamieMason/Jasmine-Matchers)
+- [Enzyme](http://airbnb.io/enzyme/)
+- [Jest](https://facebook.github.io/jest/)
+
+### Linting
+- [ESLint](https://eslint.org/)
+- [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb)
+
+### Compiler
+- [Babel 7](https://babeljs.io/)
