@@ -1,0 +1,8 @@
+export { default as Auth } from './pages/auth'
+export { default as Dashboard } from './pages/dashboard'
+export { default as Me } from './pages/me'
+export { default as NoPage } from './pages/nopage'
+export { default as Role } from './pages/role'
+export { default as User } from './pages/user'
+export { default as Store } from './store'
+export { withStore } from './store'
