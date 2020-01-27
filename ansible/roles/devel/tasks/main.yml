@@ -3,3 +3,9 @@
   with_items: "{{ devel_packages }}"
   pkgng:
     name: "{{ item.name }}"
+
+- name: create python2 link
+  file:
+    dest: /usr/local/bin/python2
+    src: /usr/local/bin/python2.7
+    state: link
