@@ -2,7 +2,9 @@
 
 
 BIN_DIR=`dirname $0`
+PROJECT_ROOT="${BIN_DIR}/.."
 . "${BIN_DIR}/common.sh"
 setup
 
-env HOST=$(hostname) "${PACKAGE_MANAGER}" release
+cd "${PROJECT_ROOT}"
+"${PACKAGE_MANAGER}" publish

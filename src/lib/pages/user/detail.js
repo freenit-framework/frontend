@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core'
 
 import { withStore } from '../../store'
-import Template from '../../templates/default/detail'
 import styles from './styles'
 
 class UserDetail extends React.Component {
@@ -70,15 +69,13 @@ class UserDetail extends React.Component {
     }
 
     return (
-      <Template secure style={{}}>
-        <Paper style={styles.root}>
-          email: &nbsp;
-          <span data-id="email">{user.detail.email}</span>
-          <List>
-            {roleList}
-          </List>
-        </Paper>
-      </Template>
+      <Paper style={styles.root}>
+        email: &nbsp;
+        <span data-id="email">{user.detail.email}</span>
+        <List>
+          {roleList}
+        </List>
+      </Paper>
     )
   }
 }

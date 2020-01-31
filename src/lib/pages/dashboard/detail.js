@@ -1,5 +1,4 @@
 import React from 'react'
-import Template from '../../templates/default/detail'
 
 // Components
 import {
@@ -10,12 +9,10 @@ import {
 import styles from './styles'
 
 const Dashboard = () => (
-  <Template secure style={styles.template}>
-    <div style={styles.root}>
-      <RoleList />
-      <UserList />
-    </div>
-  </Template>
+  <div style={styles.root}>
+    <RoleList />
+    <UserList />
+  </div>
 )
 
 export default Dashboard

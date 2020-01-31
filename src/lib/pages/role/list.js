@@ -20,7 +20,6 @@ import AddIcon from '@material-ui/icons/Add'
 import {
   RoleCreate,
 } from '../../components'
-import Template from '../../templates/default/detail'
 import { withStore } from '../../store'
 import styles from './styles'
 
@@ -95,7 +94,7 @@ class RoleList extends React.Component {
     ))
 
     return (
-      <Template style={{}} secure>
+      <div>
         <RoleCreate
           open={this.state.open}
           close={this.handleClose}
@@ -111,7 +110,7 @@ class RoleList extends React.Component {
             {next}
           </div>
         </Paper>
-      </Template>
+      </div>
     )
   }
 }

@@ -14,7 +14,6 @@ import {
   Switch,
 } from '@material-ui/core'
 
-import Template from '../../templates/default/detail'
 import { withStore } from '../../store'
 import { errors } from '../../utils'
 import styles from './styles'
@@ -92,16 +91,14 @@ class UserList extends React.Component {
     ))
 
     return (
-      <Template secure style={{}}>
-        <Paper style={styles.root}>
-          {userList}
-          <div style={styles.center}>
-            {previous}
-            <Avatar style={styles.page} data-id="page">{String(page)}</Avatar>
-            {next}
-          </div>
-        </Paper>
-      </Template>
+      <Paper style={styles.root}>
+        {userList}
+        <div style={styles.center}>
+          {previous}
+          <Avatar style={styles.page} data-id="page">{String(page)}</Avatar>
+          {next}
+        </div>
+      </Paper>
     )
   }
 }

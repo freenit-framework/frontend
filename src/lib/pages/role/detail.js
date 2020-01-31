@@ -12,7 +12,6 @@ import {
   Switch,
 } from '@material-ui/core'
 
-import Template from '../../templates/default/detail'
 import { withStore } from '../../store'
 import styles from './styles'
 
@@ -73,16 +72,14 @@ class RoleDetail extends React.Component {
     }
 
     return (
-      <Template style={{}} secure>
-        <Paper style={styles.root}>
-          <h1 style={styles.h1.small}>
-            {role.detail.name}
-          </h1>
-          <List>
-            {userList}
-          </List>
-        </Paper>
-      </Template>
+      <Paper style={styles.root}>
+        <h1 style={styles.h1.small}>
+          {role.detail.name}
+        </h1>
+        <List>
+          {userList}
+        </List>
+      </Paper>
     )
   }
 }

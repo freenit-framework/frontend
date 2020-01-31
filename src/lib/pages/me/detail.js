@@ -10,7 +10,6 @@ import {
 
 import styles from './styles'
 import { withStore } from '../../store'
-import Template from '../../templates/default/detail'
 import { errors } from '../../utils'
 
 class Me extends React.Component {
@@ -56,37 +55,35 @@ class Me extends React.Component {
     const me = this.props.store.me.detail
 
     return (
-      <Template style={{}}>
-        <Paper style={styles.root}>
-          <form onSubmit={this.handleSubmit} style={styles.form}>
-            <TextField
-              required
-              label="Email"
-              type="email"
-              variant="outlined"
-              value={this.state.email}
-              onChange={this.handleEmail}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              style={styles.button}
-              disabled={me.email === this.state.email}
-            >
-              Save
-            </Button>
-            <Button
-              variant="contained"
-              style={styles.button}
-              disabled={me.email === this.state.email}
-              onClick={this.handleEmailCancel}
-            >
-              Cancel
-            </Button>
-          </form>
-        </Paper>
-      </Template>
+      <Paper style={styles.root}>
+        <form onSubmit={this.handleSubmit} style={styles.form}>
+          <TextField
+            required
+            label="Email"
+            type="email"
+            variant="outlined"
+            value={this.state.email}
+            onChange={this.handleEmail}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            style={styles.button}
+            disabled={me.email === this.state.email}
+          >
+            Save
+          </Button>
+          <Button
+            variant="contained"
+            style={styles.button}
+            disabled={me.email === this.state.email}
+            onClick={this.handleEmailCancel}
+          >
+            Cancel
+          </Button>
+        </form>
+      </Paper>
     )
   }
 }
