@@ -1,38 +1,31 @@
-import { rest } from '../../utils'
-
 export default {
   assign: async (user, id) => {
-    const response = await rest.post(`/roles/${id}/user`, { id: user })
-
+    const response = await window.rest.post(`/roles/${id}/user`, { id: user })
     return response.data
   },
 
   deassign: async (user, id) => {
-    const response = await rest.delete(`/roles/${id}/user/${user}`)
-
+    const response = await window.rest.delete(`/roles/${id}/user/${user}`)
     return response.data
   },
 
   create: async data => {
-    const response = await rest.post('/users', data)
-
+    const response = await window.rest.post('/users', data)
     return response.data
   },
 
   edit: async (id, data) => {
-    const response = await rest.patch(`/users/${id}`, data)
-
+    const response = await window.rest.patch(`/users/${id}`, data)
     return response.data
   },
 
   fetch: async id => {
-    const response = await rest.get(`/users/${id}`)
-
+    const response = await window.rest.get(`/users/${id}`)
     return response.data
   },
 
   fetchAll: async (page = 0, perpage = 10) => {
-    const response = await rest.get(
+    const response = await window.rest.get(
       '/users',
       {
         headers: {
@@ -41,13 +34,11 @@ export default {
         },
       },
     )
-
     return response.data
   },
 
   remove: async id => {
-    const response = await rest.delete(`/users/${id}`)
-
+    const response = await window.rest.delete(`/users/${id}`)
     return response.data
   },
 }
