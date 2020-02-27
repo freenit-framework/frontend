@@ -10,14 +10,14 @@ class ProtectedComponent extends React.Component {
   }
 
   protect = async () => {
-    const { auth, me } = this.props.store
+    const { auth, profile } = this.props.store
     const response = await auth.refresh()
     if (!response.ok) {
       if (this.props.secure) {
         this.props.store.history.push('/')
       }
-    } else if (!me.detail.id) {
-      me.fetch()
+    } else if (!profile.detail.id) {
+      profile.fetch()
     }
   }
 
@@ -36,7 +36,7 @@ ProtectedComponent.propTypes = {
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
-    me: PropTypes.shape({
+    profile: PropTypes.shape({
       detail: PropTypes.shape({
         id: PropTypes.number.isRequired,
       }),

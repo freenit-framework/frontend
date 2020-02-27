@@ -12,7 +12,7 @@ import styles from './styles'
 import { withStore } from '../../store'
 import { errors } from '../../utils'
 
-class Me extends React.Component {
+class Profile extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -23,7 +23,7 @@ class Me extends React.Component {
 
   fetch = async () => {
     const { store } = this.props
-    const response = await store.me.fetch()
+    const response = await store.profile.fetch()
     if (!response.ok) {
       const error = errors(response)
       store.notification.show(error.message)
@@ -39,20 +39,20 @@ class Me extends React.Component {
   }
 
   handleEmailCancel = () => {
-    this.setState({ email: this.props.store.me.detail.email })
+    this.setState({ email: this.props.store.profile.detail.email })
   }
 
   handleSubmit = async event => {
-    const { me, notification } = this.props.store
+    const { profile, notification } = this.props.store
     event.preventDefault()
-    const response = await me.edit({ email: this.state.email })
+    const response = await profile.edit({ email: this.state.email })
     if (!response.ok) {
-      notification.show('Error editing me')
+      notification.show('Error editing profile')
     }
   }
 
   render() {
-    const me = this.props.store.me.detail
+    const profile = this.props.store.profile.detail
 
     return (
       <Paper style={styles.root}>
@@ -70,14 +70,14 @@ class Me extends React.Component {
             color="primary"
             type="submit"
             style={styles.button}
-            disabled={me.email === this.state.email}
+            disabled={profile.email === this.state.email}
           >
             Save
           </Button>
           <Button
             variant="contained"
             style={styles.button}
-            disabled={me.email === this.state.email}
+            disabled={profile.email === this.state.email}
             onClick={this.handleEmailCancel}
           >
             Cancel
@@ -88,9 +88,10 @@ class Me extends React.Component {
   }
 }
 
-Me.propTypes = {
+
+Profile.propTypes = {
   store: PropTypes.shape({
-    me: PropTypes.shape({
+    profile: PropTypes.shape({
       detail: PropTypes.shape({
         email: PropTypes.string.isRequired,
       }).isRequired,
@@ -103,4 +104,4 @@ Me.propTypes = {
   }).isRequired,
 }
 
-export default withStore(Me)
+export default withStore(Profile)
