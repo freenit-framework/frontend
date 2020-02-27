@@ -2,13 +2,13 @@ import { rest } from '../../utils'
 
 export default {
   edit: async data => {
-    const response = await rest.patch('/me', data)
+    const response = await rest.patch('/profile', data)
 
     return response.data
   },
 
   fetch: async () => {
-    const response = await rest.get('/me')
+    const response = await rest.get('/profile')
 
     return response.data
   },
