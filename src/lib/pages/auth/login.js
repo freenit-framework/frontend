@@ -29,7 +29,7 @@ class Login extends React.Component {
     const { email, password } = this.state
     const response = await auth.login(email, password)
     if (response.ok) {
-      history.push('/dashboard')
+      history.push(this.props.redirect || '/dashboard')
       auth.refresh()
     } else {
       const error = errors(response)
@@ -106,6 +106,7 @@ Login.propTypes = {
       show: PropTypes.func.isRequired,
     }).isRequired,
   }).isRequired,
+  redirect: PropTypes.str,
 }
 
 export default withStore(Login)
