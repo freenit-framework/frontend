@@ -1,14 +1,21 @@
-export { default as Auth } from './pages/auth'
-export { default as Dashboard } from './pages/dashboard'
-export { default as EmptyTemplate } from './templates/empty'
-export { default as Profile } from './pages/profile'
-export { default as NoPage } from './pages/nopage'
-export { default as Resolution } from './pages/resolution'
-export { default as Role } from './pages/role'
-export { default as Store } from './store'
-export { default as User } from './pages/user'
+export {
+  default as EmptyTemplate,
+} from './templates/empty'
 
-export { withStore } from './store'
+export {
+  Auth,
+  Dashboard,
+  NoPage,
+  Profile,
+  Resolution,
+  Role,
+  User,
+} from './pages'
+
+export {
+  default as Store,
+  withStore,
+} from './store'
 
 export {
   Protected,
@@ -16,3 +23,9 @@ export {
   RoleList,
   UserList,
 } from './components'
+
+export {
+  rest,
+  getCookie,
+  errors,
+} from './utils'

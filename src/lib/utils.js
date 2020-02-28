@@ -2,10 +2,33 @@ import axios from 'axios'
 
 export const API_ROOT = '/api/v0'
 
-export const rest = axios.create({
-  baseURL: API_ROOT,
-  withCredentials: true,
-})
+
+export const rest = (apiRoot = API_ROOT) => {
+  const data = axios.create({
+    baseURL: apiRoot,
+    withCredentials: true,
+  })
+  data.interceptors.request.use(
+    config => {
+      const csrfType = config.url === '/auth/refresh'
+        ? 'csrf_refresh_token'
+        : 'csrf_access_token'
+      const csrf = getCookie(csrfType)
+      // eslint-disable-next-line no-param-reassign
+      config.headers.withCredentials = true
+      if (csrf) {
+        // eslint-disable-next-line no-param-reassign
+        config.headers['X-CSRF-TOKEN'] = csrf
+      }
+
+      return config
+    },
+
+    err => Promise.reject(err),
+  )
+  return data
+}
+
 
 export const getCookie = name => {
   const value = `; ${document.cookie}`
@@ -15,24 +38,6 @@ export const getCookie = name => {
   }
 }
 
-rest.interceptors.request.use(
-  config => {
-    const csrfType = config.url === '/auth/refresh'
-      ? 'csrf_refresh_token'
-      : 'csrf_access_token'
-    const csrf = getCookie(csrfType)
-    // eslint-disable-next-line no-param-reassign
-    config.headers.withCredentials = true
-    if (csrf) {
-      // eslint-disable-next-line no-param-reassign
-      config.headers['X-CSRF-TOKEN'] = csrf
-    }
-
-    return config
-  },
-
-  err => Promise.reject(err),
-)
 
 export const errors = response => {
   const data = response.response && response.response.data
