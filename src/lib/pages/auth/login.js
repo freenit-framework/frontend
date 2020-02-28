@@ -85,6 +85,7 @@ class Login extends React.Component {
                   forgot password?
                 </Link>
               </form>
+	      <Link to="/">Home</Link>"
             </div>
           </Paper>
         </div>
