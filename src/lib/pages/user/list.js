@@ -74,7 +74,7 @@ class UserList extends React.Component {
             <Switch
               onChange={this.handleUserActive(user)}
               checked={user.active}
-              disabled={user.id === this.props.store.me.detail.id}
+              disabled={user.id === this.props.store.profile.detail.id}
             />
             <Link to={`/user/${user.id}`}>
               <Button
@@ -110,7 +110,7 @@ UserList.propTypes = {
     }).isRequired,
   }).isRequired,
   store: PropTypes.shape({
-    me: PropTypes.shape({
+    profile: PropTypes.shape({
       detail: PropTypes.shape({
         id: PropTypes.number.isRequired,
       }).isRequired,
