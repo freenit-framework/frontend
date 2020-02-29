@@ -24,10 +24,11 @@
     "build:watch": "rollup -c -w",
     "test": "jest",
     "test:coverage": "jest --coverage --forceExit --colors",
-    "lint": "esw --ext .jsx --ext .js --color",
+    "lint": "esw --ext .jsx --ext .js --color src/lib",
+    "watch": "esw --ext .jsx --ext .js --color --watch src/lib",
     "lint:fix": "yarn lint --fix",
     "prerelease": "yarn lint:fix && yarn test:coverage && yarn build",
-    "release": "npm publish",
+    "release": "yarn publish",
     "predeploy": "yarn styleguide:build",
     "deploy": "gh-pages -d styleguide"
   },

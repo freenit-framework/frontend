@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 // Pages
 import {
   Auth,
   EmptyTemplate,
-  Landing,
   Profile,
   Resolution,
   Store,
@@ -31,6 +31,11 @@ const StoreProvider = (props) => {
       {props.children}
     </Store.Provider>
   )
+}
+
+StoreProvider.propTypes = {
+  children: PropTypes.node,
+  history: PropTypes.shape({}).isRequired,
 }
 
 
