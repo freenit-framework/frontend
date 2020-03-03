@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 // Components
 import {
@@ -28,7 +29,11 @@ class Confirm extends React.Component {
     const { auth, notification } = store
     const response = await auth.confirm(match.params.token)
     if (response.ok) {
-      this.setState({ message: 'Your account is confirmed' })
+      const message = [
+        <div key="message">Your account is confirmed</div>,
+        <div key="login">You may <Link to="/login">login</Link> now</div>,
+      ]
+      this.setState({ message })
     } else {
       this.setState({ message: 'Error confirming account' })
       const error = errors(response)
@@ -40,8 +45,8 @@ class Confirm extends React.Component {
     return (
       <Template style={{}}>
         <div style={styles.root}>
-          <Paper style={styles.paper}>
-            {this.state.message}
+          <Paper style={{ ...styles.paper, flexDirection: 'column' }}>
+            <div>{this.state.message}</div>
           </Paper>
         </div>
       </Template>
