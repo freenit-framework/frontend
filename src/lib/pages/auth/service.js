@@ -14,8 +14,16 @@ export default {
     return response.data
   },
 
+  confirm: async (token) => {
+    const response = await window.rest.get(`/auth/register/${token}`)
+    return response.data
+  },
+
   register: async (email, password) => {
-    const response = await window.rest.post('/auth/register', { email, password })
+    const response = await window.rest.post(
+      '/auth/register',
+      { email, password },
+    )
     return response.data
   },
 

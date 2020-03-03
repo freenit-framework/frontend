@@ -32,23 +32,14 @@ class Register extends React.Component {
 
       return
     }
-    const result = await auth.register(
+    const response = await auth.register(
       this.state.email,
       this.state.password,
     )
-    if (result.ok) {
-      notification.show(
-        <div>
-          You are now registered!
-          Once admin approves your account you should be
-          able to &nbsp;
-          <Link to="/login">
-            login
-          </Link>
-        </div>,
-      )
+    if (response.ok) {
+      notification.show('success')
     } else {
-      notification.show(result.error)
+      notification.show(response.error)
     }
     this.setState({
       password: '',

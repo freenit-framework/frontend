@@ -13,11 +13,12 @@ import { withStore } from '../../store'
 import { errors } from '../../utils'
 
 class Profile extends React.Component {
+  state = {
+    email: '',
+  }
+
   constructor(props) {
     super(props)
-    this.state = {
-      email: '',
-    }
     this.fetch()
   }
 
