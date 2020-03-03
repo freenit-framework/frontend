@@ -102,6 +102,22 @@ export default class AuthStore {
     }
   }
 
+  confirm = async (token) => {
+    try {
+      const response = await service.confirm(token)
+      console.log(response)
+      const result = {
+        ok: true,
+      }
+      return result
+    } catch (error) {
+      return {
+        ...error,
+        ok: false,
+      }
+    }
+  }
+
   register = async (email, password) => {
     try {
       const response = await service.register(email, password)
@@ -112,7 +128,6 @@ export default class AuthStore {
         ok: true,
       }
       this.setDetail(result)
-
       return result
     } catch (error) {
       const result = {
@@ -120,7 +135,6 @@ export default class AuthStore {
         ok: false,
       }
       this.setDetail(result)
-
       return {
         ...error,
         ...result,

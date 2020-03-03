@@ -15,12 +15,9 @@ import { withStore } from '../../store'
 import { errors } from '../../utils'
 
 class Login extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      email: '',
-      password: '',
-    }
+  state = {
+    email: '',
+    password: '',
   }
 
   handleSubmit = async event => {
@@ -85,7 +82,7 @@ class Login extends React.Component {
                   forgot password?
                 </Link>
               </form>
-	     <Link to="/">Home</Link>
+              <Link to="/">Home</Link>
             </div>
           </Paper>
         </div>
