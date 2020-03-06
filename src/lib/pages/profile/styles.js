@@ -7,7 +7,7 @@ const center = {
 export default {
   root: {
     display: 'block',
-    minHeight: 'calc(100vh - 65px - 40px)',
+    minHeight: 'calc(100vh - 40px)',
     padding: 20,
   },
 

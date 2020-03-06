@@ -54,9 +54,13 @@ class Profile extends React.Component {
 
   render() {
     const profile = this.props.store.profile.detail
-
+    const style = this.props.style
+      ? {
+        ...styles.root,
+        ...this.props.style,
+      } : styles.root
     return (
-      <Paper style={styles.root}>
+      <Paper style={style}>
         <form onSubmit={this.handleSubmit} style={styles.form}>
           <TextField
             required
@@ -103,6 +107,7 @@ Profile.propTypes = {
       show: PropTypes.func.isRequired,
     }).isRequired,
   }).isRequired,
+  style: PropTypes.shape({}),
 }
 
 export default withStore(Profile)
