@@ -23,6 +23,5 @@ src/local-conf.js
 project.mk
 vars.mk
 yarn-error.log
-yarn.lock
 coverage
 dist
