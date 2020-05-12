@@ -15,7 +15,7 @@ const EmptyTemplate = props => {
 
   return (
     <div style={props.style}>
-      <this.props.protected secure={props.secure} />
+      <props.protected secure={props.secure} />
       {props.children}
       <Snackbar
         autoHideDuration={5000}
