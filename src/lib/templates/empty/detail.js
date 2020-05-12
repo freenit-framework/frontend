@@ -15,7 +15,7 @@ const EmptyTemplate = props => {
 
   return (
     <div style={props.style}>
-      <Protected secure={props.secure} />
+      <this.props.protected secure={props.secure} />
       {props.children}
       <Snackbar
         autoHideDuration={5000}
@@ -39,6 +39,7 @@ const EmptyTemplate = props => {
 
 EmptyTemplate.propTypes = {
   children: PropTypes.node,
+  protected: PropTypes.shape({}),
   secure: PropTypes.bool,
   store: PropTypes.shape({
     notification: PropTypes.shape({
@@ -54,6 +55,7 @@ EmptyTemplate.propTypes = {
 
 EmptyTemplate.defaultProps = {
   children: null,
+  protected: Protected,
   secure: false,
   style: {
     padding: 20,

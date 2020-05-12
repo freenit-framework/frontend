@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import { withStore } from '../../store'
+
 
 class ProtectedComponent extends React.Component {
   constructor(props) {
@@ -26,6 +26,7 @@ class ProtectedComponent extends React.Component {
   }
 }
 
+
 ProtectedComponent.propTypes = {
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   secure: PropTypes.bool,
@@ -45,8 +46,10 @@ ProtectedComponent.propTypes = {
   }).isRequired,
 }
 
+
 ProtectedComponent.defaultProps = {
   secure: false,
 }
+
 
 export default withStore(ProtectedComponent)
