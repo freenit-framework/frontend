@@ -8,7 +8,7 @@
     "type": "git",
     "url": "git@github.com:freenit-framework/frontend.git"
   },
-  "homepage": "https://github.com/freenit-framework/frotend",
+  "homepage": "https://github.com/freenit-framework/frontend",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
