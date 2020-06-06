@@ -132,7 +132,7 @@ export default class UserStore {
     }
   }
 
-  deasign = async roleId => {
+  deassign = async roleId => {
     try {
       const result = await service.deassign(this.detail.id, roleId)
       const data = {
