@@ -5,4 +5,4 @@ BIN_DIR=`dirname $0`
 . "${BIN_DIR}/common.sh"
 setup
 
-env HOST=$(hostname) "${PACKAGE_MANAGER}" build
+env HOST=$(hostname) "${PACKAGE_MANAGER}" run-script build
