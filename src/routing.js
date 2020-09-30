@@ -4,9 +4,10 @@ import { Switch, Route } from 'react-router-dom'
 // Pages
 import {
   Auth,
-  Dashboard,
   Profile,
   NoPage,
+  Dashboard,
+  Landing,
   Role,
   User,
   rest,
@@ -21,6 +22,8 @@ window.rest.API_ROOT = API_ROOT
 const Routing = () => {
   return (
     <Switch>
+      <Route exact path="/" component={Landing.detail} />
+      <Route exact path="/confirm/:token" component={Auth.confirm} />
       <Route exact path="/dashboard" component={Dashboard.detail} />
       <Route exact path="/login" component={Auth.login} />
       <Route exact path="/profile" component={Profile.detail} />

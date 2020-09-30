@@ -7,4 +7,4 @@ PROJECT_ROOT="${BIN_DIR}/.."
 setup
 
 cd "${PROJECT_ROOT}"
-"${PACKAGE_MANAGER}" release
+"${PACKAGE_MANAGER}" publish

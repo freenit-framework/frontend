@@ -1,176 +1,72 @@
 {
   "name": "freenit",
-  "version": "0.0.16",
+  "version": "0.0.20",
+  "private": false,
   "description": "Freenit framework",
   "author": "Goran Mekić",
   "license": "BSD-2-Clause",
   "repository": {
     "type": "git",
-    "url": "git@github.com:freenit-framework/frontend.git"
+    "url": "https://github.com/freenit-framework/frontend.git"
   },
   "homepage": "https://github.com/freenit-framework/frontend",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
-  "jsnext:main": "dist/index.es.js",
-  "engines": {
-    "node": ">=8",
-    "npm": ">=5"
-  },
-  "scripts": {
-    "dev": "NODE_ENV=development BABEL_ENV=development run-p build:watch start",
-    "start": "NODE_ENV=development BABEL_ENV=development styleguidist server --open",
-    "styleguide:build": "NODE_ENV=production BABEL_ENV=production styleguidist build",
-    "build": "NODE_ENV=production BABEL_ENV=production rollup -c",
-    "build:watch": "rollup -c -w",
-    "test": "jest",
-    "test:coverage": "jest --coverage --forceExit --colors",
-    "lint": "esw --ext .jsx --ext .js --color src/lib",
-    "watch": "esw --ext .jsx --ext .js --color --watch src/lib",
-    "lint:fix": "yarn lint --fix",
-    "prerelease": "yarn lint:fix && yarn test:coverage && yarn build",
-    "release": "yarn publish",
-    "predeploy": "yarn styleguide:build",
-    "deploy": "gh-pages -d styleguide"
-  },
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "dependencies": {
-    "@material-ui/core": "^4.9.14",
+    "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
-    "axios": "^0.19.2",
     "react-router-dom": "^5.2.0"
   },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "rollup -c",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "peerDependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "axios": ">=0.20.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
-    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@rollup/plugin-node-resolve": "^7.1.3",
-    "@rollup/plugin-url": "^5.0.0",
-    "@svgr/rollup": "^5.4.0",
-    "@testing-library/dom": "^7.5.2",
-    "@testing-library/jest-dom": "^5.7.0",
-    "@testing-library/react": "^10.0.4",
-    "@testing-library/user-event": "^10.1.2",
-    "babel-core": "^6.26.3",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^26.0.1",
-    "babel-loader": "^8.1.0",
-    "babel-plugin-named-asset-import": "^0.3.6",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
-    "babel-preset-react-app": "^9.1.2",
-    "cross-env": "^7.0.2",
-    "css-loader": "^3.5.3",
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "@rollup/plugin-commonjs": "^15.1.0",
+    "@rollup/plugin-image": "^2.0.5",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "axios": "^0.20.0",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
-    "eslint": "^7.0.0",
-    "eslint-config-airbnb": "^18.1.0",
-    "eslint-plugin-flowtype": "^4.7.0",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-jest": "^23.10.0",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-react-hooks": "^4.0.0",
-    "eslint-watch": "^6.0.1",
-    "gh-pages": "^2.2.0",
-    "jasmine-expect": "^4.0.3",
-    "jest": "^26.0.1",
-    "jest-environment-jsdom-fourteen": "^1.0.1",
-    "jest-pnp-resolver": "^1.2.1",
-    "jest-resolve": "^26.0.1",
-    "jest-watch-typeahead": "^0.6.0",
-    "node-sass": "^4.14.1",
-    "npm-run-all": "^4.1.5",
-    "prop-types": "^15.7.2",
+    "enzyme-adapter-react-16": "^1.15.5",
+    "radium": "^0.26.1",
     "react": "^16.13.1",
-    "react-app-polyfill": "^1.0.6",
     "react-dom": "^16.13.1",
-    "react-styleguidist": "^11.0.6",
-    "react-test-renderer": "^16.13.1",
-    "rollup": "^2.9.1",
+    "react-scripts": "3.4.3",
+    "react-styleguidist": "^11.1.0",
+    "rollup": "^2.28.2",
     "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-peer-deps-external": "^2.2.2",
-    "rollup-plugin-postcss": "^3.1.1",
-    "rollup-plugin-terser": "^5.3.0",
-    "sass-loader": "^8.0.2",
-    "style-loader": "^1.2.1",
-    "typescript": "^3.8.3",
-    "webpack": "^4.43.0"
-  },
-  "files": [
-    "dist"
-  ],
-  "jest": {
-    "roots": [
-      "<rootDir>/src"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts",
-      "!src/**/index.js"
-    ],
-    "resolver": "jest-pnp-resolver",
-    "setupFiles": [
-      "react-app-polyfill/jsdom",
-      "<rootDir>/config/enzymeConfig.js"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/config/setupTests.js"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
-    ],
-    "testEnvironment": "jest-environment-jsdom-fourteen",
-    "testURL": "http://localhost",
-    "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
-      "^.+\\.css$": "<rootDir>/config/cssTransform.js",
-      "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/fileTransform.js"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "src"
-    ],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
-    },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "react-app"
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-object-rest-spread",
-      "@babel/plugin-proposal-optional-chaining",
-      "@babel/plugin-syntax-dynamic-import",
-      "@babel/plugin-proposal-class-properties",
-      "transform-react-remove-prop-types"
-    ]
+    "rollup-plugin-peer-deps-external": "^2.2.3",
+    "rollup-plugin-visualizer": "^4.1.1"
   }
 }
