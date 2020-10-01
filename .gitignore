@@ -25,3 +25,4 @@ vars.mk
 coverage
 dist
 stats.html
+styleguide/
