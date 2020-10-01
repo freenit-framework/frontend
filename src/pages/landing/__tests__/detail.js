@@ -11,6 +11,6 @@ it('landing', async () => {
       <TestApp path="/" />
     )
   })
-  let title = wrapper.find('a[data-id="app"]')
-  expect(title.text()).toEqual('Freenit')
+  let title = wrapper.find('h1')
+  expect(title.text()).toEqual('Freenit Framework')
 })
