@@ -1,18 +1,17 @@
-import service from './service'
 import initial from './initial'
 
 export default class AuthStore {
   timeoutHandler = null
 
   constructor(detail) {
-    this.detail = detail[0] // eslint-disable-line prefer-destructuring
-    this.setDetail = detail[1] // eslint-disable-line prefer-destructuring
+    this.detail = detail[0]
+    this.setDetail = detail[1]
   }
 
   login = async (email, password) => {
     try {
-      const response = await service.login(email, password)
-      const { accessExpire, refreshExpire } = response
+      const response = await window.rest.post('/auth/login', {email, password})
+      const { accessExpire, refreshExpire } = response.data
       const result = {
         accessExpire,
         refreshExpire,
@@ -37,7 +36,7 @@ export default class AuthStore {
 
   logout = async () => {
     try {
-      await service.logout()
+      await window.rest.post('/auth/logout', {})
       const result = {}
       this.setDetail(result)
 
@@ -63,8 +62,8 @@ export default class AuthStore {
       }
     }
     try {
-      const response = await service.refresh()
-      const { accessExpire, refreshExpire } = response
+      const response = await window.rest.post('/auth/refresh', {})
+      const { accessExpire, refreshExpire } = response.data
       const result = {
         ...this.detail,
         accessExpire,
@@ -104,7 +103,7 @@ export default class AuthStore {
 
   confirm = async (token) => {
     try {
-      const response = await service.confirm(token)
+      await window.rest.get(`/auth/register/${token}`)
       const result = {
         ok: true,
       }
@@ -119,8 +118,11 @@ export default class AuthStore {
 
   register = async (email, password) => {
     try {
-      const response = await service.register(email, password)
-      const { accessExpire, refreshExpire } = response
+      const response = await window.rest.post(
+        '/auth/register',
+        { email, password },
+      )
+      const { accessExpire, refreshExpire } = response.data
       const result = {
         accessExpire,
         refreshExpire,
@@ -143,9 +145,9 @@ export default class AuthStore {
 
   reset = async email => {
     try {
-      const response = await service.reset(email)
+      const response = await window.rest.post('/auth/reset/request', { email })
       const result = {
-        ...response,
+        ...response.data,
         ok: true,
       }
 
@@ -162,9 +164,9 @@ export default class AuthStore {
 
   changePassword = async (password, token) => {
     try {
-      const response = await service.changePassword(password, token)
+      const response = await window.rest.post('/auth/reset', { password, token })
       const result = {
-        ...response,
+        ...response.data,
         ok: true,
       }
 

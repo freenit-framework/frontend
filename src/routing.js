@@ -15,11 +15,11 @@ import {
 
 
 const API_ROOT = '/api/v0'
-window.rest = rest(API_ROOT)
-window.rest.API_ROOT = API_ROOT
 
 
 const Routing = () => {
+  window.rest = rest(API_ROOT)
+  window.rest.API_ROOT = API_ROOT
   return (
     <Switch>
       <Route exact path="/" component={Landing.detail} />
