@@ -1,17 +1,16 @@
-import service from './service'
 import initial from './initial'
 
-export default class MeStore {
+export default class ProfileStore {
   constructor(detail) {
-    this.detail = detail[0] // eslint-disable-line prefer-destructuring
-    this.setDetail = detail[1] // eslint-disable-line prefer-destructuring
+    this.detail = detail[0]
+    this.setDetail = detail[1]
   }
 
   fetch = async () => {
     try {
-      const response = await service.fetch()
+      const response = await window.rest.get('/profile')
       const result = {
-        ...response,
+        ...response.data,
         ok: true,
       }
       this.setDetail(result)
@@ -35,9 +34,9 @@ export default class MeStore {
 
   edit = async data => {
     try {
-      const response = await service.edit(data)
+      const response = await window.rest.patch('/profile', data)
       const result = {
-        ...response,
+        ...response.data,
         ok: true,
       }
       this.setDetail(result)

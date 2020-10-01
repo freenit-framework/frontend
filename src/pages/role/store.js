@@ -1,23 +1,21 @@
-import service from './service'
 import initial from './initial'
 
 export default class RoleStore {
   constructor(detail, list) {
-    this.detail = detail[0] // eslint-disable-line prefer-destructuring
-    this.setDetail = detail[1] // eslint-disable-line prefer-destructuring
-    this.list = list[0] // eslint-disable-line prefer-destructuring
-    this.setList = list[1] // eslint-disable-line prefer-destructuring
+    this.detail = detail[0]
+    this.setDetail = detail[1]
+    this.list = list[0]
+    this.setList = list[1]
   }
 
   fetch = async id => {
     try {
-      const response = await service.fetch(id)
+      const response = await window.rest.get(`/roles/${id}`)
       const result = {
         ...response,
         ok: true,
       }
       this.setDetail(result)
-
       return result
     } catch (error) {
       const result = {
@@ -27,7 +25,6 @@ export default class RoleStore {
         ...initial.detail,
         ...result,
       })
-
       return {
         ...error,
         ...result,
@@ -37,11 +34,10 @@ export default class RoleStore {
 
   fetchAll = async (page = 0, perpage = 10) => {
     try {
-      const response = await service.fetchAll(page, perpage)
-      this.setList(response)
-
+      const response = await window.rest.get('/roles')
+      this.setList(response.data)
       return {
-        ...response,
+        ...response.data,
         ok: true,
       }
     } catch (error) {
@@ -54,11 +50,10 @@ export default class RoleStore {
 
   create = async data => {
     try {
-      const response = await service.create(data)
-      this.list.data.push(response)
-
+      const response = await window.rest.post('/roles', data)
+      this.list.data.push(response.data)
       return {
-        ...response,
+        ...response.data,
         ok: true,
       }
     } catch (error) {
@@ -71,9 +66,9 @@ export default class RoleStore {
 
   edit = async (id, data) => {
     try {
-      const response = await service.edit(id, data)
+      const response = await window.rest.patch(`/roles/${id}`, data)
       const result = {
-        ...response,
+        ...response.data,
         ok: true,
       }
       if (this.detail.id === id) {
@@ -88,7 +83,6 @@ export default class RoleStore {
         }
       })
       this.setList(listData)
-
       return result
     } catch (error) {
       return {
@@ -100,10 +94,9 @@ export default class RoleStore {
 
   delete = async id => {
     try {
-      const response = await service.delete(id)
-
+      const response = await window.rest.delete(`/roles/${id}`)
       return {
-        ...response,
+        ...response.data,
         ok: true,
       }
     } catch (error) {
@@ -114,16 +107,18 @@ export default class RoleStore {
     }
   }
 
-  async assign(userId) {
+  assign = async (userId) => {
     try {
-      const response = await service.assign(this.detail.id, userId)
+      const response = await window.rest.post(
+        `/roles/${this.detail.id}/user`,
+        { userId },
+      )
       const data = {
         ...this.detail,
         ok: true,
       }
       data.users.push(response)
       this.setDetail(data)
-
       return data
     } catch (error) {
       return {
@@ -133,9 +128,11 @@ export default class RoleStore {
     }
   }
 
-  async deassign(userId) {
+  deassign = async (userId) => {
     try {
-      const result = await service.deassign(this.detail.id, userId)
+      const result = await window.rest.delete(
+        `/roles/${this.detail.id}/user/${userId}`
+      )
       const data = {
         ...this.detail,
         ok: true,
@@ -144,7 +141,6 @@ export default class RoleStore {
         user => user.id !== result.id,
       )
       this.setDetail(data)
-
       return data
     } catch (error) {
       return {

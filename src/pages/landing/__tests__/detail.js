@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { act } from 'react-dom/test-utils'
-import TestApp from 'TestApp'
+import TestApp from '../../../TestApp'
 
 
 it('landing', async () => {

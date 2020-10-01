@@ -9,7 +9,6 @@
     "type": "git",
     "url": "https://github.com/freenit-framework/frontend.git"
   },
-  "homepage": "https://github.com/freenit-framework/frontend",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "dependencies": {

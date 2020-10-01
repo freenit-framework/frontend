@@ -1,23 +1,22 @@
-import service from './service'
 import initial from './initial'
+
 
 export default class UserStore {
   constructor(detail, list) {
-    this.detail = detail[0] // eslint-disable-line prefer-destructuring
-    this.setDetail = detail[1] // eslint-disable-line prefer-destructuring
-    this.list = list[0] // eslint-disable-line prefer-destructuring
-    this.setList = list[1] // eslint-disable-line prefer-destructuring
+    this.detail = detail[0]
+    this.setDetail = detail[1]
+    this.list = list[0]
+    this.setList = list[1]
   }
 
   fetch = async id => {
     try {
-      const response = await service.fetch(id)
+      const response = await window.rest.get(`/users/${id}`)
       const result = {
-        ...response,
+        ...response.data,
         ok: true,
       }
       this.setDetail(result)
-
       return result
     } catch (error) {
       const result = {
@@ -27,7 +26,6 @@ export default class UserStore {
         ...initial.detail,
         ...result,
       })
-
       return {
         ...error,
         ...result,
@@ -37,11 +35,18 @@ export default class UserStore {
 
   fetchAll = async (page = 0, perpage = 10) => {
     try {
-      const response = await service.fetchAll(page, perpage)
-      this.setList(response)
-
+      const response = await window.rest.get(
+        '/users',
+        {
+          headers: {
+            Page: page,
+            PerPage: perpage,
+          },
+        },
+      )
+      this.setList(response.data)
       return {
-        ...response,
+        ...response.data,
         ok: true,
       }
     } catch (error) {
@@ -54,10 +59,9 @@ export default class UserStore {
 
   create = async data => {
     try {
-      const response = await service.create(data)
-
+      const response = await window.rest.post('/users', data)
       return {
-        ...response,
+        ...response.data,
         ok: true,
       }
     } catch (error) {
@@ -70,9 +74,9 @@ export default class UserStore {
 
   edit = async (id, data) => {
     try {
-      const response = await service.edit(id, data)
+      const response = await window.rest.patch(`/users/${id}`, data)
       const result = {
-        ...response,
+        ...response.data,
         ok: true,
       }
       if (this.detail.id === id) {
@@ -81,13 +85,12 @@ export default class UserStore {
       const listData = { ...this.list }
       listData.data.forEach(user => {
         if (user.id === id) {
-          user.email = response.email // eslint-disable-line no-param-reassign
-          user.active = response.active // eslint-disable-line no-param-reassign
-          user.admin = response.admin // eslint-disable-line no-param-reassign
+          user.email = response.email
+          user.active = response.active
+          user.admin = response.admin
         }
       })
       this.setList(listData)
-
       return result
     } catch (error) {
       return {
@@ -99,10 +102,9 @@ export default class UserStore {
 
   delete = async id => {
     try {
-      const response = await service.delete(id)
-
+      const response = await window.rest.delete(`/users/${id}`)
       return {
-        ...response,
+        ...response.data,
         ok: true,
       }
     } catch (error) {
@@ -115,14 +117,16 @@ export default class UserStore {
 
   assign = async roleId => {
     try {
-      const response = await service.assign(this.detail.id, roleId)
+      const response = await window.rest.post(
+        `/roles/${roleId}/user`,
+        { id: this.detail.id },
+      )
       const data = {
         ...this.detail,
         ok: true,
       }
-      data.roles.push(response)
+      data.roles.push(response.data)
       this.setDetail(data)
-
       return data
     } catch (error) {
       return {
@@ -134,16 +138,17 @@ export default class UserStore {
 
   deassign = async roleId => {
     try {
-      const result = await service.deassign(this.detail.id, roleId)
+      const result = await window.rest.delete(
+        `/roles/${roleId}/user/${this.detail.id}`,
+      )
       const data = {
         ...this.detail,
         ok: true,
       }
       data.roles = this.detail.roles.filter(
-        user => user.id !== result.id,
+        user => user.id !== result.data.id,
       )
       this.setDetail(data)
-
       return data
     } catch (error) {
       return {
