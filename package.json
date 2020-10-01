@@ -1,6 +1,6 @@
 {
   "name": "freenit",
-  "version": "0.0.21",
+  "version": "0.0.25",
   "private": false,
   "description": "Freenit framework",
   "author": "Goran Mekić",
@@ -13,8 +13,7 @@
   "module": "dist/index.esm.js",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
-    "react-router-dom": "^5.2.0"
+    "@material-ui/icons": "^4.9.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -42,7 +41,8 @@
   "peerDependencies": {
     "axios": ">=0.20.0",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "react-router-dom": ">=5.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.11.6",
@@ -63,6 +63,7 @@
     "radium": "^0.26.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-styleguidist": "^11.1.0",
     "rollup": "^2.28.2",
