@@ -22,7 +22,6 @@ site.retry
 src/local-conf.js
 project.mk
 vars.mk
-yarn-error.log
 coverage
 dist
 stats.html
