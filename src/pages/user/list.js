@@ -132,6 +132,7 @@ UserList.propTypes = {
       list: PropTypes.shape({
         data: PropTypes.array.isRequired,
         pages: PropTypes.number.isRequired,
+        total: PropTypes.number.isRequired,
       }).isRequired,
       fetch: PropTypes.func.isRequired,
     }).isRequired,
