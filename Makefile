@@ -1,5 +1,6 @@
 .include <name.ini>
 
+USE_FREENIT = YES
 DEVEL_MODE = YES
 SERVICE != echo ${app_name}
 REGGAE_PATH := /usr/local/share/reggae

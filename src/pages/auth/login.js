@@ -28,6 +28,10 @@ class Login extends React.Component {
     if (response.ok) {
       history.push(this.props.redirect || '/dashboard')
       auth.refresh()
+      const { onSuccess } = this.props
+      if (onSuccess) {
+        onSuccess(email, password)
+      }
     } else {
       const error = errors(response)
       notification.show(error.message)
@@ -92,6 +96,7 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
+  onSuccess: PropTypes.func,
   store: PropTypes.shape({
     auth: PropTypes.shape({
       login: PropTypes.func.isRequired,
