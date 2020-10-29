@@ -1,5 +1,9 @@
-import detail from './detail'
+import Detail from './detail'
 
-export default {
-  detail,
+
+const nopage = {
+  Detail,
 }
+
+
+export default nopage

@@ -4,7 +4,7 @@ const flex = {
   alignItems: 'center',
 }
 
-export default {
+const styles = {
   root: {
     ...flex,
     height: '100vh',
@@ -27,3 +27,6 @@ export default {
     flexDirection: 'column',
   },
 }
+
+
+export default styles

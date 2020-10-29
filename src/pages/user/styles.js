@@ -4,7 +4,7 @@ const center = {
   alignItems: 'center',
 }
 
-export default {
+const styles = {
   item: {
     marginBottom: 5,
     backgroundColor: '#eee',
@@ -32,3 +32,6 @@ export default {
     minHeight: 'calc(100vh - 65px - 40px)',
   },
 }
+
+
+export default styles
