@@ -4,7 +4,7 @@ const center = {
   alignItems: 'center',
 }
 
-export default {
+const styles = {
   root: {
     ...center,
     height: '100vh',
@@ -21,3 +21,6 @@ export default {
     flexDirection: 'column',
   },
 }
+
+
+export default styles

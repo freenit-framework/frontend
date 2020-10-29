@@ -1,4 +1,4 @@
-export default {
+const styles = {
   root: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -13,3 +13,6 @@ export default {
     padding: 20,
   },
 }
+
+
+export default styles

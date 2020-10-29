@@ -1,9 +1,12 @@
-import detail from './detail'
+import Detail from './detail'
 import initial from './initial'
 import store from './store'
 
-export default {
-  detail,
+const empty = {
+  Detail,
   initial,
   store,
 }
+
+
+export default empty

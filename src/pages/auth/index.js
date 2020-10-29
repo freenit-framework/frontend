@@ -1,17 +1,21 @@
-import changePassword from './change-password'
-import confirm from './confirm'
+import Confirm from './confirm'
+import Login from './login'
+import Register from './register'
+import Reset from './reset'
+import ChangePassword from './change-password'
 import initial from './initial'
-import login from './login'
-import register from './register'
-import reset from './reset'
 import store from './store'
 
-export default {
-  changePassword,
-  confirm,
+
+const auth = {
+  ChangePassword,
+  Confirm,
+  Login,
+  Register,
+  Reset,
   initial,
-  login,
-  register,
-  reset,
   store,
 }
+
+
+export default auth

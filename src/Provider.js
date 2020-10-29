@@ -8,7 +8,7 @@ import theme from 'theme'
 import styles from 'styles'
 
 
-export default (props) => {
+const Provider = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <Style rules={styles} />
@@ -20,3 +20,6 @@ export default (props) => {
     </ThemeProvider>
   )
 }
+
+
+export default Provider
