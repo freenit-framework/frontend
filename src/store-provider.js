@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom'
 import {
   Auth,
@@ -14,27 +14,19 @@ import {
 import { Store } from 'store'
 
 
+export const store = {
+  auth: Auth.store,
+  landing: Landing.store,
+  notification: EmptyTemplate.store,
+  profile: Profile.store,
+  resolution: Resolution.store,
+  role: Role.store,
+  user: User.store,
+}
+
+
 const Provider = (props) => {
-  const store = {
-    auth: new Auth.store(useState(Auth.initial.detail)),
-    history: props.history,
-    landing: new Landing.store(useState(Landing.initial.detail)),
-    notification: new EmptyTemplate.store(
-      useState(EmptyTemplate.initial.detail),
-    ),
-    profile: new Profile.store(
-      useState(Profile.initial.detail),
-    ),
-    resolution: new Resolution.store(useState(Resolution.initial.detail)),
-    role: new Role.store(
-      useState(Role.initial.detail),
-      useState(Role.initial.list),
-    ),
-    user: new User.store(
-      useState(User.initial.detail),
-      useState(User.initial.list),
-    ),
-  }
+  store.history = props.history
   return (
     <Store.Provider value={store}>
       {props.children}

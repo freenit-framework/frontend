@@ -1,12 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-
-// Components
-import {
-  Button,
-  Snackbar,
-} from '@material-ui/core'
-
+import { Button, Snackbar } from '@material-ui/core'
 import { withStore } from '../../store'
 import Protected from '../../components/protected'
 
@@ -20,15 +13,11 @@ const EmptyTemplate = props => {
       <Snackbar
         autoHideDuration={5000}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        open={notification.detail.show}
+        open={Boolean(notification.message)}
         onClose={notification.close}
-        message={notification.detail.message}
+        message={notification.message}
         action={(
-          <Button
-            color="secondary"
-            size="small"
-            onClick={notification.close}
-          >
+          <Button color="secondary" size="small" onClick={notification.close} >
             CLOSE
           </Button>
         )}
@@ -38,30 +27,11 @@ const EmptyTemplate = props => {
 }
 
 
-EmptyTemplate.propTypes = {
-  children: PropTypes.node,
-  protected: PropTypes.func,
-  secure: PropTypes.bool,
-  store: PropTypes.shape({
-    notification: PropTypes.shape({
-      close: PropTypes.func.isRequired,
-      detail: PropTypes.shape({
-        message: PropTypes.string.isRequired,
-        show: PropTypes.bool.isRequired,
-      }).isRequired,
-    }).isRequired,
-  }).isRequired,
-  style: PropTypes.shape({}),
-}
-
-
 EmptyTemplate.defaultProps = {
   children: null,
   protected: Protected,
   secure: false,
-  style: {
-    padding: 20,
-  },
+  style: { padding: 20 },
 }
 
 

@@ -1,20 +1,18 @@
-import Confirm from './confirm'
+// import ChangePassword from './change-password'
+// import Confirm from './confirm'
 import Login from './login'
-import Register from './register'
-import Reset from './reset'
-import ChangePassword from './change-password'
-import initial from './initial'
-import store from './store'
+// import Register from './register'
+// import Reset from './reset'
+import Store from './store'
 
 
 const auth = {
-  ChangePassword,
-  Confirm,
+  // ChangePassword,
+  // Confirm,
   Login,
-  Register,
-  Reset,
-  initial,
-  store,
+  // Register,
+  // Reset,
+  store: new Store(),
 }
 
 

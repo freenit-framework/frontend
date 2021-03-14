@@ -1,12 +1,10 @@
 import Detail from './detail'
-import initial from './initial'
-import store from './store'
+import Store from './store'
 
 
 const landing = {
   Detail,
-  initial,
-  store,
+  store: new Store(),
 }
 
 

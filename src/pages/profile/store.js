@@ -1,52 +1,30 @@
-import initial from './initial'
+import { makeAutoObservable } from 'mobx'
+
 
 export default class ProfileStore {
-  constructor(detail) {
-    this.detail = detail[0]
-    this.setDetail = detail[1]
+  detail = { id: 0 }
+
+  constructor() {
+    makeAutoObservable(this)
   }
 
-  fetch = async () => {
+  async fetch() {
     try {
       const response = await window.rest.get('/profile')
-      const result = {
-        ...response.data,
-        ok: true,
-      }
-      this.setDetail(result)
-
-      return result
+      this.detail = { ...response.data, ok: true }
+      return this.detail
     } catch (error) {
-      const result = {
-        ok: false,
-      }
-      this.setDetail({
-        ...initial.detail,
-        ...result,
-      })
-
-      return {
-        ...error,
-        ...result,
-      }
+      return { ...error, ok: false }
     }
   }
 
-  edit = async data => {
+  async edit(data) {
     try {
       const response = await window.rest.patch('/profile', data)
-      const result = {
-        ...response.data,
-        ok: true,
-      }
-      this.setDetail(result)
-
-      return result
+      this.detail = { ...response.data, ok: true }
+      return this.detail
     } catch (error) {
-      return {
-        ...error,
-        ok: false,
-      }
+      return { ...error, ok: false }
     }
   }
 }

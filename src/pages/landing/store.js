@@ -1,31 +1,10 @@
-import initial from './initial'
+import { makeAutoObservable } from 'mobx'
 
 
 export default class LandingStore {
-  constructor(detail) {
-    this.detail = detail[0]
-    this.setDetail = detail[1]
-  }
+  data = null
 
-  send = async () => {
-    try {
-      const response = await window.rest.post('/landing/form', this.organizer)
-      const result = {
-        ...response.data,
-        ok: true
-      }
-      this.setDetail(result)
-      return result
-    } catch (error) {
-      const result = {
-        ...initial.detail,
-        ok: false,
-      }
-      this.setDetail(result)
-      return {
-        ...error,
-        ...result,
-      }
-    }
+  constructor() {
+    makeAutoObservable(this)
   }
 }

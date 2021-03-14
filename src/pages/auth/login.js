@@ -30,9 +30,7 @@ class Login extends React.Component {
       history.push(this.props.redirect || '/dashboard')
       auth.refresh()
       const { onSuccess } = this.props
-      if (onSuccess) {
-        onSuccess(email, password)
-      }
+      if (onSuccess) { onSuccess(email, password) }
     } else {
       const error = errors(response)
       notification.show(error.message)
