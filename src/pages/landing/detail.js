@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { withTheme } from '@material-ui/core/styles'
 import {
   Paper,
@@ -26,12 +25,6 @@ class Landing extends React.Component {
       </Paper>
     )
   }
-}
-
-
-Landing.propTypes = {
-  height: PropTypes.number,
-  theme: PropTypes.shape({}).isRequired,
 }
 
 

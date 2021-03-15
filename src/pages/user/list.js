@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 // Components
@@ -26,6 +25,7 @@ class UserList extends React.Component {
 
   fetch = async () => {
     const { notification, user } = this.props.store
+    console.log(user)
     const response = await user.fetchAll(this.props.match.params.page)
     if (!response.ok) {
       const error = errors(response)
@@ -103,40 +103,5 @@ class UserList extends React.Component {
   }
 }
 
-UserList.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      page: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-  store: PropTypes.shape({
-    profile: PropTypes.shape({
-      detail: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-      }).isRequired,
-    }).isRequired,
-    notification: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-    }).isRequired,
-    role: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      fetchAll: PropTypes.func.isRequired,
-      list: PropTypes.shape({
-        data: PropTypes.array,
-      }).isRequired,
-    }).isRequired,
-    user: PropTypes.shape({
-      edit: PropTypes.func.isRequired,
-      fetchAll: PropTypes.func.isRequired,
-      list: PropTypes.shape({
-        data: PropTypes.array.isRequired,
-        pages: PropTypes.number.isRequired,
-        total: PropTypes.number.isRequired,
-      }).isRequired,
-      fetch: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
-}
 
 export default withStore(UserList)

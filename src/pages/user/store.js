@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx'
+import { auth } from 'auth'
 
 
 export default class UserStore {
@@ -17,7 +18,7 @@ export default class UserStore {
     makeAutoObservable(this)
   }
 
-  fetch = async id => {
+  fetch = auth.protect(async id => {
     try {
       const response = await window.rest.get(`/users/${id}`)
       this.detail = { ...response.data, ok: true }
@@ -25,9 +26,9 @@ export default class UserStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  fetchAll = async (Page = 0, PerPage = 10) => {
+  fetchAll = auth.protect(async (Page = 0, PerPage = 10) => {
     try {
       const response = await window.rest.get(
         '/users',
@@ -38,9 +39,9 @@ export default class UserStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  create = async data => {
+  create = auth.protect(async data => {
     try {
       const response = await window.rest.post('/users', data)
       this.list = { ...response.data, ok: true }
@@ -48,9 +49,9 @@ export default class UserStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  edit = async (id, data) => {
+  edit = auth.protect(async (id, data) => {
     try {
       const response = await window.rest.patch(`/users/${id}`, data)
       const result = { ...response.data, ok: true }
@@ -66,9 +67,9 @@ export default class UserStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  delete = async id => {
+  delete = auth.protect(async id => {
     try {
       const response = await window.rest.delete(`/users/${id}`)
       this.detail = { ...response.data, ok: true }
@@ -76,9 +77,9 @@ export default class UserStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  assign = async roleId => {
+  assign = auth.protect(async roleId => {
     try {
       const response = await window.rest.post(
         `/roles/${roleId}/user`,
@@ -91,9 +92,9 @@ export default class UserStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  deassign = async roleId => {
+  deassign = auth.protect(async roleId => {
     try {
       const result = await window.rest.delete(
         `/roles/${roleId}/user/${this.detail.id}`,
@@ -107,5 +108,5 @@ export default class UserStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 }

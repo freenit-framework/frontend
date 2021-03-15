@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx'
+import { auth } from 'auth'
 
 
 export default class ProfileStore {
@@ -8,7 +9,7 @@ export default class ProfileStore {
     makeAutoObservable(this)
   }
 
-  async fetch() {
+  fetch = auth.protect(async () => {
     try {
       const response = await window.rest.get('/profile')
       this.detail = { ...response.data, ok: true }
@@ -16,9 +17,9 @@ export default class ProfileStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  async edit(data) {
+  edit = auth.protect(async (data) => {
     try {
       const response = await window.rest.patch('/profile', data)
       this.detail = { ...response.data, ok: true }
@@ -26,5 +27,5 @@ export default class ProfileStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 }

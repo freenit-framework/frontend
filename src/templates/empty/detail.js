@@ -1,14 +1,12 @@
 import React from 'react'
 import { Button, Snackbar } from '@material-ui/core'
 import { withStore } from '../../store'
-import Protected from '../../components/protected'
 
 
 const EmptyTemplate = props => {
   const { notification } = props.store
   return (
     <div style={props.style}>
-      <props.protected secure={props.secure} />
       {props.children}
       <Snackbar
         autoHideDuration={5000}
@@ -17,7 +15,7 @@ const EmptyTemplate = props => {
         onClose={notification.close}
         message={notification.message}
         action={(
-          <Button color="secondary" size="small" onClick={notification.close} >
+          <Button color="secondary" size="small" onClick={notification.close}>
             CLOSE
           </Button>
         )}
@@ -29,7 +27,6 @@ const EmptyTemplate = props => {
 
 EmptyTemplate.defaultProps = {
   children: null,
-  protected: Protected,
   secure: false,
   style: { padding: 20 },
 }

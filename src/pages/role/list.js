@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 // Components
@@ -115,24 +114,5 @@ class RoleList extends React.Component {
   }
 }
 
-RoleList.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      page: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-  store: PropTypes.shape({
-    role: PropTypes.shape({
-      fetchAll: PropTypes.func.isRequired,
-      list: PropTypes.shape({
-        data: PropTypes.array.isRequired,
-        pages: PropTypes.number.isRequired,
-      }).isRequired,
-    }).isRequired,
-    notification: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
-}
 
 export default withStore(RoleList)
