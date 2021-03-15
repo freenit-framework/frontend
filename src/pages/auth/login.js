@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import { auth } from 'auth'
 
 // Components
 import {
@@ -23,16 +23,14 @@ class Login extends React.Component {
 
   handleSubmit = async event => {
     event.preventDefault()
-    const { auth, history, notification } = this.props.store
+    const { history, notification } = this.props.store
     const { email, password } = this.state
     const response = await auth.login(email, password)
     if (response.ok) {
       history.push(this.props.redirect || '/dashboard')
       auth.refresh()
       const { onSuccess } = this.props
-      if (onSuccess) {
-        onSuccess(email, password)
-      }
+      if (onSuccess) { onSuccess(email, password) }
     } else {
       const error = errors(response)
       notification.show(error.message)
@@ -96,21 +94,5 @@ class Login extends React.Component {
   }
 }
 
-Login.propTypes = {
-  onSuccess: PropTypes.func,
-  store: PropTypes.shape({
-    auth: PropTypes.shape({
-      login: PropTypes.func.isRequired,
-      refresh: PropTypes.func.isRequired,
-    }).isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
-    notification: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
-  redirect: PropTypes.string,
-}
 
 export default withStore(Login)

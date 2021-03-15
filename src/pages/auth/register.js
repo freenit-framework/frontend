@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 // Components
 import {
@@ -11,6 +10,7 @@ import {
 import styles from './styles'
 import { withStore } from '../../store'
 import Template from '../../templates/empty/detail'
+
 
 class Register extends React.Component {
   constructor(props) {
@@ -28,7 +28,6 @@ class Register extends React.Component {
     const { password, repeatPassword } = this.state
     if (password !== repeatPassword) {
       notification.show('Passwords must match!')
-
       return
     }
     const response = await auth.register(
@@ -114,15 +113,5 @@ class Register extends React.Component {
   }
 }
 
-Register.propTypes = {
-  store: PropTypes.shape({
-    auth: PropTypes.shape({
-      register: PropTypes.func.isRequired,
-    }).isRequired,
-    notification: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
-}
 
 export default withStore(Register)

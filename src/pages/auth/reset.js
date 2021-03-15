@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 // Components
 import {
@@ -12,6 +11,7 @@ import Template from '../../templates/empty/detail'
 import { withStore } from '../../store'
 import { errors } from '../../utils'
 import styles from './styles'
+
 
 class Reset extends React.Component {
   constructor(props) {
@@ -72,15 +72,5 @@ class Reset extends React.Component {
   }
 }
 
-Reset.propTypes = {
-  store: PropTypes.shape({
-    auth: PropTypes.shape({
-      reset: PropTypes.func.isRequired,
-    }).isRequired,
-    notification: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
-}
 
 export default withStore(Reset)

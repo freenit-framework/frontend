@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 // Components
 import {
@@ -84,39 +83,5 @@ class RoleDetail extends React.Component {
   }
 }
 
-RoleDetail.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  store: PropTypes.shape({
-    notification: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-    }).isRequired,
-    role: PropTypes.shape({
-      assign: PropTypes.func.isRequired,
-      deassign: PropTypes.func.isRequired,
-      detail: PropTypes.shape({
-        admin: PropTypes.bool,
-        name: PropTypes.string.isRequired,
-        users: PropTypes.array.isRequired,
-      }).isRequired,
-      edit: PropTypes.func.isRequired,
-      fetch: PropTypes.func.isRequired,
-    }).isRequired,
-    user: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      email: PropTypes.string.isRequired,
-      list: PropTypes.shape({
-        data: PropTypes.shape({
-          length: PropTypes.number.isRequired,
-          map: PropTypes.func.isRequired,
-        }).isRequired,
-      }).isRequired,
-      fetchAll: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
-}
 
 export default withStore(RoleDetail)

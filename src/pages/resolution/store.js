@@ -1,12 +1,15 @@
+import { makeAutoObservable } from 'mobx'
+
+
 export default class ResolutionStore {
-  constructor(detail) {
-    this.detail = detail[0]
-    this.setDetail = detail[1]
+  height = window.innerHeight
+  width = window.innerWidth
+
+  constructor() {
+    makeAutoObservable(this)
     window.onresize = () => {
-      this.setDetail({
-        height: window.innerHeight,
-        width: window.innerWidth,
-      })
+      this.height = window.innerHeight
+      this.width = window.innerWidth
     }
   }
 }

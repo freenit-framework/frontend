@@ -1,10 +1,9 @@
+import ChangePassword from './change-password'
 import Confirm from './confirm'
 import Login from './login'
 import Register from './register'
 import Reset from './reset'
-import ChangePassword from './change-password'
-import initial from './initial'
-import store from './store'
+import Store from './store'
 
 
 const auth = {
@@ -13,8 +12,7 @@ const auth = {
   Login,
   Register,
   Reset,
-  initial,
-  store,
+  store: new Store(),
 }
 
 
