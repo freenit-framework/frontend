@@ -7,11 +7,9 @@ import {
   Resolution,
   Role,
   User,
-} from 'pages'
-import {
-  EmptyTemplate,
-} from 'templates'
-import { Store } from 'store'
+} from './pages'
+import { Store } from './store'
+import { EmptyTemplate } from './templates'
 
 
 export const store = {
@@ -26,9 +24,9 @@ export const store = {
 
 
 const Provider = (props) => {
-  store.history = props.history
+  props.store.history = props.history
   return (
-    <Store.Provider value={store}>
+    <Store.Provider value={props.store}>
       {props.children}
     </Store.Provider>
   )

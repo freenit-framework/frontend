@@ -1,5 +1,5 @@
 import React from 'react'
-import { StoreProvider } from 'store-provider'
+import { StoreProvider, store } from 'store-provider'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ThemeProvider } from '@material-ui/styles'
 import { Style } from 'radium'
@@ -14,7 +14,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <Style rules={styles} />
         <Router>
-          <StoreProvider>
+          <StoreProvider store={store}>
             <Routing />
           </StoreProvider>
         </Router>
