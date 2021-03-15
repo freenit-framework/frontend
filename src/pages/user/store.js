@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { auth } from 'auth'
+import { auth } from '../../auth'
 
 
 export default class UserStore {

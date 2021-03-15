@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { auth } from 'auth'
+import { auth } from '../../auth'
 
 // Components
 import {
