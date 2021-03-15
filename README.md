@@ -3,7 +3,7 @@
 ### [Tutorial](https://github.com/freenit-framework/frontend-tutorial)
 
 ### Shell Scripts
-To star development:
+To start development:
 ```
 bin/init.sh
 bin/devel.sh
