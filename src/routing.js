@@ -10,16 +10,10 @@ import {
   Landing,
   Role,
   User,
-  rest,
-} from './lib'
-
-
-const API_ROOT = '/api/v0'
+} from './pages'
 
 
 const Routing = () => {
-  window.rest = rest(API_ROOT)
-  window.rest.API_ROOT = API_ROOT
   return (
     <Switch>
       <Route exact path="/" component={Landing.Detail} />

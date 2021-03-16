@@ -4,9 +4,13 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { ThemeProvider } from '@material-ui/styles'
 import { Style } from 'radium'
 
-import Routing from 'routing'
-import theme from 'theme'
-import styles from 'styles'
+import Routing from './routing'
+import styles from './styles'
+import theme from './theme'
+import { auth } from './auth'
+
+
+auth.init('/api/v0')
 
 
 const App = () => {

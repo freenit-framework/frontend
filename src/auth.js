@@ -1,10 +1,15 @@
+import { rest } from './utils'
+
+
 class Auth
 {
   access = { expire: null, date: null }
   refresh = { expire: null, data: null }
 
-  constructor() {
-    this.refresh()
+  init = async (api) => {
+    window.rest = rest(api)
+    window.rest.API_ROOT = api
+    await this.refresh()
   }
 
   login = async (email, password) => {
