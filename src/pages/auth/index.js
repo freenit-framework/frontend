@@ -3,7 +3,7 @@ import Confirm from './confirm'
 import Login from './login'
 import Register from './register'
 import Reset from './reset'
-import Store from './store'
+import { auth as store } from '../../auth'
 
 
 const auth = {
@@ -12,7 +12,7 @@ const auth = {
   Login,
   Register,
   Reset,
-  store: new Store(),
+  store,
 }
 
 
