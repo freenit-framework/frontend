@@ -3,6 +3,10 @@ class Auth
   access = { expire: null, date: null }
   refresh = { expire: null, data: null }
 
+  constructor() {
+    this.refresh()
+  }
+
   login = async (email, password) => {
     try {
       const response = await window.rest.post('/auth/login', {email, password})

@@ -1,10 +1,15 @@
 import React from 'react'
 import { Button, Snackbar } from '@material-ui/core'
+import { auth } from '../../auth'
 import { withStore } from '../../store'
 
 
 const EmptyTemplate = props => {
-  const { notification } = props.store
+  const { history, notification } = props.store
+  if (props.secure && !auth.authorized()) {
+    history.push('/')
+    return null
+  }
   return (
     <div style={props.style}>
       {props.children}
