@@ -6,7 +6,7 @@ import { withStore } from '../../store'
 
 const EmptyTemplate = props => {
   const { history, notification } = props.store
-  if (props.secure && !auth.authorized()) {
+  if (props.secure && !auth.authenticated()) {
     history.push('/')
     return null
   }
