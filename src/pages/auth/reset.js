@@ -1,18 +1,15 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 
 // Components
-import {
-  Button,
-  Paper,
-  TextField,
-} from '@material-ui/core'
+import { Button, Paper, TextField } from '@material-ui/core'
 
 import Template from '../../templates/empty/detail'
-import { withStore } from '../../store'
+import { store } from '../../store'
 import { errors } from '../../utils'
 import styles from './styles'
 
-
+@observer
 class Reset extends React.Component {
   constructor(props) {
     super(props)
@@ -21,10 +18,10 @@ class Reset extends React.Component {
     }
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async (event) => {
     event.preventDefault()
     const { email } = this.state
-    const { auth, notification } = this.props.store
+    const { auth, notification } = store
     const response = await auth.reset(email)
     if (response.ok) {
       notification.show(`Email with instructions sent to ${email}`)
@@ -34,7 +31,7 @@ class Reset extends React.Component {
     }
   }
 
-  handleEmail = event => {
+  handleEmail = (event) => {
     this.setState({ email: event.target.value })
   }
 
@@ -72,5 +69,4 @@ class Reset extends React.Component {
   }
 }
 
-
-export default withStore(Reset)
+export default Reset

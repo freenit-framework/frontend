@@ -1,4 +1,5 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
@@ -12,33 +13,31 @@ import {
   Typography,
 } from '@material-ui/core'
 
-import { withStore } from '../../store'
+import { store } from '../../store'
 import styles from './styles'
 
+@observer
 class RoleList extends React.Component {
   constructor(props) {
     super(props)
-    props.store.role.fetchAll()
+    store.role.fetchAll()
   }
 
   render() {
     return (
-      <Badge
-        color="primary"
-        badgeContent={this.props.store.role.list.total}
-      >
+      <Badge color="primary" badgeContent={store.role.list.total}>
         <Card style={styles.card}>
           <CardContent>
             <Typography variant="h5" data-id="roles">
               Roles
             </Typography>
-            <Typography color="textSecondary">
-              All roles
-            </Typography>
+            <Typography color="textSecondary">All roles</Typography>
           </CardContent>
           <CardActions>
             <Link to="/roles">
-              <Button variant="outlined" size="small">Explore</Button>
+              <Button variant="outlined" size="small">
+                Explore
+              </Button>
             </Link>
           </CardActions>
         </Card>
@@ -47,15 +46,4 @@ class RoleList extends React.Component {
   }
 }
 
-RoleList.propTypes = {
-  store: PropTypes.shape({
-    role: PropTypes.shape({
-      list: PropTypes.shape({
-        total: PropTypes.number.isRequired,
-      }).isRequired,
-      fetchAll: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
-}
-
-export default withStore(RoleList)
+export default RoleList

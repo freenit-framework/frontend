@@ -1,7 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { rest } from './utils'
 
-
 class AuthStore {
   tokens = {
     access: { expire: null, date: null },
@@ -22,7 +21,10 @@ class AuthStore {
 
   login = async (email, password) => {
     try {
-      const response = await window.rest.post('/auth/login', {email, password})
+      const response = await window.rest.post('/auth/login', {
+        email,
+        password,
+      })
       const { accessExpire, refreshExpire } = response.data
       const now = new Date()
       const ae = Number(accessExpire)
@@ -49,8 +51,12 @@ class AuthStore {
   }
 
   refresh = async (initialized = false) => {
-    if (!this.initialized && !initialized) { return { ok: false } }
-    if (this.authenticated()) { return { ok: true } }
+    if (!this.initialized && !initialized) {
+      return { ok: false }
+    }
+    if (this.authenticated()) {
+      return { ok: true }
+    }
     try {
       const response = await window.rest.post('/auth/refresh', {})
       const { accessExpire, refreshExpire } = response.data
@@ -68,18 +74,28 @@ class AuthStore {
   }
 
   authenticated = () => {
-    if (!this.tokens.access.expire) { return false }
-    if (!this.tokens.refresh.expire) { return false }
+    if (!this.tokens.access.expire) {
+      return false
+    }
+    if (!this.tokens.refresh.expire) {
+      return false
+    }
     const now = new Date()
-    if (now > this.tokens.access.date) { return false }
-    if (now > this.tokens.refresh.date) { return false }
+    if (now > this.tokens.access.date) {
+      return false
+    }
+    if (now > this.tokens.refresh.date) {
+      return false
+    }
     return true
   }
 
   protect = (fn) => async (...data) => {
     if (!this.authenticated()) {
       const response = await this.refresh()
-      if (!response.ok) { return response }
+      if (!response.ok) {
+        return response
+      }
     }
     return await fn(...data)
   }
@@ -102,7 +118,7 @@ class AuthStore {
     }
   }
 
-  reset = async email => {
+  reset = async (email) => {
     try {
       await window.rest.post('/auth/reset/request', { email })
       return { ok: true }
@@ -120,6 +136,5 @@ class AuthStore {
     }
   }
 }
-
 
 export const auth = new AuthStore()

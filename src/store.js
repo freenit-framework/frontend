@@ -1,15 +1,9 @@
-import React from 'react'
-import { observer } from 'mobx-react'
-
-
-export const Store = React.createContext({})
-
-
-export const withStore = Component => props => {
-  const ObservedComponent = observer(Component)
-  return (
-    <Store.Consumer>
-      {store => <ObservedComponent {...props} store={store} />}
-    </Store.Consumer>
-  )
+export const store = {
+  auth: Auth.store,
+  landing: Landing.store,
+  notification: EmptyTemplate.store,
+  profile: Profile.store,
+  resolution: Resolution.store,
+  role: Role.store,
+  user: User.store,
 }

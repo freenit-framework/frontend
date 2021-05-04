@@ -1,17 +1,14 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 
 // Components
-import {
-  Button,
-  Paper,
-  TextField,
-} from '@material-ui/core'
+import { Button, Paper, TextField } from '@material-ui/core'
 
 import styles from './styles'
-import { withStore } from '../../store'
+import { store } from '../../store'
 import Template from '../../templates/empty/detail'
 
-
+@observer
 class Register extends React.Component {
   constructor(props) {
     super(props)
@@ -22,18 +19,15 @@ class Register extends React.Component {
     }
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async (event) => {
     event.preventDefault()
-    const { auth, notification } = this.props.store
+    const { auth, notification } = store
     const { password, repeatPassword } = this.state
     if (password !== repeatPassword) {
       notification.show('Passwords must match!')
       return
     }
-    const response = await auth.register(
-      this.state.email,
-      this.state.password,
-    )
+    const response = await auth.register(this.state.email, this.state.password)
     if (response.ok) {
       notification.show('success')
     } else {
@@ -45,15 +39,15 @@ class Register extends React.Component {
     })
   }
 
-  handleEmail = event => {
+  handleEmail = (event) => {
     this.setState({ email: event.target.value })
   }
 
-  handlePassword = event => {
+  handlePassword = (event) => {
     this.setState({ password: event.target.value })
   }
 
-  handleRepeatPassword = event => {
+  handleRepeatPassword = (event) => {
     this.setState({ repeatPassword: event.target.value })
   }
 
@@ -113,5 +107,4 @@ class Register extends React.Component {
   }
 }
 
-
-export default withStore(Register)
+export default Register

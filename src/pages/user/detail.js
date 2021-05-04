@@ -1,4 +1,5 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 
 import {
   Avatar,
@@ -10,10 +11,10 @@ import {
   Switch,
 } from '@material-ui/core'
 
-import { withStore } from '../../store'
+import { store } from '../../store'
 import styles from './styles'
 
-
+@observer
 class UserDetail extends React.Component {
   constructor(props) {
     super(props)
@@ -21,29 +22,36 @@ class UserDetail extends React.Component {
   }
 
   fetch = async () => {
-    const { store } = this.props
     const [user, roles] = await Promise.all([
       store.user.fetch(this.props.match.params.id),
       store.role.fetchAll(),
     ])
-    if (!user.ok) { store.notification.show('User error') }
-    if (!roles.ok) { store.notification.show('Role error') }
+    if (!user.ok) {
+      store.notification.show('User error')
+    }
+    if (!roles.ok) {
+      store.notification.show('Role error')
+    }
   }
 
-  handleRoleActive = role => (event, value) => {
-    if (value) { this.props.store.user.assign(role.id) }
-    else { this.props.store.user.deassign(role.id) }
+  handleRoleActive = (role) => (event, value) => {
+    if (value) {
+      store.user.assign(role.id)
+    } else {
+      store.user.deassign(role.id)
+    }
   }
 
   render() {
     let roleList
-    const { role, user } = this.props.store
-    if (role.list.data.length === 0) { roleList = null }
-    else {
-      roleList = role.list.data.map(role => {
-        const activated = user.detail.roles.filter(
-          userRole => userRole.id === role.id,
-        ).length > 0
+    const { role, user } = store
+    if (role.list.data.length === 0) {
+      roleList = null
+    } else {
+      roleList = role.list.data.map((role) => {
+        const activated =
+          user.detail.roles.filter((userRole) => userRole.id === role.id)
+            .length > 0
 
         return (
           <ListItem key={role.id} style={styles.item} dense button>
@@ -63,13 +71,10 @@ class UserDetail extends React.Component {
       <Paper style={styles.root}>
         email: &nbsp;
         <span data-id="email">{user.detail.email}</span>
-        <List>
-          {roleList}
-        </List>
+        <List>{roleList}</List>
       </Paper>
     )
   }
 }
 
-
-export default withStore(UserDetail)
+export default UserDetail

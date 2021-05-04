@@ -1,18 +1,16 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
 // Components
-import {
-  Button,
-  Paper,
-  TextField,
-} from '@material-ui/core'
+import { Button, Paper, TextField } from '@material-ui/core'
 
 import styles from './styles'
 import Template from '../../templates/empty/detail'
-import { withStore } from '../../store'
+import { store } from '../../store'
 import { errors } from '../../utils'
 
+@observer
 class ChangePassword extends React.Component {
   constructor(props) {
     super(props)
@@ -21,13 +19,13 @@ class ChangePassword extends React.Component {
     }
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async (event) => {
     event.preventDefault()
     const { password } = this.state
-    const { auth, notification } = this.props.store
+    const { auth, notification } = store
     const response = await auth.changePassword(
       password,
-      this.props.match.params.token,
+      this.props.match.params.token
     )
     if (response.ok) {
       notification.show('You can login with your new password')
@@ -37,7 +35,7 @@ class ChangePassword extends React.Component {
     }
   }
 
-  handlePassword = event => {
+  handlePassword = (event) => {
     this.setState({ password: event.target.value })
   }
 
@@ -80,14 +78,6 @@ ChangePassword.propTypes = {
       token: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  store: PropTypes.shape({
-    auth: PropTypes.shape({
-      changePassword: PropTypes.func.isRequired,
-    }).isRequired,
-    notification: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
 }
 
-export default withStore(ChangePassword)
+export default ChangePassword

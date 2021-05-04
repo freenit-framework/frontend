@@ -1,47 +1,46 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import { auth } from '../../auth'
 
 // Components
-import {
-  Button,
-  Paper,
-  TextField,
-} from '@material-ui/core'
+import { Button, Paper, TextField } from '@material-ui/core'
 
 import styles from './styles'
 import Template from '../../templates/empty/detail'
-import { withStore } from '../../store'
+import { store } from '../../store'
 import { errors } from '../../utils'
 
-
+@observer
 class Login extends React.Component {
   state = {
     email: '',
     password: '',
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async (event) => {
     event.preventDefault()
-    const { history, notification } = this.props.store
+    const { history, notification } = store
     const { email, password } = this.state
     const response = await auth.login(email, password)
     if (response.ok) {
       history.push(this.props.redirect || '/dashboard')
       auth.refresh()
       const { onSuccess } = this.props
-      if (onSuccess) { onSuccess(email, password) }
+      if (onSuccess) {
+        onSuccess(email, password)
+      }
     } else {
       const error = errors(response)
       notification.show(error.message)
     }
   }
 
-  handleEmail = event => {
+  handleEmail = (event) => {
     this.setState({ email: event.target.value })
   }
 
-  handlePassword = event => {
+  handlePassword = (event) => {
     this.setState({ password: event.target.value })
   }
 
@@ -81,9 +80,7 @@ class Login extends React.Component {
                     Login
                   </Button>
                 </div>
-                <Link to="/reset">
-                  forgot password?
-                </Link>
+                <Link to="/reset">forgot password?</Link>
               </form>
               <Link to="/">Home</Link>
             </div>
@@ -94,5 +91,4 @@ class Login extends React.Component {
   }
 }
 
-
-export default withStore(Login)
+export default Login

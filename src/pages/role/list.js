@@ -1,4 +1,5 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 
 // Components
@@ -16,12 +17,11 @@ import {
 // Icons
 import AddIcon from '@material-ui/icons/Add'
 
-import {
-  RoleCreate,
-} from '../../components'
-import { withStore } from '../../store'
+import { RoleCreate } from '../../components'
+import { store } from '../../store'
 import styles from './styles'
 
+@observer
 class RoleList extends React.Component {
   constructor(props) {
     super(props)
@@ -29,14 +29,14 @@ class RoleList extends React.Component {
       open: false,
     }
     const page = Number(props.match.params.page || '0')
-    props.store.role.fetchAll(page)
+    store.role.fetchAll(page)
   }
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps) => {
     const oldPage = Number(prevProps.match.params.page || '0')
     const newPage = Number(this.props.match.params.page || '0')
     if (oldPage !== newPage) {
-      this.props.store.role.fetchAll(newPage)
+      store.role.fetchAll(newPage)
     }
   }
 
@@ -50,36 +50,32 @@ class RoleList extends React.Component {
 
   render() {
     const page = Number(this.props.match.params.page || '0')
-    const previous = page !== 0
-      ? (
+    const previous =
+      page !== 0 ? (
         <Link to={page !== 1 ? `/roles/${page - 1}` : '/roles'}>
-          <Button variant="outlined">
-            &lt;
-          </Button>
+          <Button variant="outlined">&lt;</Button>
         </Link>
-      )
-      : (
+      ) : (
         <Button variant="outlined" disabled>
           &lt;
         </Button>
       )
-    const next = page < this.props.store.role.list.pages - 1
-      ? (
+    const next =
+      page < store.role.list.pages - 1 ? (
         <Link to={`/roles/${page + 1}`}>
-          <Button variant="outlined">
-            &gt;
-          </Button>
+          <Button variant="outlined">&gt;</Button>
         </Link>
-      )
-      : (
+      ) : (
         <Button variant="outlined" disabled>
           &gt;
         </Button>
       )
-    const roleList = this.props.store.role.list.data.map(role => (
+    const roleList = store.role.list.data.map((role) => (
       <List style={styles.item} key={role.id}>
         <ListItem dense button>
-          <Avatar style={styles.avatar} data-id="avatar">{role.id}</Avatar>
+          <Avatar style={styles.avatar} data-id="avatar">
+            {role.id}
+          </Avatar>
           <ListItemText primary={role.name} />
           <ListItemSecondaryAction>
             <Link to={`/role/${role.id}`}>
@@ -94,10 +90,7 @@ class RoleList extends React.Component {
 
     return (
       <div>
-        <RoleCreate
-          open={this.state.open}
-          close={this.handleClose}
-        />
+        <RoleCreate open={this.state.open} close={this.handleClose} />
         <Paper style={styles.root}>
           {roleList}
           <Fab color="primary" onClick={this.handleAdd} data-id="add">
@@ -105,7 +98,9 @@ class RoleList extends React.Component {
           </Fab>
           <div style={styles.center}>
             {previous}
-            <Avatar style={styles.page} data-id="page">{String(page)}</Avatar>
+            <Avatar style={styles.page} data-id="page">
+              {String(page)}
+            </Avatar>
             {next}
           </div>
         </Paper>
@@ -114,5 +109,4 @@ class RoleList extends React.Component {
   }
 }
 
-
-export default withStore(RoleList)
+export default RoleList

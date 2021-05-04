@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "system",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outFile": "./dist/tsc.js",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "allowJs": true
+  },
+  "include": ["src/**/*.js"],
+  "exclude": ["node_modules"]
+}

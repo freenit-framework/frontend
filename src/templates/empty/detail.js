@@ -1,11 +1,10 @@
 import React from 'react'
 import { Button, Snackbar } from '@material-ui/core'
-import { withStore } from '../../store'
-
+import { store } from '../../store'
 
 class EmptyTemplate extends React.Component {
   render() {
-    const { auth, history, notification } = this.props.store
+    const { auth, history, notification } = store
     if (auth.initialized && this.props.secure && !auth.authenticated()) {
       history.push('/')
       return null
@@ -19,17 +18,16 @@ class EmptyTemplate extends React.Component {
           open={Boolean(notification.message)}
           onClose={notification.close}
           message={notification.message}
-          action={(
+          action={
             <Button color="secondary" size="small" onClick={notification.close}>
               CLOSE
             </Button>
-          )}
+          }
         />
       </div>
     )
   }
 }
-
 
 EmptyTemplate.defaultProps = {
   children: null,
@@ -37,5 +35,4 @@ EmptyTemplate.defaultProps = {
   style: { padding: 20 },
 }
 
-
-export default withStore(EmptyTemplate)
+export default EmptyTemplate

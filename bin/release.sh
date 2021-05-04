@@ -7,4 +7,4 @@ PROJECT_ROOT="${BIN_DIR}/.."
 setup
 
 cd "${PROJECT_ROOT}"
-"${PACKAGE_MANAGER}" publish
+"${PACKAGE_MANAGER}" publish --access public

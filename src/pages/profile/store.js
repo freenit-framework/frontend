@@ -1,7 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { auth } from '../../auth'
 
-
 export default class ProfileStore {
   detail = { id: 0 }
 

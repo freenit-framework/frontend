@@ -1,6 +1,4 @@
 ---
 devel_packages:
-  - name: gmake
   - name: node
-  - name: python27
   - name: yarn

@@ -1,17 +1,14 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 
 // Components
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  TextField,
-} from '@material-ui/core'
+import { Button, Dialog, DialogTitle, TextField } from '@material-ui/core'
 
-import { withStore } from '../../store'
+import { store } from '../../store'
 import styles from './styles'
 
+@observer
 class RoleCreate extends React.Component {
   constructor(props) {
     super(props)
@@ -20,14 +17,14 @@ class RoleCreate extends React.Component {
     }
   }
 
-  handleName = event => {
+  handleName = (event) => {
     this.setState({ name: event.target.value })
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async (event) => {
     event.preventDefault()
     const { name } = this.state
-    const { role, notification } = this.props.store
+    const { role, notification } = store
     const response = await role.create({ name })
     if (response.ok) {
       notification.show('Role created')
@@ -39,10 +36,7 @@ class RoleCreate extends React.Component {
 
   render() {
     return (
-      <Dialog
-        onClose={this.props.close}
-        open={this.props.open}
-      >
+      <Dialog onClose={this.props.close} open={this.props.open}>
         <DialogTitle>Create new role</DialogTitle>
         <form onSubmit={this.handleSubmit} style={styles.form}>
           <TextField
@@ -54,12 +48,7 @@ class RoleCreate extends React.Component {
             value={this.state.name}
             onChange={this.handleName}
           />
-          <Button
-            fullWidth
-            type="submit"
-            color="primary"
-            variant="contained"
-          >
+          <Button fullWidth type="submit" color="primary" variant="contained">
             Create
           </Button>
           <Button
@@ -79,23 +68,10 @@ class RoleCreate extends React.Component {
 RoleCreate.propTypes = {
   open: PropTypes.bool,
   close: PropTypes.func.isRequired,
-  store: PropTypes.shape({
-    notification: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-    }).isRequired,
-    role: PropTypes.shape({
-      detail: PropTypes.shape({
-        admin: PropTypes.bool,
-        name: PropTypes.string.isRequired,
-        users: PropTypes.array.isRequired,
-      }).isRequired,
-      create: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
 }
 
 RoleCreate.defaultProps = {
   open: false,
 }
 
-export default withStore(RoleCreate)
+export default RoleCreate

@@ -1,17 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 
 // Components
-import {
-  Button,
-  Paper,
-  TextField,
-} from '@material-ui/core'
+import { Button, Paper, TextField } from '@material-ui/core'
 
 import styles from './styles'
-import { withStore } from '../../store'
+import { store } from '../../store'
 import { errors } from '../../utils'
 
+@observer
 class Profile extends React.Component {
   state = {
     email: '',
@@ -23,7 +21,6 @@ class Profile extends React.Component {
   }
 
   fetch = async () => {
-    const { store } = this.props
     const response = await store.profile.fetch()
     if (!response.ok) {
       const error = errors(response)
@@ -35,16 +32,16 @@ class Profile extends React.Component {
     }
   }
 
-  handleEmail = event => {
+  handleEmail = (event) => {
     this.setState({ email: event.target.value })
   }
 
   handleEmailCancel = () => {
-    this.setState({ email: this.props.store.profile.detail.email })
+    this.setState({ email: store.profile.detail.email })
   }
 
-  handleSubmit = async event => {
-    const { profile, notification } = this.props.store
+  handleSubmit = async (event) => {
+    const { profile, notification } = store
     event.preventDefault()
     const response = await profile.edit({ email: this.state.email })
     if (!response.ok) {
@@ -53,12 +50,13 @@ class Profile extends React.Component {
   }
 
   render() {
-    const profile = this.props.store.profile.detail
+    const profile = store.profile.detail
     const style = this.props.style
       ? {
-        ...styles.root,
-        ...this.props.style,
-      } : styles.root
+          ...styles.root,
+          ...this.props.style,
+        }
+      : styles.root
     return (
       <Paper style={style}>
         <form onSubmit={this.handleSubmit} style={styles.form}>
@@ -93,21 +91,4 @@ class Profile extends React.Component {
   }
 }
 
-
-Profile.propTypes = {
-  store: PropTypes.shape({
-    profile: PropTypes.shape({
-      detail: PropTypes.shape({
-        email: PropTypes.string.isRequired,
-      }).isRequired,
-      edit: PropTypes.func.isRequired,
-      fetch: PropTypes.func.isRequired,
-    }).isRequired,
-    notification: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
-  style: PropTypes.shape({}),
-}
-
-export default withStore(Profile)
+export default Profile

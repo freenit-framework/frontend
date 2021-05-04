@@ -1,16 +1,19 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
-// Pages
 import {
   Auth,
   Profile,
   NoPage,
+} from 'freenit'
+
+
+import {
   Dashboard,
   Landing,
   Role,
   User,
-} from './pages'
+} from 'pages'
 
 
 const Routing = () => {

@@ -1,10 +1,7 @@
 import React from 'react'
 
 // Components
-import {
-  RoleList,
-  UserList,
-} from '../../components'
+import { RoleList, UserList } from '../../components'
 
 import styles from './styles'
 

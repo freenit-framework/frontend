@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx'
 
-
 export default class LandingStore {
   data = null
 

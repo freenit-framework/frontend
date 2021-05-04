@@ -11,9 +11,3 @@ echo "========"
 cd "${PROJECT_ROOT}"
 rm -rf build
 ${PACKAGE_MANAGER} build
-
-cd build/public
-BUNDLE=`ls static/js/bundle.*.js`
-cd -
-
-sed -e "s;BUNDLE;${BUNDLE};g" templates/index.html >build/public/index.html

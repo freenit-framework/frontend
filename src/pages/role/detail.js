@@ -1,4 +1,5 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 
 // Components
 import {
@@ -11,16 +12,17 @@ import {
   Switch,
 } from '@material-ui/core'
 
-import { withStore } from '../../store'
+import { store } from '../../store'
 import styles from './styles'
 
+@observer
 class RoleDetail extends React.Component {
   componentDidMount = async () => {
     const [roleResponse, userResponse] = await Promise.all([
-      this.props.store.role.fetch(this.props.match.params.id),
-      this.props.store.user.fetchAll(),
+      store.role.fetch(this.props.match.params.id),
+      store.user.fetchAll(),
     ])
-    const { notification } = this.props.store
+    const { notification } = store
     if (!roleResponse.ok) {
       notification.show(roleResponse.error)
     }
@@ -30,30 +32,29 @@ class RoleDetail extends React.Component {
   }
 
   handleAdmin = () => {
-    this.props.store.role.edit(
-      this.props.match.params.id,
-      { admin: !this.props.store.role.detail.admin },
-    )
+    store.role.edit(this.props.match.params.id, {
+      admin: !store.role.detail.admin,
+    })
   }
 
-  handleUserActive = user => (event, value) => {
+  handleUserActive = (user) => (event, value) => {
     if (value) {
-      this.props.store.role.assign(user.id)
+      store.role.assign(user.id)
     } else {
-      this.props.store.role.deassign(user.id)
+      store.role.deassign(user.id)
     }
   }
 
   render() {
     let userList
-    const { role, user } = this.props.store
+    const { role, user } = store
     if (user.list.data.length === 0) {
       userList = null
     } else {
-      userList = user.list.data.map(user => {
-        const activated = role.detail.users.filter(
-          roleUser => roleUser.id === user.id,
-        ).length > 0
+      userList = user.list.data.map((user) => {
+        const activated =
+          role.detail.users.filter((roleUser) => roleUser.id === user.id)
+            .length > 0
 
         return (
           <ListItem key={user.id} style={styles.item} dense button>
@@ -72,16 +73,11 @@ class RoleDetail extends React.Component {
 
     return (
       <Paper style={styles.root}>
-        <h1 style={styles.h1.small}>
-          {role.detail.name}
-        </h1>
-        <List>
-          {userList}
-        </List>
+        <h1 style={styles.h1.small}>{role.detail.name}</h1>
+        <List>{userList}</List>
       </Paper>
     )
   }
 }
 
-
-export default withStore(RoleDetail)
+export default RoleDetail
