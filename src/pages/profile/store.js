@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { auth } from '../../auth'
 
-export default class ProfileStore {
+class ProfileStore {
   detail = { id: 0 }
 
   constructor() {
@@ -28,3 +28,5 @@ export default class ProfileStore {
     }
   })
 }
+
+export default new ProfileStore()

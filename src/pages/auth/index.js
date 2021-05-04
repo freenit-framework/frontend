@@ -5,7 +5,6 @@ import Register from './register'
 import Reset from './reset'
 import { auth as store } from '../../auth'
 
-
 const auth = {
   ChangePassword,
   Confirm,
@@ -14,6 +13,5 @@ const auth = {
   Reset,
   store,
 }
-
 
 export default auth

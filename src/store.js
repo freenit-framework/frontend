@@ -1,9 +1,17 @@
+import { auth } from './auth'
+import landing from './pages/landing/store'
+import notification from './templates/empty/store'
+import profile from './pages/profile/store'
+import resolution from './pages/resolution/store'
+import role from './pages/role/store'
+import user from './pages/user/store'
+
 export const store = {
-  auth: Auth.store,
-  landing: Landing.store,
-  notification: EmptyTemplate.store,
-  profile: Profile.store,
-  resolution: Resolution.store,
-  role: Role.store,
-  user: User.store,
+  auth,
+  landing,
+  notification,
+  profile,
+  resolution,
+  role,
+  user,
 }

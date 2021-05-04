@@ -1,8 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { auth } from '../../auth'
 
-
-export default class UserStore {
+class UserStore {
   detail = {
     id: 0,
     email: '',
@@ -18,7 +17,7 @@ export default class UserStore {
     makeAutoObservable(this)
   }
 
-  fetch = auth.protect(async id => {
+  fetch = auth.protect(async (id) => {
     try {
       const response = await window.rest.get(`/users/${id}`)
       this.detail = { ...response.data, ok: true }
@@ -30,10 +29,9 @@ export default class UserStore {
 
   fetchAll = auth.protect(async (Page = 0, PerPage = 10) => {
     try {
-      const response = await window.rest.get(
-        '/users',
-        { headers: { Page, PerPage } },
-      )
+      const response = await window.rest.get('/users', {
+        headers: { Page, PerPage },
+      })
       this.list = { ...response.data, ok: true }
       return this.list
     } catch (error) {
@@ -41,7 +39,7 @@ export default class UserStore {
     }
   })
 
-  create = auth.protect(async data => {
+  create = auth.protect(async (data) => {
     try {
       const response = await window.rest.post('/users', data)
       this.list = { ...response.data, ok: true }
@@ -55,8 +53,10 @@ export default class UserStore {
     try {
       const response = await window.rest.patch(`/users/${id}`, data)
       const result = { ...response.data, ok: true }
-      if (this.detail.id === id) { this.detail = result }
-      this.list.data.forEach(user => {
+      if (this.detail.id === id) {
+        this.detail = result
+      }
+      this.list.data.forEach((user) => {
         if (user.id === id) {
           user.email = result.email
           user.active = result.active
@@ -69,7 +69,7 @@ export default class UserStore {
     }
   })
 
-  delete = auth.protect(async id => {
+  delete = auth.protect(async (id) => {
     try {
       const response = await window.rest.delete(`/users/${id}`)
       this.detail = { ...response.data, ok: true }
@@ -79,12 +79,11 @@ export default class UserStore {
     }
   })
 
-  assign = auth.protect(async roleId => {
+  assign = auth.protect(async (roleId) => {
     try {
-      const response = await window.rest.post(
-        `/roles/${roleId}/user`,
-        { id: this.detail.id },
-      )
+      const response = await window.rest.post(`/roles/${roleId}/user`, {
+        id: this.detail.id,
+      })
       const data = { ...this.detail, ok: true }
       data.roles.push(response.data)
       this.detail = data
@@ -94,14 +93,14 @@ export default class UserStore {
     }
   })
 
-  deassign = auth.protect(async roleId => {
+  deassign = auth.protect(async (roleId) => {
     try {
       const result = await window.rest.delete(
-        `/roles/${roleId}/user/${this.detail.id}`,
+        `/roles/${roleId}/user/${this.detail.id}`
       )
       const data = { ...this.detail, ok: true }
       data.roles = this.detail.roles.filter(
-        user => user.id !== result.data.id,
+        (user) => user.id !== result.data.id
       )
       this.detail = data
       return this.detail
@@ -110,3 +109,5 @@ export default class UserStore {
     }
   })
 }
+
+export default new UserStore()

@@ -1,7 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 
-
-export default class ResolutionStore {
+class ResolutionStore {
   height = window.innerHeight
   width = window.innerWidth
 
@@ -13,3 +12,5 @@ export default class ResolutionStore {
     }
   }
 }
+
+export default new ResolutionStore()

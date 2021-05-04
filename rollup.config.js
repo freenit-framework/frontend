@@ -11,12 +11,12 @@ export default {
   input: './src/lib.js',
   output: [
     {
-      file: `dist/${pkg.main}`,
+      file: pkg.main,
       format: 'cjs',
       sourcemap: true,
     },
     {
-      file: `dist/${pkg.module}`,
+      file: pkg.module,
       format: 'esm',
       sourcemap: true,
     },

@@ -1,9 +1,11 @@
 import { makeAutoObservable } from 'mobx'
 
-export default class LandingStore {
+class LandingStore {
   data = null
 
   constructor() {
     makeAutoObservable(this)
   }
 }
+
+export default new LandingStore()

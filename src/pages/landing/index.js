@@ -1,9 +1,9 @@
 import Detail from './detail'
-import Store from './store'
+import store from './store'
 
 const landing = {
   Detail,
-  store: new Store(),
+  store,
 }
 
 export default landing

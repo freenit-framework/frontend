@@ -1,8 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { auth } from '../../auth'
 
-
-export default class RoleStore {
+class RoleStore {
   detail = {
     id: 0,
     users: [],
@@ -17,7 +16,7 @@ export default class RoleStore {
     makeAutoObservable(this)
   }
 
-  fetch = auth.protect(async id => {
+  fetch = auth.protect(async (id) => {
     try {
       const response = await window.rest.get(`/roles/${id}`)
       this.detail = { ...response, ok: true }
@@ -37,7 +36,7 @@ export default class RoleStore {
     }
   })
 
-  create = auth.protect(async data => {
+  create = auth.protect(async (data) => {
     try {
       const response = await window.rest.post('/roles', data)
       this.detail = { ...response.data, ok: true }
@@ -52,8 +51,10 @@ export default class RoleStore {
     try {
       const response = await window.rest.patch(`/roles/${id}`, data)
       const result = { ...response.data, ok: true }
-      if (this.detail.id === id) { this.detail = result }
-      this.list.data.forEach(user => {
+      if (this.detail.id === id) {
+        this.detail = result
+      }
+      this.list.data.forEach((user) => {
         if (user.id === id) {
           user.email = result.email
           user.active = result.active
@@ -66,7 +67,7 @@ export default class RoleStore {
     }
   })
 
-  delete = auth.protect(async id => {
+  delete = auth.protect(async (id) => {
     try {
       const response = await window.rest.delete(`/roles/${id}`)
       return { ...response.data, ok: true }
@@ -77,10 +78,9 @@ export default class RoleStore {
 
   assign = auth.protect(async (userId) => {
     try {
-      const response = await window.rest.post(
-        `/roles/${this.detail.id}/user`,
-        { userId },
-      )
+      const response = await window.rest.post(`/roles/${this.detail.id}/user`, {
+        userId,
+      })
       const data = { ...this.detail, ok: true }
       data.users.push(response.data)
       this.detail = data
@@ -96,9 +96,7 @@ export default class RoleStore {
         `/roles/${this.detail.id}/user/${userId}`
       )
       const data = { ...this.detail, ok: true }
-      data.users = this.detail.users.filter(
-        user => user.id !== result.id,
-      )
+      data.users = this.detail.users.filter((user) => user.id !== result.id)
       this.detail = data
       return data
     } catch (error) {
@@ -106,3 +104,5 @@ export default class RoleStore {
     }
   })
 }
+
+export default new RoleStore()

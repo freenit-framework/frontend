@@ -1,13 +1,11 @@
 import Detail from './detail'
 import List from './list'
-import Store from './store'
-
+import store from './store'
 
 const role = {
   Detail,
   List,
-  store: new Store(),
+  store,
 }
-
 
 export default role

@@ -1,7 +1,7 @@
-import Store from './store'
+import store from './store'
 
 const resolution = {
-  store: new Store(),
+  store,
 }
 
 export default resolution
