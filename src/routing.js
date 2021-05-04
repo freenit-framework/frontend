@@ -1,20 +1,7 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
-import {
-  Auth,
-  Profile,
-  NoPage,
-} from 'freenit'
-
-
-import {
-  Dashboard,
-  Landing,
-  Role,
-  User,
-} from 'pages'
-
+import { Auth, Profile, NoPage, Dashboard, Landing, Role, User } from './pages'
 
 const Routing = () => {
   return (
@@ -37,6 +24,5 @@ const Routing = () => {
     </Switch>
   )
 }
-
 
 export default Routing
