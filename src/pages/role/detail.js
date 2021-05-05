@@ -15,7 +15,6 @@ import {
 import { store } from '../../store'
 import styles from './styles'
 
-@observer
 class RoleDetail extends React.Component {
   componentDidMount = async () => {
     const [roleResponse, userResponse] = await Promise.all([
@@ -80,4 +79,4 @@ class RoleDetail extends React.Component {
   }
 }
 
-export default RoleDetail
+export default observer(RoleDetail)

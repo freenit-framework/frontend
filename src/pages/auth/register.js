@@ -8,7 +8,6 @@ import styles from './styles'
 import { store } from '../../store'
 import Template from '../../templates/empty/detail'
 
-@observer
 class Register extends React.Component {
   constructor(props) {
     super(props)
@@ -107,4 +106,4 @@ class Register extends React.Component {
   }
 }
 
-export default Register
+export default observer(Register)

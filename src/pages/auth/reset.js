@@ -9,7 +9,6 @@ import { store } from '../../store'
 import { errors } from '../../utils'
 import styles from './styles'
 
-@observer
 class Reset extends React.Component {
   constructor(props) {
     super(props)
@@ -69,4 +68,4 @@ class Reset extends React.Component {
   }
 }
 
-export default Reset
+export default observer(Reset)

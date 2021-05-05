@@ -10,7 +10,6 @@ import Template from '../../templates/empty/detail'
 import { store } from '../../store'
 import { errors } from '../../utils'
 
-@observer
 class ChangePassword extends React.Component {
   constructor(props) {
     super(props)
@@ -80,4 +79,4 @@ ChangePassword.propTypes = {
   }).isRequired,
 }
 
-export default ChangePassword
+export default observer(ChangePassword)

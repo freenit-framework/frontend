@@ -11,7 +11,6 @@ import Template from '../../templates/empty/detail'
 import { store } from '../../store'
 import { errors } from '../../utils'
 
-@observer
 class Login extends React.Component {
   state = {
     email: '',
@@ -91,4 +90,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login
+export default observer(Login)

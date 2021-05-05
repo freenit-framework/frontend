@@ -14,7 +14,6 @@ import {
 import { store } from '../../store'
 import styles from './styles'
 
-@observer
 class UserDetail extends React.Component {
   constructor(props) {
     super(props)
@@ -77,4 +76,4 @@ class UserDetail extends React.Component {
   }
 }
 
-export default UserDetail
+export default observer(UserDetail)

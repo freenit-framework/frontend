@@ -9,7 +9,6 @@ import styles from './styles'
 import { store } from '../../store'
 import { errors } from '../../utils'
 
-@observer
 class Profile extends React.Component {
   state = {
     email: '',
@@ -91,4 +90,4 @@ class Profile extends React.Component {
   }
 }
 
-export default Profile
+export default observer(Profile)

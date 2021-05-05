@@ -21,7 +21,6 @@ import { RoleCreate } from '../../components'
 import { store } from '../../store'
 import styles from './styles'
 
-@observer
 class RoleList extends React.Component {
   constructor(props) {
     super(props)
@@ -109,4 +108,4 @@ class RoleList extends React.Component {
   }
 }
 
-export default RoleList
+export default observer(RoleList)

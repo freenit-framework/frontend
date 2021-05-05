@@ -5,7 +5,6 @@ import { Paper } from '@material-ui/core'
 
 import getStyles from './styles'
 
-@observer
 class Landing extends React.Component {
   render() {
     const height = this.props.height || 'calc(100vh - 64px - 40px)'
@@ -20,4 +19,4 @@ class Landing extends React.Component {
   }
 }
 
-export default withTheme(Landing)
+export default withTheme(observer(Landing))

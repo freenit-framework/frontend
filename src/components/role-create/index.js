@@ -8,7 +8,6 @@ import { Button, Dialog, DialogTitle, TextField } from '@material-ui/core'
 import { store } from '../../store'
 import styles from './styles'
 
-@observer
 class RoleCreate extends React.Component {
   constructor(props) {
     super(props)
@@ -74,4 +73,4 @@ RoleCreate.defaultProps = {
   open: false,
 }
 
-export default RoleCreate
+export default observer(RoleCreate)

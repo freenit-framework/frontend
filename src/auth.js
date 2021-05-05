@@ -1,25 +1,21 @@
-import { makeAutoObservable } from 'mobx'
+import { observable, action } from 'mobx'
 import { rest } from './utils'
 
 class AuthStore {
-  tokens = {
+  tokens = observable({
     access: { expire: null, date: null },
     refresh: { expire: null, data: null },
-  }
-  initialized = false
+  })
+  initialized = observable(false)
 
-  constructor() {
-    makeAutoObservable(this)
-  }
-
-  init = async (api) => {
+  init = action(async (api) => {
     window.rest = rest(api)
     window.rest.API_ROOT = api
-    await this.refresh(true)
     this.initialized = true
-  }
+    return await this.refresh(true)
+  })
 
-  login = async (email, password) => {
+  login = action(async (email, password) => {
     try {
       const response = await window.rest.post('/auth/login', {
         email,
@@ -37,9 +33,9 @@ class AuthStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  logout = async () => {
+  logout = action(async () => {
     try {
       await window.rest.post('/auth/logout', {})
       this.tokens.access = { expire: null, date: null }
@@ -48,9 +44,9 @@ class AuthStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  refresh = async (initialized = false) => {
+  refresh = action(async (initialized = false) => {
     if (!this.initialized && !initialized) {
       return { ok: false }
     }
@@ -71,7 +67,7 @@ class AuthStore {
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
   authenticated = () => {
     if (!this.tokens.access.expire) {
@@ -100,41 +96,41 @@ class AuthStore {
     return await fn(...data)
   }
 
-  confirm = async (token) => {
+  confirm = action(async (token) => {
     try {
       await window.rest.get(`/auth/register/${token}`)
       return { ok: true }
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  register = async (email, password) => {
+  register = action(async (email, password) => {
     try {
       await window.rest.post('/auth/register', { email, password })
       return { ok: true }
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  reset = async (email) => {
+  reset = action(async (email) => {
     try {
       await window.rest.post('/auth/reset/request', { email })
       return { ok: true }
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 
-  changePassword = async (password, token) => {
+  changePassword = action(async (password, token) => {
     try {
       await window.rest.post('/auth/reset', { password, token })
       return { ok: true }
     } catch (error) {
       return { ...error, ok: false }
     }
-  }
+  })
 }
 
 export const auth = new AuthStore()

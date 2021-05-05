@@ -1,11 +1,10 @@
-import { makeAutoObservable } from 'mobx'
+import { observable } from 'mobx'
 
 class ResolutionStore {
-  height = window.innerHeight
-  width = window.innerWidth
+  height = observable(window.innerHeight)
+  width = observable(window.innerWidth)
 
   constructor() {
-    makeAutoObservable(this)
     window.onresize = () => {
       this.height = window.innerHeight
       this.width = window.innerWidth

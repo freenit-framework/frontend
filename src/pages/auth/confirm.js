@@ -14,7 +14,6 @@ import Template from '../../templates/empty/detail'
 import { store } from '../../store'
 import { errors } from '../../utils'
 
-@observer
 class Confirm extends React.Component {
   state = {
     message: 'Trying to confirm account ...',
@@ -66,4 +65,4 @@ Confirm.propTypes = {
   token: PropTypes.string.isRequired,
 }
 
-export default Confirm
+export default observer(Confirm)
