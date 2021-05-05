@@ -976,10 +976,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@freenit-framework/cli@^0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@freenit-framework/cli/-/cli-0.0.10.tgz#e1f5e01a899ee0766ae5519a1c53510779acf430"
-  integrity sha512-CS0M8yR2VaaCeeGuXMBVTR8hSVS0W/nm6i6E75uSndFhxKmXJgLEuFzYGJdRmnDrGRmBOZCcjccD4SsmxVpPKg==
+"@freenit-framework/cli@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@freenit-framework/cli/-/cli-0.0.11.tgz#0d7135c62e334760d9937f6653b610d96640d5d8"
+  integrity sha512-E7i2XB8ukv6BTS1rjNVvNrlXI9Meep5oMSgQbiQoRkAo2ue/Ngvu4hbvf0PIHQVJJXZLGekseXtUT3Krt1rvuw==
   dependencies:
     "@babel/core" "^7.13.14"
     "@babel/eslint-parser" "^7.13.14"
