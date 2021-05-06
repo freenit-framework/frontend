@@ -4,7 +4,7 @@ import { ThemeProvider } from '@material-ui/styles'
 import { Style } from 'radium'
 
 import { store } from './store'
-import { StoreProvider } from './store-provider'
+import { StoreContext, StoreProvider } from './store-provider'
 import Routing from './routing'
 import theme from './theme'
 import styles from './styles'
@@ -15,8 +15,10 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <Style rules={styles} />
       <Router>
-        <StoreProvider />
-        <Routing />
+        <StoreProvider store={store} />
+        <StoreContext.Provider value={store}>
+          <Routing />
+        </StoreContext.Provider>
       </Router>
     </ThemeProvider>
   )
