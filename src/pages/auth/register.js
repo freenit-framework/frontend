@@ -9,13 +9,10 @@ import { store } from '../../store'
 import Template from '../../templates/empty/detail'
 
 class Register extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      email: '',
-      password: '',
-      repeatPassword: '',
-    }
+  state = {
+    email: '',
+    password: '',
+    repeatPassword: '',
   }
 
   handleSubmit = async (event) => {

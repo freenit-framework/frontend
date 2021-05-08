@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, action } from 'mobx'
 
 class NotificationStore {
   message = null
@@ -7,12 +7,13 @@ class NotificationStore {
     makeAutoObservable(this)
   }
 
-  show = (message) => {
+  show = action((message) => {
     this.message = message
-  }
-  close = () => {
+  })
+
+  close = action(() => {
     this.message = null
-  }
+  })
 }
 
 export default new NotificationStore()

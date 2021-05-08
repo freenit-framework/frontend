@@ -1,4 +1,5 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 import { Button, Snackbar } from '@material-ui/core'
 import { store } from '../../store'
 
@@ -35,4 +36,4 @@ EmptyTemplate.defaultProps = {
   style: { padding: 20 },
 }
 
-export default EmptyTemplate
+export default observer(EmptyTemplate)

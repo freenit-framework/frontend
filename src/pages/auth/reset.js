@@ -10,11 +10,8 @@ import { errors } from '../../utils'
 import styles from './styles'
 
 class Reset extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      email: '',
-    }
+  state = {
+    email: '',
   }
 
   handleSubmit = async (event) => {

@@ -27,7 +27,6 @@ class UserList extends React.Component {
   fetch = async () => {
     const { notification, user } = store
     const response = await user.fetchAll(this.props.match.params.page)
-    console.log('fetch', response)
     if (!response.ok) {
       const error = errors(response)
       notification.show(error.message)
@@ -39,7 +38,6 @@ class UserList extends React.Component {
   }
 
   render() {
-    console.log('render', store.user.list)
     const page = Number(this.props.match.params.page || '0')
     const previous =
       page !== 0 ? (

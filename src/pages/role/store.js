@@ -1,59 +1,63 @@
-import { observable, action } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 import { auth } from '../../auth'
 
 class RoleStore {
-  detail = observable({
+  detail = {
     id: 0,
     users: [],
-  })
-  list = observable({
+  }
+  list = {
     data: [],
     pages: 0,
     total: 0,
+  }
+
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  fetch = auth.protect(async (id) => {
+    try {
+      const response = await window.rest.get(`/roles/${id}`)
+      runInAction(() => {
+        this.detail = { ...response, ok: true }
+      })
+      return this.detail
+    } catch (error) {
+      return { ...error, ok: false }
+    }
   })
 
-  fetch = action(
-    auth.protect(async (id) => {
-      try {
-        const response = await window.rest.get(`/roles/${id}`)
-        this.detail = { ...response, ok: true }
-        return this.detail
-      } catch (error) {
-        return { ...error, ok: false }
-      }
-    })
-  )
-
-  fetchAll = action(
-    auth.protect(async (page = 0, perpage = 10) => {
-      try {
-        const response = await window.rest.get('/roles')
+  fetchAll = auth.protect(async (page = 0, perpage = 10) => {
+    try {
+      const response = await window.rest.get('/roles')
+      runInAction(() => {
         this.list = { ...response.data, ok: true }
-        return this.list
-      } catch (error) {
-        return { ...error, ok: false }
-      }
-    })
-  )
+      })
+      return this.list
+    } catch (error) {
+      return { ...error, ok: false }
+    }
+  })
 
-  create = action(
-    auth.protect(async (data) => {
-      try {
-        const response = await window.rest.post('/roles', data)
+  create = auth.protect(async (data) => {
+    try {
+      const response = await window.rest.post('/roles', data)
+      runInAction(() => {
         this.detail = { ...response.data, ok: true }
         this.list.data.push(this.detail)
-        return this.detail
-      } catch (error) {
-        return { ...error, ok: false }
-      }
-    })
-  )
+      })
+      return this.detail
+    } catch (error) {
+      return { ...error, ok: false }
+    }
+  })
 
-  edit = action(
-    auth.protect(async (id, data) => {
-      try {
-        const response = await window.rest.patch(`/roles/${id}`, data)
-        const result = { ...response.data, ok: true }
+  edit = auth.protect(async (id, data) => {
+    try {
+      const response = await window.rest.patch(`/roles/${id}`, data)
+      const result = { ...response.data, ok: true }
+      runInAction(() => {
         if (this.detail.id === id) {
           this.detail = result
         }
@@ -64,58 +68,53 @@ class RoleStore {
             user.admin = result.admin
           }
         })
-        return result
-      } catch (error) {
-        return { ...error, ok: false }
-      }
-    })
-  )
+      })
+      return result
+    } catch (error) {
+      return { ...error, ok: false }
+    }
+  })
 
-  delete = action(
-    auth.protect(async (id) => {
-      try {
-        const response = await window.rest.delete(`/roles/${id}`)
-        return { ...response.data, ok: true }
-      } catch (error) {
-        return { ...error, ok: false }
-      }
-    })
-  )
+  delete = auth.protect(async (id) => {
+    try {
+      const response = await window.rest.delete(`/roles/${id}`)
+      return { ...response.data, ok: true }
+    } catch (error) {
+      return { ...error, ok: false }
+    }
+  })
 
-  assign = action(
-    auth.protect(async (userId) => {
-      try {
-        const response = await window.rest.post(
-          `/roles/${this.detail.id}/user`,
-          {
-            userId,
-          }
-        )
-        const data = { ...this.detail, ok: true }
-        data.users.push(response.data)
+  assign = auth.protect(async (userId) => {
+    try {
+      const response = await window.rest.post(`/roles/${this.detail.id}/user`, {
+        userId,
+      })
+      const data = { ...this.detail, ok: true }
+      data.users.push(response.data)
+      runInAction(() => {
         this.detail = data
-        return data
-      } catch (error) {
-        return { ...error, ok: false }
-      }
-    })
-  )
+      })
+      return data
+    } catch (error) {
+      return { ...error, ok: false }
+    }
+  })
 
-  deassign = action(
-    auth.protect(async (userId) => {
-      try {
-        const result = await window.rest.delete(
-          `/roles/${this.detail.id}/user/${userId}`
-        )
-        const data = { ...this.detail, ok: true }
-        data.users = this.detail.users.filter((user) => user.id !== result.id)
+  deassign = auth.protect(async (userId) => {
+    try {
+      const result = await window.rest.delete(
+        `/roles/${this.detail.id}/user/${userId}`
+      )
+      const data = { ...this.detail, ok: true }
+      data.users = this.detail.users.filter((user) => user.id !== result.id)
+      runInAction(() => {
         this.detail = data
-        return data
-      } catch (error) {
-        return { ...error, ok: false }
-      }
-    })
-  )
+      })
+      return data
+    } catch (error) {
+      return { ...error, ok: false }
+    }
+  })
 }
 
 export default new RoleStore()
