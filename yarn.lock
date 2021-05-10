@@ -960,10 +960,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@freenit-framework/cli@^0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@freenit-framework/cli/-/cli-0.0.11.tgz#0d7135c62e334760d9937f6653b610d96640d5d8"
-  integrity sha512-E7i2XB8ukv6BTS1rjNVvNrlXI9Meep5oMSgQbiQoRkAo2ue/Ngvu4hbvf0PIHQVJJXZLGekseXtUT3Krt1rvuw==
+"@freenit-framework/cli@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@freenit-framework/cli/-/cli-0.0.12.tgz#f5e7867198d7be8e3387c9d22e08a4e0796bf575"
+  integrity sha512-DCTGWH28ClZsT7Iq/HIuzFInFSovZv+4QL7MUSvk9d4N+IeyiZV6N5r6HxpLwdUStl1W3NBUTUJJbqwmWPJUnA==
   dependencies:
     "@babel/core" "^7.13.14"
     "@babel/eslint-parser" "^7.13.14"
@@ -980,7 +980,7 @@
     prettier "^2.2.1"
     webpack "^5.35.1"
     webpack-cli "^4.6.0"
-    webpack-dev-server "^4.0.0-beta.2"
+    webpack-dev-server "^4.0.0-beta.3"
 
 "@material-ui/core@^4.11.4":
   version "4.11.4"
@@ -4535,7 +4535,7 @@ webpack-dev-middleware@^4.1.0:
     range-parser "^1.2.1"
     schema-utils "^3.0.0"
 
-webpack-dev-server@^4.0.0-beta.2:
+webpack-dev-server@^4.0.0-beta.3:
   version "4.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-4.0.0-beta.3.tgz#57368679f7f1fdd7ec8d9dd287275117271164f0"
   integrity sha512-Ud7ieH15No/KiSdRuzk+2k+S4gSCR/N7m4hJhesDbKQEZy3P+NPXTXfsimNOZvbVX2TRuIEFB+VdLZFn8DwGwg==
