@@ -5,6 +5,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import image from '@rollup/plugin-image'
 import visualizer from 'rollup-plugin-visualizer'
 import json from '@rollup/plugin-json'
+import { terser } from 'rollup-plugin-terser'
 import pkg from './package.json'
 
 export default {
@@ -26,6 +27,7 @@ export default {
     external(),
     babel({ exclude: 'node_modules/**' }),
     resolve({ preferBuiltins: true }),
+    terser(),
     commonjs(),
     image(),
     visualizer(),
