@@ -75,7 +75,7 @@ class RoleStore {
     }
   })
 
-  delete = auth.protect(async (id) => {
+  destroy = auth.protect(async (id) => {
     try {
       const response = await window.rest.delete(`/roles/${id}`)
       return { ...response.data, ok: true }

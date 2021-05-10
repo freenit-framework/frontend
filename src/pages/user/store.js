@@ -77,7 +77,7 @@ class UserStore {
     }
   })
 
-  delete = auth.protect(async (id) => {
+  destroy = auth.protect(async (id) => {
     try {
       const response = await window.rest.delete(`/users/${id}`)
       runInAction(() => {
@@ -95,11 +95,11 @@ class UserStore {
         id: this.detail.id,
       })
       const data = { ...this.detail, ok: true }
-      data.roles.push(response.data)
       runInAction(() => {
+        data.roles.push(response.data)
         this.detail = data
       })
-      return this.detail
+      return data
     } catch (error) {
       return { ...error, ok: false }
     }
@@ -111,10 +111,10 @@ class UserStore {
         `/roles/${roleId}/user/${this.detail.id}`
       )
       const data = { ...this.detail, ok: true }
-      data.roles = this.detail.roles.filter(
-        (user) => user.id !== result.data.id
-      )
       runInAction(() => {
+        data.roles = this.detail.roles.filter(
+          (user) => user.id !== result.data.id
+        )
         this.detail = data
       })
       return this.detail
