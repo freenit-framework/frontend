@@ -1,6 +1,6 @@
 {
   "name": "@freenit-framework/core",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "license": "BSD-2-Clause",
@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",
-    "@freenit-framework/cli": "^0.0.12",
+    "@freenit-framework/cli": "^0.0.13",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "@rollup/plugin-commonjs": "^18.0.0",
