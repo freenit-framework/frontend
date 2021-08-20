@@ -10,7 +10,7 @@ import theme from './theme'
 import styles from './styles'
 
 const App = () => {
-  store.auth.init('/api/v0')
+  store.auth.init('/api/v1')
   return (
     <ThemeProvider theme={theme}>
       <Style rules={styles} />

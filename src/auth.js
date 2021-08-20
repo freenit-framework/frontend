@@ -28,15 +28,14 @@ class AuthStore {
   }
 
   login = async (email, password) => {
+    const formData = new FormData()
+    formData.append('username', email)
+    formData.append('password', password)
     try {
-      const response = await window.rest.post('/auth/login', {
-        email,
-        password,
-      })
-      const { accessExpire, refreshExpire } = response.data
+      const response = await window.rest.post('/auth/login', formData)
       const now = new Date()
-      const ae = Number(accessExpire)
-      const re = Number(refreshExpire)
+      const ae = 3600
+      const re = 720000
       runInAction(() => {
         this.tokens.access.expire = ae
         this.tokens.access.date = new Date(now.getTime() + ae * 1000)
