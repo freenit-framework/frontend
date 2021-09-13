@@ -33,7 +33,7 @@ class EmptyTemplate extends React.Component {
 EmptyTemplate.defaultProps = {
   children: null,
   secure: false,
-  style: { padding: 20 },
+  style: {},
 }
 
 export default observer(EmptyTemplate)
