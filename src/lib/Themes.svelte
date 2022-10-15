@@ -84,7 +84,7 @@
       {$list.page}
       <button
         class="button"
-        disabled={$list.page === $list.pages}
+        disabled={$list.page >= $list.pages}
         on:click={fetchNext}>&gt;</button
       >
     </div>
