@@ -11,4 +11,4 @@ export { default as User } from './User.svelte'
 export { default as Users } from './Users.svelte'
 
 export { default as methods } from './methods'
-export { default as makeStore } from './store'
+export { default as store } from './store'
