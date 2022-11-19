@@ -10,7 +10,6 @@ if (process.env.BACKEND_URL) {
     proxy: {
       '/api': {
         target: process.env.BACKEND_URL,
-        changeOrigin: true,
       },
     },
   }
