@@ -33,9 +33,9 @@
   const toggleMembership = (role: any) => async (event: any) => {
     let response
     if (event.target.checked) {
-      response = await roleDetail.assign(role.id, $detail.id)
+      response = await roleDetail.assign(role.id || role.dn, $detail.id || $detail.dn)
     } else {
-      response = await roleDetail.deassign(role.id, $detail.id)
+      response = await roleDetail.deassign(role.id || role.dn, $detail.id || $detail.dn)
     }
     if (!response.ok) {
       error(response.statusText)
@@ -70,8 +70,8 @@
       <div class="heading">Name</div>
       <div class="heading">Member</div>
       {#each $roleList.data as role}
-        <div class="data">{role.id}</div>
-        <div class="data">{role.name}</div>
+        <div class="data">{role.id || role.dn}</div>
+        <div class="data">{role.name || role.cn}</div>
         <div class="data">
           <input
             type="checkbox"

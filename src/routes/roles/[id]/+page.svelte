@@ -3,4 +3,4 @@
   import { page } from '$app/stores'
 </script>
 
-<Role pk={Number($page.params.id)} />
+<Role pk={$page.params.id} />

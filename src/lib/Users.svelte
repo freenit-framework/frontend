@@ -40,12 +40,16 @@
       <div class="heading">Active</div>
       <div class="heading">Admin</div>
       {#each $list.data as user}
-        <div class="data">{user.id}</div>
+        <div class="data">{user.id || user.dn}</div>
         <div class="data">
-          <a href={`/users/${user.id}`}>{user.email}</a>
+          <a href={`/users/${user.id || user.dn}`}>{user.email}</a>
         </div>
         <div class="data">
-          <input disabled type="checkbox" checked={user.active} />
+          <input
+            disabled
+            type="checkbox"
+            checked={user.active || user.userClass == 'enabled'}
+          />
         </div>
         <div class="data">
           <input

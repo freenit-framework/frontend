@@ -25,21 +25,31 @@
   })
 
   const member = (user: any) => {
-    const myusers = $detail.users.filter((u: any) => u.id === user.id)
+    const users = $detail.users || $detail.uniqueMembers
+    const myusers = users.filter((u: any) => {
+      if (user.id) {
+        return u.id === user.id
+      }
+      return u === user.dn
+    })
     return myusers.length > 0
   }
 
   const toggleMembership = (user: any) => async (event: any) => {
     let response
     if (event.target.checked) {
-      response = await detail.assign($detail.id, user.id)
+      response = await detail.assign($detail.id || $detail.dn, user.id || user.dn)
     } else {
-      response = await detail.deassign($detail.id, user.id)
+      response = await detail.deassign($detail.id || $detail.dn, user.id || user.dn)
     }
     if (!response.ok) {
       error(response.statusText)
     } else {
-      $detail.users = [...$detail.users, user]
+      if ($detail.users) {
+        $detail.users = [...$detail.users, user]
+      } else {
+        $detail.uniqueMembers = [...$detail.uniqueMembers, user.dn]
+      }
     }
   }
 
@@ -62,7 +72,7 @@
   <Spinner size={200} />
 {:else}
   <div class="container">
-    <h2>Role: {$detail.name}</h2>
+    <h2>Role: {$detail.name || $detail.cn}</h2>
     <h3>Users</h3>
     <div class="table">
       <div class="heading">ID</div>
@@ -71,10 +81,10 @@
       <div class="heading">Admin</div>
       <div class="heading">Member</div>
       {#each $userList.data as user}
-        <div class="data">{user.id}</div>
+        <div class="data">{user.id || user.dn}</div>
         <div class="data">{user.email}</div>
         <div class="data">
-          <input disabled type="checkbox" checked={user.active} />
+          <input disabled type="checkbox" checked={user.active || user.userClass == 'enabled'} />
         </div>
         <div class="data">
           <input disabled type="checkbox" checked={user.admin} />

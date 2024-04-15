@@ -66,10 +66,10 @@
         <div class="heading">Name</div>
         {#each $list.data as role}
           <div class="data">
-            <a href={`/roles/${role.id}`}>{role.id}</a>
+            <a href={`/roles/${role.id || role.dn}`}>{role.id || role.dn}</a>
           </div>
           <div class="data">
-            <a href={`/roles/${role.id}`}>{role.name}</a>
+            <a href={`/roles/${role.id || role.dn}`}>{role.name || role.cn}</a>
           </div>
           <div class="border" />
         {/each}

@@ -13,8 +13,8 @@
 </script>
 
 <div>
-  <div>ID: {$profile.id}</div>
+  <div>ID: {$profile.id || $profile.dn}</div>
   <div>Email: {$profile.email}</div>
-  <div>Active: {$profile.active ? 'yes' : 'no'}</div>
+  <div>Active: {$profile.active || $profile.userClass == 'enabled' ? 'yes' : 'no'}</div>
   <div>Admin: {$profile.admin ? 'yes' : 'no'}</div>
 </div>
