@@ -28,12 +28,7 @@
     <input required type="password" name="password" bind:value={password} />
 
     <label for="password">Repeat Password</label>
-    <input
-      required
-      type="password"
-      name="repeatpassword"
-      bind:value={repeatpassword}
-    />
+    <input required type="password" name="repeatpassword" bind:value={repeatpassword} />
 
     <div class="actions">
       <button class="button">Register</button>

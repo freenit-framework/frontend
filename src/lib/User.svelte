@@ -12,10 +12,7 @@
 
   onMount(async () => {
     loading = true
-    const [userResponse, roleResponse] = await Promise.all([
-      detail.fetch(pk),
-      roleList.fetch(),
-    ])
+    const [userResponse, roleResponse] = await Promise.all([detail.fetch(pk), roleList.fetch()])
     if (!userResponse.ok) {
       error(userResponse.statusText)
     }
@@ -73,27 +70,17 @@
         <div class="data">{role.id || role.dn}</div>
         <div class="data">{role.name || role.cn}</div>
         <div class="data">
-          <input
-            type="checkbox"
-            checked={member(role)}
-            on:change={toggleMembership(role)}
-          />
+          <input type="checkbox" checked={member(role)} on:change={toggleMembership(role)} />
         </div>
         <div class="border" />
       {/each}
     </div>
   </div>
   <div class="actions">
-    <button
-      class="button"
-      disabled={$roleList.page === 1}
-      on:click={fetchPrevious}>&lt;</button
-    >
+    <button class="button" disabled={$roleList.page === 1} on:click={fetchPrevious}>&lt;</button>
     {$roleList.page}
-    <button
-      class="button"
-      disabled={$roleList.page === $roleList.pages}
-      on:click={fetchNext}>&gt;</button
+    <button class="button" disabled={$roleList.page === $roleList.pages} on:click={fetchNext}
+      >&gt;</button
     >
   </div>
 {/if}

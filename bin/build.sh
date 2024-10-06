@@ -6,8 +6,7 @@ BIN_DIR=`dirname $0`
 setup
 
 
-echo "Frontend"
-echo "========"
+echo "Svelte Base"
+echo "==========="
 cd "${PROJECT_ROOT}"
-rm -rf build
-yarn run build
+npm run build

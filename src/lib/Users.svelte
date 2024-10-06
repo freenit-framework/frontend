@@ -45,33 +45,19 @@
           <a href={`/users/${user.id || user.dn}`}>{user.email}</a>
         </div>
         <div class="data">
-          <input
-            disabled
-            type="checkbox"
-            checked={user.active || user.userClass == 'enabled'}
-          />
+          <input disabled type="checkbox" checked={user.active || user.userClass == 'enabled'} />
         </div>
         <div class="data">
-          <input
-            disabled={!$detail.admin}
-            type="checkbox"
-            checked={user.admin}
-          />
+          <input disabled={!$detail.admin} type="checkbox" checked={user.admin} />
         </div>
         <div class="border" />
       {/each}
     </div>
   </div>
   <div class="actions">
-    <button class="button" disabled={$list.page === 1} on:click={fetchPrevious}
-      >&lt;</button
-    >
+    <button class="button" disabled={$list.page === 1} on:click={fetchPrevious}>&lt;</button>
     {$list.page}
-    <button
-      class="button"
-      disabled={$list.page >= $list.pages}
-      on:click={fetchNext}>&gt;</button
-    >
+    <button class="button" disabled={$list.page >= $list.pages} on:click={fetchNext}>&gt;</button>
   </div>
 {/if}
 

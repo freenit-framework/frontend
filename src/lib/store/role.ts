@@ -94,10 +94,7 @@ export class RoleDetailStore {
 
   async assign(role_id: number | string, user_id: number | string) {
     await store().auth.refresh()
-    const response = await methods.post(
-      `${this.prefix}/roles/${role_id}/${user_id}`,
-      {},
-    )
+    const response = await methods.post(`${this.prefix}/roles/${role_id}/${user_id}`, {})
     if (response.ok) {
       const data = await response.json()
       return { ...data, ok: true }
@@ -107,9 +104,7 @@ export class RoleDetailStore {
 
   async deassign(role_id: number | string, user_id: number | string) {
     await store().auth.refresh()
-    const response = await methods.delete(
-      `${this.prefix}/roles/${role_id}/${user_id}`,
-    )
+    const response = await methods.delete(`${this.prefix}/roles/${role_id}/${user_id}`)
     if (response.ok) {
       const data = await response.json()
       return { ...data, ok: true }

@@ -57,9 +57,7 @@
     <div class="container">
       <div class="header">
         <h2>Themes</h2>
-        <button class="button primary" on:click={toggleShowCreate}
-          >Create</button
-        >
+        <button class="button primary" on:click={toggleShowCreate}>Create</button>
       </div>
       <div class="table">
         <div class="heading">ID</div>
@@ -76,17 +74,9 @@
       </div>
     </div>
     <div class="actions">
-      <button
-        class="button"
-        disabled={$list.page === 1}
-        on:click={fetchPrevious}>&lt;</button
-      >
+      <button class="button" disabled={$list.page === 1} on:click={fetchPrevious}>&lt;</button>
       {$list.page}
-      <button
-        class="button"
-        disabled={$list.page >= $list.pages}
-        on:click={fetchNext}>&gt;</button
-      >
+      <button class="button" disabled={$list.page >= $list.pages} on:click={fetchNext}>&gt;</button>
     </div>
   </div>
 {/if}

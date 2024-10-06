@@ -79,10 +79,7 @@ export class ThemeDetailStore {
 
   async edit(name: string, fields: any) {
     await store().auth.refresh()
-    const response = await methods.patch(
-      `${this.prefix}/themes/${name}`,
-      fields,
-    )
+    const response = await methods.patch(`${this.prefix}/themes/${name}`, fields)
     if (response.ok) {
       const data = await response.json()
       this.set(data)
