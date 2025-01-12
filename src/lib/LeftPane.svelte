@@ -5,6 +5,7 @@
     <a href="/login">Login</a>
     <a href="/register">Register</a>
     <a href="/verify">Verify</a>
+    <a href="/logout">Logout</a>
   </div>
   <div class="item">
     Users

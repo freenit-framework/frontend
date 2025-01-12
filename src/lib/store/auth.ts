@@ -34,6 +34,19 @@ export default class AuthStore {
     return response
   }
 
+  async logout() {
+    const response = await methods.post(`${this.prefix}/auth/logout`)
+    if (response.ok) {
+      const data = await response.json()
+      const access = new Date()
+      access.setSeconds(0)
+      this.set({ access, refresh: access })
+      store().user.profile.set({})
+      return { ...data, ok: true }
+    }
+    return response
+  }
+
   async register(email: string, password: string) {
     const response = await methods.post(`${this.prefix}/auth/register`, {
       email,
@@ -59,7 +72,7 @@ export default class AuthStore {
 
   async refresh() {
     const now = new Date()
-    const mystore = get(this.store)
+    const mystore = get(this)
     if (now > mystore.access) {
       const response = await methods.post(`${this.prefix}/auth/refresh`, {})
       if (response.ok) {
