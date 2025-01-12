@@ -7,3 +7,4 @@
   roles:
     - onelove-roles.freebsd-common
     - onelove-roles.freebsd_node
+    - onelove-roles.freebsd_pm2

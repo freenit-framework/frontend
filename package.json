@@ -1,6 +1,6 @@
 {
-  "name": "@freenit-framework/svelte-base",
-  "version": "0.0.6",
+  "name": "@freenit-framework/core",
+  "version": "0.0.1",
   "private": false,
   "author": "Goran Mekić <meka@tilda.center>",
   "license": "BSD-2-Clause",
@@ -22,6 +22,9 @@
       "svelte": "./dist/index.js"
     }
   },
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist",
     "!dist/**/*.test.*",
@@ -34,12 +37,14 @@
     "svelte": "^4.0.0"
   },
   "devDependencies": {
-    "@sveltejs/adapter-node": "^5.2.5",
+    "@freenit-framework/svelte-base": "^0.0.6",
+    "@mdi/js": "^7.4.47",
+    "@sveltejs/adapter-node": "^5.2.11",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/package": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
     "@types/eslint": "^9.6.0",
-    "@types/node": "^22.7.4",
+    "@types/node": "^22.10.5",
     "@zerodevx/svelte-toast": "^0.9.6",
     "chota": "^0.9.2",
     "eslint": "^9.0.0",
