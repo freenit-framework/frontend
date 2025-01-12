@@ -48,9 +48,9 @@
           <input disabled type="checkbox" checked={user.active || user.userClass == 'enabled'} />
         </div>
         <div class="data">
-          <input disabled={!$detail.admin} type="checkbox" checked={user.admin} />
+          <input disabled={!store.user.profile.admin} type="checkbox" checked={user.admin} />
         </div>
-        <div class="border" />
+        <div class="border"></div>
       {/each}
     </div>
   </div>

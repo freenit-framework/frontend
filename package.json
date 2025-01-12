@@ -1,6 +1,9 @@
 {
-	"name": "myapp",
-	"version": "0.0.1",
+	"name": "@freenit-framework/core",
+	"version": "0.0.18",
+  "private": false,
+  "author": "Goran Mekić <meka@tilda.center>",
+  "license": "BSD-2-Clause",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",

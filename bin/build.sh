@@ -11,4 +11,3 @@ echo "========"
 cd "${PROJECT_ROOT}"
 rm -rf build
 npm run build
-touch build/.keep

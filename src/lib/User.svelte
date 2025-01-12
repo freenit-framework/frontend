@@ -67,7 +67,7 @@
         <div class="data">
           <input type="checkbox" checked={member(role)} on:change={toggleMembership(role)} />
         </div>
-        <div class="border" />
+        <div class="border"></div>
       {/each}
     </div>
   </div>
