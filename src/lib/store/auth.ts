@@ -8,13 +8,11 @@ const defaults = {
 }
 
 export default class AuthStore {
-  store = writable(defaults)
-  prefix = ''
-  set = this.store.set
-  update = this.store.update
-  subscribe = this.store.subscribe
-
   constructor(prefix: string) {
+    const { set, subscribe, update } = writable(defaults)
+    this.set = set
+    this.subscribe = subscribe
+    this.update = update
     this.prefix = prefix
   }
 

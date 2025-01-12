@@ -13,14 +13,12 @@ const defaults = {
 }
 
 export class RoleListStore {
-  store = writable(defaults.list)
-  prefix = ''
-  set = this.store.set
-  update = this.store.update
-  subscribe = this.store.subscribe
-
   constructor(prefix: string) {
+    const { set, update, subscribe } = writable(defaults.list)
     this.prefix = prefix
+    this.set = set
+    this.update = update
+    this.subscribe = subscribe
   }
 
   async fetch(page = 1, perpage = 10) {
@@ -49,14 +47,12 @@ export class RoleListStore {
 }
 
 export class RoleDetailStore {
-  store = writable(defaults.detail)
-  prefix = ''
-  set = this.store.set
-  update = this.store.update
-  subscribe = this.store.subscribe
-
   constructor(prefix: string) {
+    const { set, subscribe, update } = writable(defaults.detail)
     this.prefix = prefix
+    this.set = set
+    this.update = update
+    this.subscribe = subscribe
   }
 
   async fetch(id: number | string) {

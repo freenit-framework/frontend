@@ -20,6 +20,10 @@ export class ThemeListStore {
   subscribe = this.store.subscribe
 
   constructor(prefix: string) {
+    const { set, update, subscribe } = writable(defaults.list)
+    this.set = set
+    this.update = update
+    this.subscribe = subscribe
     this.prefix = prefix
   }
 
@@ -57,14 +61,12 @@ export class ThemeListStore {
 }
 
 export class ThemeDetailStore {
-  store = writable(defaults.detail)
-  prefix = ''
-  set = this.store.set
-  update = this.store.update
-  subscribe = this.store.subscribe
-
   constructor(prefix: string) {
+    const { set, subscribe, update } = writable(defaults.detail)
     this.prefix = prefix
+    this.set = set
+    this.update = update
+    this.subscribe = subscribe
   }
 
   async fetch(name: string) {

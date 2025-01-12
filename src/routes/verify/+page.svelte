@@ -1,28 +1,14 @@
-<script lang="ts">
-  import { goto } from '$app/navigation'
-
-  let token = ''
-  function submit() {
-    goto(`/verify/${token}`)
-  }
-</script>
-
-<div class="container">
-  <h2>Verify Account</h2>
-  <form on:submit|preventDefault={submit}>
-    <!-- svelte-ignore a11y-autofocus -->
-    <input autofocus bind:value={token} />
-    <div class="actions">
-      <button class="button" type="submit">OK</button>
-    </div>
-  </form>
+<div class="root">
+  <h1>Welcome</h1>
+  <p>You should receive email to verify your account shortly!</p>
 </div>
 
 <style>
-  .actions {
-    margin-top: 10px;
+  .root {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    height: 100%;
   }
 </style>

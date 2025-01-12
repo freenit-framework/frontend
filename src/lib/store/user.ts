@@ -22,18 +22,12 @@ const defaults = {
 defaults.profile = defaults.detail
 
 export class UserListStore {
-  store = writable(defaults.list)
-  prefix = ''
-  set = this.store.set
-  update = this.store.update
-  subscribe = this.store.subscribe
-
   constructor(prefix: string) {
     const { set, update, subscribe } = writable(defaults.list)
+    this.prefix = prefix
     this.set = set
     this.update = update
     this.subscribe = subscribe
-    this.prefix = prefix
   }
 
   async fetch() {
@@ -60,14 +54,12 @@ export class UserListStore {
 }
 
 export class UserDetailStore {
-  store = writable(defaults.detail)
-  prefix = ''
-  set = this.store.set
-  update = this.store.update
-  subscribe = this.store.subscribe
-
   constructor(prefix: string) {
+    const { set, subscribe, update } = writable(defaults.detail)
     this.prefix = prefix
+    this.set = set
+    this.update = update
+    this.subscribe = subscribe
   }
 
   async fetch(id: number | string) {
@@ -94,14 +86,12 @@ export class UserDetailStore {
 }
 
 export class ProfileStore {
-  store = writable(defaults.profile)
-  prefix = ''
-  set = this.store.set
-  update = this.store.update
-  subscribe = this.store.subscribe
-
   constructor(prefix: string) {
+    const { set, subscribe, update } = writable(defaults.profile)
     this.prefix = prefix
+    this.set = set
+    this.update = update
+    this.subscribe = subscribe
   }
 
   async fetch() {
