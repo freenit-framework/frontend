@@ -1,53 +1,45 @@
-import { get, writable } from 'svelte/store'
 import methods from '$lib/methods'
-import store from '.'
-
-const defaults = {
-  access: new Date(),
-  refresh: new Date(),
-}
+import { store } from '.'
 
 export default class AuthStore {
-  constructor(prefix: string) {
-    const { set, subscribe, update } = writable(defaults)
-    this.set = set
-    this.subscribe = subscribe
-    this.update = update
+  access = $state(new Date())
+  refresh = $state(new Date())
+
+  constructor(prefix) {
     this.prefix = prefix
   }
 
-  async login(email: string, password: string) {
+  login = async (email: string, password: string) => {
     const response = await methods.post(`${this.prefix}/auth/login`, {
       email,
       password,
     })
     if (response.ok) {
       const data = await response.json()
-      const access = new Date()
-      access.setSeconds(access.getSeconds() + data.expire.access)
-      const refresh = new Date()
-      refresh.setSeconds(refresh.getSeconds() + data.expire.refresh)
-      this.set({ access, refresh })
-      store().user.profile.set(data.user)
+      const now = new Date()
+      this.access = new Date(now)
+      this.access.setSeconds(now.getSeconds() + data.expire.access)
+      this.refresh = new Date(now)
+      this.refresh.setSeconds(now.getSeconds() + data.expire.refresh)
+      store.user.profile = data.user
       return { ...data, ok: true }
     }
     return response
   }
 
-  async logout() {
+  logout = async () => {
     const response = await methods.post(`${this.prefix}/auth/logout`)
     if (response.ok) {
       const data = await response.json()
-      const access = new Date()
-      access.setSeconds(0)
-      this.set({ access, refresh: access })
-      store().user.profile.set({})
+      this.access = new Date()
+      this.refresh = new Date()
+      store.user.profile = {}
       return { ...data, ok: true }
     }
     return response
   }
 
-  async register(email: string, password: string) {
+  register = async (email: string, password: string) => {
     const response = await methods.post(`${this.prefix}/auth/register`, {
       email,
       password,
@@ -59,7 +51,7 @@ export default class AuthStore {
     return response
   }
 
-  async verify(verification: string) {
+  verify = async (verification: string) => {
     const response = await methods.post(`${this.prefix}/auth/verify`, {
       verification,
     })
@@ -70,19 +62,17 @@ export default class AuthStore {
     return response
   }
 
-  async refresh() {
+  refresh_token = async () => {
     const now = new Date()
-    const mystore = get(this)
-    if (now > mystore.access) {
+    if (now > this.access) {
       const response = await methods.post(`${this.prefix}/auth/refresh`, {})
       if (response.ok) {
         const data = await response.json()
-        const access = new Date()
+        this.access = new Date()
         access.setSeconds(access.getSeconds() + data.expire.access)
-        const refresh = new Date()
+        this.refresh = new Date()
         refresh.setSeconds(refresh.getSeconds() + data.expire.refresh)
-        this.set({ access, refresh })
-        store().user.profile.set(data.user)
+        store.user.profile = data.user
         return { ...data, ok: true }
       }
     }

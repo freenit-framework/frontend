@@ -1,18 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import store from '$lib/store'
   import { error } from '$lib/notification'
+  import { store } from '$lib/store'
   import Spinner from './Spinner.svelte'
 
   export let pk = 0
   let loading = true
-  const { detail } = store().user
-  const roleList = store().role.list
-  const roleDetail = store().role.detail
 
   onMount(async () => {
     loading = true
-    const [userResponse, roleResponse] = await Promise.all([detail.fetch(pk), roleList.fetch()])
+    const [userResponse, roleResponse] = await Promise.all([store.user.fetch(pk), store.role.fetchAll()])
     if (!userResponse.ok) {
       error(userResponse.statusText)
     }
@@ -23,33 +20,31 @@
   })
 
   const member = (role: any) => {
-    const myroles = $detail.roles.filter((r: any) => r.id === role.id)
+    const myroles = store.user.detail.roles.filter((r: any) => r.id === role.id)
     return myroles.length > 0
   }
 
   const toggleMembership = (role: any) => async (event: any) => {
     let response
     if (event.target.checked) {
-      response = await roleDetail.assign(role.id || role.dn, $detail.id || $detail.dn)
+      response = await store.role.assign(role.id || role.dn, store.user.detail.id || store.user.detail.dn)
     } else {
-      response = await roleDetail.deassign(role.id || role.dn, $detail.id || $detail.dn)
+      response = await store.role.deassign(role.id || role.dn, store.user.detail.id || store.user.detail.dn)
     }
     if (!response.ok) {
       error(response.statusText)
-    } else {
-      $detail.roles = [...$detail.roles, role]
     }
   }
 
   async function fetchPrevious() {
-    const response = await roleList.fetch($roleList.page - 1)
+    const response = await store.role.fetchAll(store.role.list.page - 1)
     if (!response.ok) {
       error(response.statusText)
     }
   }
 
   async function fetchNext() {
-    const response = await roleList.fetch($roleList.page + 1)
+    const response = await store.role.fetchAll(store.role.list.page + 1)
     if (!response.ok) {
       error(response.statusText)
     }
@@ -60,13 +55,13 @@
   <Spinner size={200} />
 {:else}
   <div class="container">
-    <h2>User: {$detail.email}</h2>
+    <h2>User: {store.user.detail.email}</h2>
     <h3>Roles</h3>
     <div class="table">
       <div class="heading">ID</div>
       <div class="heading">Name</div>
       <div class="heading">Member</div>
-      {#each $roleList.data as role}
+      {#each store.role.list.data as role}
         <div class="data">{role.id || role.dn}</div>
         <div class="data">{role.name || role.cn}</div>
         <div class="data">
@@ -77,9 +72,9 @@
     </div>
   </div>
   <div class="actions">
-    <button class="button" disabled={$roleList.page === 1} on:click={fetchPrevious}>&lt;</button>
-    {$roleList.page}
-    <button class="button" disabled={$roleList.page === $roleList.pages} on:click={fetchNext}
+    <button class="button" disabled={store.role.list.page === 1} on:click={fetchPrevious}>&lt;</button>
+    {store.role.list.page}
+    <button class="button" disabled={store.role.list.page === store.role.list.pages} on:click={fetchNext}
       >&gt;</button
     >
   </div>
@@ -122,3 +117,4 @@
     margin-right: 10px;
   }
 </style>
+

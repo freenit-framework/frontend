@@ -1,18 +1,15 @@
-import RoleStore from './role'
-import AuthStore from './auth'
-import ThemeStore from './theme'
-import UserStore from './user'
+import AuthStore from './auth.svelte.ts'
+import RoleStore from './role.svelte.ts'
+import ThemeStore from './theme.svelte.ts'
+import UserStore from './user.svelte.ts'
 
-let global_store: any = null
 
-export default function store(prefix: string = '/api/v1') {
-  if (!global_store) {
-    global_store = {
-      auth: new AuthStore(prefix),
-      role: RoleStore(prefix),
-      theme: ThemeStore(prefix),
-      user: UserStore(prefix),
-    }
-  }
-  return global_store
+export const store = {}
+
+
+export function create_store(prefix: str = '/api/v1') {
+  store.auth = new AuthStore(prefix)
+  store.role = new RoleStore(prefix)
+  store.theme = new ThemeStore(prefix)
+  store.user = new UserStore(prefix)
 }

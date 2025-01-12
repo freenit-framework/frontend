@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import store from '$lib/store'
   import { error } from '$lib/notification'
+  import { store } from '$lib/store'
   import Spinner from './Spinner.svelte'
 
-  const { detail, list } = store().user
   let loading = true
+
   onMount(async () => {
-    const response = await list.fetch()
+    const response = await store.user.fetchAll()
     if (!response.ok) {
       error(response.statusText)
     }
@@ -15,14 +15,14 @@
   })
 
   async function fetchPrevious() {
-    const response = await list.fetch($list.page - 1)
+    const response = await store.user.fetchAll(store.user.list.page - 1)
     if (!response.ok) {
       error(response.statusText)
     }
   }
 
   async function fetchNext() {
-    const response = await list.fetch($list.page + 1)
+    const response = await store.user.fetchAll(store.user.list.page + 1)
     if (!response.ok) {
       error(response.statusText)
     }
@@ -39,7 +39,7 @@
       <div class="heading">EMail</div>
       <div class="heading">Active</div>
       <div class="heading">Admin</div>
-      {#each $list.data as user}
+      {#each store.user.list.data as user}
         <div class="data">{user.id || user.dn}</div>
         <div class="data">
           <a href={`/users/${user.id || user.dn}`}>{user.email}</a>
@@ -55,9 +55,9 @@
     </div>
   </div>
   <div class="actions">
-    <button class="button" disabled={$list.page === 1} on:click={fetchPrevious}>&lt;</button>
-    {$list.page}
-    <button class="button" disabled={$list.page >= $list.pages} on:click={fetchNext}>&gt;</button>
+    <button class="button" disabled={store.user.list.page === 1} on:click={fetchPrevious}>&lt;</button>
+    {store.user.list.page}
+    <button class="button" disabled={store.user.list.page >= store.user.list.pages} on:click={fetchNext}>&gt;</button>
   </div>
 {/if}
 
@@ -98,3 +98,4 @@
     border-top: 1px solid #eee;
   }
 </style>
+

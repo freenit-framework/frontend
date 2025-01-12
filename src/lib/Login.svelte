@@ -1,14 +1,13 @@
 <script lang="ts">
-  import store from '$lib/store'
   import { goto } from '$app/navigation'
   import { error } from '$lib/notification'
+  import { store } from '$lib/store'
 
-  const { auth } = store()
   let email = ''
   let password = ''
 
   const submit = async () => {
-    const response = await auth.login(email, password)
+    const response = await store.auth.login(email, password)
     if (!response.ok) {
       error(response.statusText)
     } else {
@@ -55,3 +54,4 @@
     margin-top: 10px;
   }
 </style>
+

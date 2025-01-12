@@ -3,7 +3,7 @@
 </script>
 
 <div class="root">
-  <div class="spin" style={`height: ${size}px; width: ${size}px`} />
+  <div class="spin" style={`height: ${size}px; width: ${size}px`}></div>
 </div>
 
 <style>

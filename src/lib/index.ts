@@ -10,6 +10,6 @@ export { default as Themes } from './Themes.svelte'
 export { default as User } from './User.svelte'
 export { default as Users } from './Users.svelte'
 
-export * as notification from './notification'
+export { store, create_store } from './store'
 export { default as methods } from './methods'
-export { default as store } from './store'
+export * as notification from './notification'

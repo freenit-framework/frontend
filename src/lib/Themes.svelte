@@ -1,18 +1,17 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import store from '$lib/store'
   import Modal from '$lib/Modal.svelte'
-  import { error } from '$lib/notification'
   import Spinner from './Spinner.svelte'
+  import { error } from '$lib/notification'
+  import { store } from '$lib/store'
 
   let showCreate = false
   let name = ''
   let loading = true
-  const { list } = store().theme
 
   onMount(async () => {
     loading = true
-    const response = await list.fetch()
+    const response = await store.theme.fetchAll()
     if (!response.ok) {
       error(response.statusText)
     }
@@ -20,14 +19,14 @@
   })
 
   async function fetchPrevious() {
-    const response = await list.fetch($list.page - 1)
+    const response = await store.theme.fetchAll(store.role.list.page - 1)
     if (!response.ok) {
       error(response.statusText)
     }
   }
 
   async function fetchNext() {
-    const response = await list.fetch($list.page + 1)
+    const response = await store.theme.fetchAll(store.role.list.page + 1)
     if (!response.ok) {
       error(response.statusText)
     }
@@ -38,12 +37,9 @@
   }
 
   async function create() {
-    const response = await list.create({ name })
+    const response = await store.theme.create({ name })
     if (!response.ok) {
       error(response.statusText)
-    } else {
-      $list.data = [...$list.data, response]
-      console.log($list)
     }
     name = ''
     showCreate = false
@@ -62,21 +58,21 @@
       <div class="table">
         <div class="heading">ID</div>
         <div class="heading">Name</div>
-        {#each $list.data as theme}
+        {#each store.role.list.data as theme}
           <div class="data">
             <a href={`/themes/${theme.name}`}>{theme.id}</a>
           </div>
           <div class="data">
             <a href={`/themes/${theme.name}`}>{theme.name}</a>
           </div>
-          <div class="border" />
+          <div class="border"></div>
         {/each}
       </div>
     </div>
     <div class="actions">
-      <button class="button" disabled={$list.page === 1} on:click={fetchPrevious}>&lt;</button>
-      {$list.page}
-      <button class="button" disabled={$list.page >= $list.pages} on:click={fetchNext}>&gt;</button>
+      <button class="button" disabled={store.role.list.page === 1} on:click={fetchPrevious}>&lt;</button>
+      {store.role.list.page}
+      <button class="button" disabled={store.role.list.page >= store.role.list.pages} on:click={fetchNext}>&gt;</button>
     </div>
   </div>
 {/if}
@@ -136,3 +132,4 @@
     padding: 5px;
   }
 </style>
+
