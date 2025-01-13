@@ -2,7 +2,7 @@
   import { onMount } from 'svelte'
   import { page } from '$app/stores'
   import { goto } from '$app/navigation'
-  import { store } from '$lib/store'
+  import { store } from '$lib'
 
   onMount(async () => {
     const response = await store().auth.verify($page.params.token)

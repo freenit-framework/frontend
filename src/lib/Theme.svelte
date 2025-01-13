@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { store } from '$lib/store'
+  import { store } from '$lib'
   import { error } from '$lib/notification'
   import Spinner from './Spinner.svelte'
 

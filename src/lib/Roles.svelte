@@ -2,7 +2,7 @@
   import { onMount } from 'svelte'
   import Modal from '$lib/Modal.svelte'
   import { error } from '$lib/notification'
-  import { store } from '$lib/store'
+  import { store } from '$lib'
   import Spinner from './Spinner.svelte'
 
   let loading = true

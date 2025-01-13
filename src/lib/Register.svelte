@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
   import { error } from '$lib/notification'
-  import { store } from '$lib/store'
+  import { store } from '$lib'
 
   let email = ''
   let password = ''

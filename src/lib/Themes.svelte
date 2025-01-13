@@ -3,7 +3,7 @@
   import Modal from '$lib/Modal.svelte'
   import Spinner from './Spinner.svelte'
   import { error } from '$lib/notification'
-  import { store } from '$lib/store'
+  import { store } from '$lib'
 
   let showCreate = false
   let name = ''

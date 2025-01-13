@@ -1,6 +1,6 @@
 <script>
   import 'chota'
-  import { create_store } from '$lib/store'
+  import { create_store } from '$lib'
   import './app.css'
   import { SvelteToast } from '@zerodevx/svelte-toast'
   import LeftPane from '$lib/LeftPane.svelte'

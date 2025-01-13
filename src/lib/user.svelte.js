@@ -1,17 +1,18 @@
 import methods from '$lib/methods'
 import { store } from '.'
 
-export default class ThemeStore {
+export default class UserStore {
   list = $state({})
   detail = $state({})
+  profile = $state({})
 
-  constructor(prefix: string) {
+  constructor(prefix) {
     this.prefix = prefix
   }
 
   fetchAll = async () => {
     await store.auth.refresh_token()
-    const response = await methods.get(`${this.prefix}/themes`)
+    const response = await methods.get(`${this.prefix}/users`)
     if (response.ok) {
       const data = await response.json()
       this.list = data
@@ -20,19 +21,20 @@ export default class ThemeStore {
     return response
   }
 
-  create = async (fields: any) => {
+  create = async (fields) => {
     await store.auth.refresh_token()
-    const response = await methods.post(`${this.prefix}/themes`, fields)
+    const response = await methods.post(`${this.prefix}/users`, fields)
     if (response.ok) {
       const data = await response.json()
-      this.list = data // TODO: check format
+      this.list = data
       return { ...data, ok: true }
     }
     return response
   }
 
-  active = async () => {
-    const response = await methods.get(`${this.prefix}/theme/active`)
+  fetch = async (id) => {
+    await store.auth.refresh_token()
+    const response = await methods.get(`${this.prefix}/users/${id}`)
     if (response.ok) {
       const data = await response.json()
       this.detail = data
@@ -41,9 +43,9 @@ export default class ThemeStore {
     return response
   }
 
-
-  fetch = async (name: string) => {
-    const response = await methods.get(`${this.prefix}/themes/${name}`)
+  edit = async (id, fields) => {
+    await store.auth.refresh_token()
+    const response = await methods.patch(`${this.prefix}/users/${id}`, fields)
     if (response.ok) {
       const data = await response.json()
       this.detail = data
@@ -51,23 +53,24 @@ export default class ThemeStore {
     }
     return response
   }
-
-  edit = async (name: string, fields: any) => {
-    await store().auth.refresh()
-    const response = await methods.patch(`${this.prefix}/themes/${name}`, fields)
+  
+  fetchProfile = async () => {
+    await store.auth.refresh_token()
+    const response = await methods.get(`${this.prefix}/profile`)
     if (response.ok) {
       const data = await response.json()
-      this.detail = data
+      this.profile = data
       return { ...data, ok: true }
     }
     return response
   }
 
-  destroy = async (name: string) => {
-    await store().auth.refresh()
-    const response = await methods.delete(`${this.prefix}/themes/${name}`)
+  editProfile = async (fields) => {
+    await store.auth.refresh_token()
+    const response = await methods.patch(`${this.prefix}/profile`, fields)
     if (response.ok) {
       const data = await response.json()
+      this.profile = data
       return { ...data, ok: true }
     }
     return response
