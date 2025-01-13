@@ -1,5 +1,4 @@
-import methods from '$lib/methods'
-import { store } from '.'
+import { methods, store } from '.'
 
 export default class RoleStore {
   list = $state({})
