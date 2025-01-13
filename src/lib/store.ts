@@ -1,7 +1,7 @@
-import AuthStore from './auth.svelte.js'
-import RoleStore from './role.svelte.js'
-import ThemeStore from './theme.svelte.js'
-import UserStore from './user.svelte.js'
+import AuthStore from './auth.svelte.ts'
+import RoleStore from './role.svelte.ts'
+import ThemeStore from './theme.svelte.ts'
+import UserStore from './user.svelte.ts'
 
 
 export const store = {}
