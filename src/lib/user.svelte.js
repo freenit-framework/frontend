@@ -7,6 +7,7 @@ export default class UserStore {
 
   constructor(prefix) {
     this.prefix = prefix
+    store.user = this
   }
 
   fetchAll = async () => {

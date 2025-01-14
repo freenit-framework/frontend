@@ -6,6 +6,7 @@ export default class AuthStore {
 
   constructor(prefix) {
     this.prefix = prefix
+    store.auth = this
   }
 
   login = async (email, password) => {

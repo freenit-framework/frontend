@@ -6,6 +6,7 @@ export default class ThemeStore {
 
   constructor(prefix) {
     this.prefix = prefix
+    store.theme = this
   }
 
   fetchAll = async () => {

@@ -6,6 +6,7 @@ export default class RoleStore {
 
   constructor(prefix) {
     this.prefix = prefix
+    store.role = this
   }
 
   fetchAll = async (page = 1, perpage = 10) => {
