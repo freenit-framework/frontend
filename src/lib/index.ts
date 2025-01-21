@@ -23,8 +23,11 @@ export const store = {}
 
 
 export function create_store(prefix = '/api/v1') {
-  new AuthStore(prefix)
-  new RoleStore(prefix)
-  new ThemeStore(prefix)
-  new UserStore(prefix)
+  if (store.auth === undefined) {
+    new AuthStore(prefix)
+    new RoleStore(prefix)
+    new ThemeStore(prefix)
+    new UserStore(prefix)
+  }
+  return store
 }

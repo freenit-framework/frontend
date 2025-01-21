@@ -17,10 +17,8 @@ export default class AuthStore {
     if (response.ok) {
       const data = await response.json()
       const now = new Date()
-      this.access = new Date(now)
-      this.access.setSeconds(now.getSeconds() + data.expire.access)
-      this.refresh = new Date(now)
-      this.refresh.setSeconds(now.getSeconds() + data.expire.refresh)
+      this.access = new Date(now + data.expire.access)
+      this.refresh = new Date(now + data.expire.refresh)
       store.user.profile = data.user
       return { ...data, ok: true }
     }
@@ -63,15 +61,14 @@ export default class AuthStore {
   }
 
   refresh_token = async () => {
+    console.log('refresh_token')
     const now = new Date()
     if (now > this.access) {
       const response = await methods.post(`${this.prefix}/auth/refresh`, {})
       if (response.ok) {
         const data = await response.json()
-        this.access = new Date()
-        this.access.setSeconds(access.getSeconds() + data.expire.access)
-        this.refresh = new Date()
-        this.refresh.setSeconds(refresh.getSeconds() + data.expire.refresh)
+        this.access = new Date(now + data.expire.access)
+        this.refresh = new Date(now + data.expire.refresh)
         store.user.profile = data.user
         return { ...data, ok: true }
       }
