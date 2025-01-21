@@ -1,8 +1,8 @@
 import { methods, store } from '.'
 
 export default class AuthStore {
-  access = $state(new Date())
-  refresh = $state(new Date())
+  access = $state(new Date(0))
+  refresh = $state(new Date(0))
 
   constructor(prefix) {
     this.prefix = prefix
