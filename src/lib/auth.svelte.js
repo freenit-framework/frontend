@@ -61,7 +61,6 @@ export default class AuthStore {
   }
 
   refresh_token = async () => {
-    console.log('refresh_token')
     const now = new Date()
     if (now > this.access) {
       const response = await methods.post(`${this.prefix}/auth/refresh`, {})
