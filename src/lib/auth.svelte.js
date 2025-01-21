@@ -69,9 +69,9 @@ export default class AuthStore {
       if (response.ok) {
         const data = await response.json()
         this.access = new Date()
-        access.setSeconds(access.getSeconds() + data.expire.access)
+        this.access.setSeconds(access.getSeconds() + data.expire.access)
         this.refresh = new Date()
-        refresh.setSeconds(refresh.getSeconds() + data.expire.refresh)
+        this.refresh.setSeconds(refresh.getSeconds() + data.expire.refresh)
         store.user.profile = data.user
         return { ...data, ok: true }
       }
