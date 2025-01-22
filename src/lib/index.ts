@@ -19,7 +19,15 @@ import ThemeStore from './theme.svelte.js'
 import UserStore from './user.svelte.js'
 
 
-export const store = {}
+export interface Store {
+  auth: AuthStore
+  role: RoleStore
+  theme: ThemeStore
+  user: UserStore
+}
+
+
+export const store: Store = {}
 
 
 export function create_store(prefix = '/api/v1') {

@@ -1,9 +1,9 @@
 import { methods, store } from '.'
 
 export default class UserStore {
-  list = $state({})
-  detail = $state({})
-  profile = $state({})
+  list = $state({ page: 0, perpage: 0, data: [], total: 0 })
+  detail = $state({ id: 0, email: '', active: false, admin: false })
+  profile = $state({ id: 0, email: '', active: false, admin: false })
 
   constructor(prefix) {
     this.prefix = prefix
