@@ -21,7 +21,7 @@ export default class UserStore {
     return response
   }
 
-  create = async (fields) => {
+  create = async (fields: Record<string, any>) => {
     await this.store.auth.refresh_token()
     const response = await methods.post(`${this.prefix}/users`, fields)
     if (response.ok) {
@@ -32,7 +32,7 @@ export default class UserStore {
     return response
   }
 
-  fetch = async (id) => {
+  fetch = async (id: number) => {
     await this.store.auth.refresh_token()
     const response = await methods.get(`${this.prefix}/users/${id}`)
     if (response.ok) {
@@ -43,7 +43,7 @@ export default class UserStore {
     return response
   }
 
-  edit = async (id, fields) => {
+  edit = async (id: number, fields: Record<string, any>) => {
     await this.store.auth.refresh_token()
     const response = await methods.patch(`${this.prefix}/users/${id}`, fields)
     if (response.ok) {
@@ -65,7 +65,7 @@ export default class UserStore {
     return response
   }
 
-  editProfile = async (fields) => {
+  editProfile = async (fields: Record<string, any>) => {
     await this.store.auth.refresh_token()
     const response = await methods.patch(`${this.prefix}/profile`, fields)
     if (response.ok) {

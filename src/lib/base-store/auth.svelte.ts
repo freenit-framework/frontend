@@ -9,7 +9,7 @@ export default class AuthStore {
     this.prefix = prefix
   }
 
-  login = async (email, password) => {
+  login = async (email: string, password: string) => {
     const response = await methods.post(`${this.prefix}/auth/login`, {
       email,
       password,
@@ -37,7 +37,7 @@ export default class AuthStore {
     return response
   }
 
-  register = async (email, password) => {
+  register = async (email: string, password: string) => {
     const response = await methods.post(`${this.prefix}/auth/register`, {
       email,
       password,
@@ -49,9 +49,9 @@ export default class AuthStore {
     return response
   }
 
-  verify = async (verification) => {
+  verify = async (token: string) => {
     const response = await methods.post(`${this.prefix}/auth/verify`, {
-      verification,
+      verification: token,
     })
     if (response.ok) {
       const data = await response.json()

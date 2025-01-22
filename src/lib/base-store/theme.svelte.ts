@@ -20,7 +20,7 @@ export default class ThemeStore {
     return response
   }
 
-  create = async (fields) => {
+  create = async (fields: Record<string, any>) => {
     await this.store.auth.refresh_token()
     const response = await methods.post(`${this.prefix}/themes`, fields)
     if (response.ok) {
@@ -42,7 +42,7 @@ export default class ThemeStore {
   }
 
 
-  fetch = async (name) => {
+  fetch = async (name: string) => {
     const response = await methods.get(`${this.prefix}/themes/${name}`)
     if (response.ok) {
       const data = await response.json()
@@ -52,7 +52,7 @@ export default class ThemeStore {
     return response
   }
 
-  edit = async (name, fields) => {
+  edit = async (name: string, fields: Record<string, fields>) => {
     await this.store.auth.refresh_token()
     const response = await methods.patch(`${this.prefix}/themes/${name}`, fields)
     if (response.ok) {
@@ -63,7 +63,7 @@ export default class ThemeStore {
     return response
   }
 
-  destroy = async (name) => {
+  destroy = async (name: string) => {
     await this.store.auth.refresh_token()
     const response = await methods.delete(`${this.prefix}/themes/${name}`)
     if (response.ok) {

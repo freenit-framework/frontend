@@ -23,7 +23,7 @@ export default class RoleStore {
     return response
   }
 
-  create = async (fields) => {
+  create = async (fields: Record<string, any>) => {
     await this.store.auth.refresh_token()
     const response = await methods.post(`${this.prefix}/roles`, fields)
     if (response.ok) {
@@ -33,7 +33,7 @@ export default class RoleStore {
     return response
   }
 
-  fetch = async (id) => {
+  fetch = async (id: number) => {
     await this.store.auth.refresh_token()
     const response = await methods.get(`${this.prefix}/roles/${id}`)
     if (response.ok) {
@@ -45,7 +45,7 @@ export default class RoleStore {
     return response
   }
 
-  edit = async (id) => {
+  edit = async (id: number) => {
     await this.store.auth.refresh_token()
     const response = await methods.patch(`${this.prefix}/roles/${id}`, fields)
     if (response.ok) {
@@ -56,7 +56,7 @@ export default class RoleStore {
     return response
   }
 
-  destroy = async (id) => {
+  destroy = async (id: number) => {
     await this.store.auth.refresh_token()
     const response = await methods.delete(`${this.prefix}/roles/${id}`)
     if (response.ok) {
@@ -67,7 +67,7 @@ export default class RoleStore {
     return response
   }
 
-  assign = async (role_id, user_id) => {
+  assign = async (role_id: number, user_id: number) => {
     await this.store.auth.refresh_token()
     const response = await methods.post(`${this.prefix}/roles/${role_id}/${user_id}`, {})
     if (response.ok) {
@@ -77,7 +77,7 @@ export default class RoleStore {
     return response
   }
 
-  deassign = async (role_id, user_id) => {
+  deassign = async (role_id: number, user_id: number) => {
     await this.store.auth.refresh_refresh()
     const response = await methods.delete(`${this.prefix}/roles/${role_id}/${user_id}`)
     if (response.ok) {
