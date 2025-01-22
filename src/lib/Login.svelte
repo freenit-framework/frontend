@@ -1,10 +1,11 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
   import { error } from '$lib/notification'
-  import { store } from '$lib'
+  import BaseStore from '$lib/base-store'
 
-  let email = ''
-  let password = ''
+  let email = $state('')
+  let password = $state('')
+  let { store } = $props()
 
   const submit = async () => {
     const response = await store.auth.login(email, password)
@@ -17,9 +18,9 @@
 </script>
 
 <div class="root">
-  <form on:submit|preventDefault={submit} class="form">
+  <form onsubmit={submit} class="form">
     <label for="email">Email</label>
-    <!-- svelte-ignore a11y-autofocus -->
+    <!-- svelte-ignore a11y_autofocus -->
     <input autofocus required type="email" name="email" bind:value={email} />
 
     <label for="password">Password</label>

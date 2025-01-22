@@ -1,16 +1,16 @@
-import { methods, store } from '.'
+import { methods } from '.'
 
 export default class ThemeStore {
   list = $state({})
   detail = $state({})
 
-  constructor(prefix) {
+  constructor(store, prefix: string) {
+    this.store = store
     this.prefix = prefix
-    store.theme = this
   }
 
   fetchAll = async () => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.get(`${this.prefix}/themes`)
     if (response.ok) {
       const data = await response.json()
@@ -21,7 +21,7 @@ export default class ThemeStore {
   }
 
   create = async (fields) => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.post(`${this.prefix}/themes`, fields)
     if (response.ok) {
       const data = await response.json()
@@ -53,7 +53,7 @@ export default class ThemeStore {
   }
 
   edit = async (name, fields) => {
-    await store().auth.refresh()
+    await this.store.auth.refresh_token()
     const response = await methods.patch(`${this.prefix}/themes/${name}`, fields)
     if (response.ok) {
       const data = await response.json()
@@ -64,7 +64,7 @@ export default class ThemeStore {
   }
 
   destroy = async (name) => {
-    await store().auth.refresh()
+    await this.store.auth.refresh_token()
     const response = await methods.delete(`${this.prefix}/themes/${name}`)
     if (response.ok) {
       const data = await response.json()

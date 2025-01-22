@@ -1,15 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { error } from '$lib/notification'
-  import { store } from '$lib'
   import Spinner from './Spinner.svelte'
 
-  let loading = true
-  export let pk = 0
+  let loading = $state(true)
+  let { pk = 0, store } = $props()
 
   onMount(async () => {
     loading = true
-    const [roleResponse, userResponse] = await Promise.all([store.role.detail.fetch(pk), store.user.list.fetch()])
+    const [roleResponse, userResponse] = await Promise.all([store.role.fetch(pk), store.user.fetchAll()])
     if (!roleResponse.ok) {
       error(roleResponse.statusText)
     }
@@ -21,21 +20,24 @@
 
   const member = (user: any) => {
     const users = store.role.detail.users || store.role.detail.uniqueMembers
-    const myusers = users.filter((u: any) => {
-      if (user.id) {
-        return u.id === user.id
-      }
-      return u === user.dn
-    })
-    return myusers.length > 0
+    if (users) {
+      const myusers = users.filter((u: any) => {
+        if (user.id) {
+          return u.id === user.id
+        }
+        return u === user.dn
+      })
+      return myusers.length > 0
+    }
+    return false
   }
 
   const toggleMembership = (user: any) => async (event: any) => {
     let response
     if (event.target.checked) {
-      response = await store.role.detail.assign(store.role.detail.id || store.role.detail.dn, user.id || user.dn)
+      response = await store.role.assign(store.role.detail.id || store.role.detail.dn, user.id || user.dn)
     } else {
-      response = await store.role.detail.deassign(store.role.detail.id || store.role.detail.dn, user.id || user.dn)
+      response = await store.role.deassign(store.role.detail.id || store.role.detail.dn, user.id || user.dn)
     }
     if (!response.ok) {
       error(response.statusText)
@@ -49,14 +51,14 @@
   }
 
   const fetchPrevious = async () => {
-    const response = await store.user.list.fetch(store.user.list.page - 1)
+    const response = await store.user.fetchAll(store.user.list.page - 1)
     if (!response.ok) {
       error(response.statusText)
     }
   }
 
   const fetchNext = async () => {
-    const response = await store.user.list.fetch(store.user.list.page + 1)
+    const response = await store.user.fetchAll(store.user.list.page + 1)
     if (!response.ok) {
       error(response.statusText)
     }
@@ -85,16 +87,16 @@
           <input disabled type="checkbox" checked={user.admin} />
         </div>
         <div class="data">
-          <input type="checkbox" checked={member(user)} on:change={toggleMembership(user)} />
+          <input type="checkbox" checked={member(user)} onchange={toggleMembership(user)} />
         </div>
         <div class="border"></div>
       {/each}
     </div>
   </div>
   <div class="actions">
-    <button class="button" disabled={store.user.list.page === 1} on:click={fetchPrevious}>&lt;</button>
+    <button class="button" disabled={store.user.list.page === 1} onclick={fetchPrevious}>&lt;</button>
     {store.user.list.page}
-    <button class="button" disabled={store.user.list.page === store.user.list.pages} on:click={fetchNext}
+    <button class="button" disabled={store.user.list.page === store.user.list.pages} onclick={fetchNext}
       >&gt;</button
     >
   </div>

@@ -2,16 +2,16 @@
   import { onMount } from 'svelte'
   import Modal from '$lib/Modal.svelte'
   import { error } from '$lib/notification'
-  import { store } from '$lib'
   import Spinner from './Spinner.svelte'
 
-  let loading = true
-  let showCreate = false
-  let name = ''
+  let loading = $state(true)
+  let showCreate = $state(false)
+  let name = $state('')
+  let { store } = $props()
 
   onMount(async () => {
     loading = true
-    const response = await store.role.list.fetch()
+    const response = await store.role.fetchAll()
     if (!response.ok) {
       error(response.statusText)
     }
@@ -19,25 +19,26 @@
   })
 
   async function fetchPrevious() {
-    const response = await store.role.list.fetch(store.role.list.page - 1)
+    const response = await store.role.fetchAll(store.role.list.page - 1)
     if (!response.ok) {
       error(response.statusText)
     }
   }
 
   async function fetchNext() {
-    const response = await store.role.list.fetch(store.role.list.page + 1)
+    const response = await store.role.fetchAll(store.role.list.page + 1)
     if (!response.ok) {
       error(response.statusText)
     }
   }
 
-  function toggleShowCreate() {
+  function toggleShowCreate(event: Event) {
+    event.preventDefault()
     showCreate = !showCreate
   }
 
   async function create() {
-    const response = await store.role.list.create({ name })
+    const response = await store.role.create({ name })
     if (!response.ok) {
       error(response.statusText)
     }
@@ -53,7 +54,7 @@
     <div class="container">
       <div class="header">
         <h2>Roles</h2>
-        <button class="button primary" on:click={toggleShowCreate}>Create</button>
+        <button class="button primary" onclick={toggleShowCreate}>Create</button>
       </div>
       <div class="table">
         <div class="heading">ID</div>
@@ -70,21 +71,21 @@
       </div>
     </div>
     <div class="actions">
-      <button class="button" disabled={store.role.list.page === 1} on:click={fetchPrevious}>&lt;</button>
+      <button class="button" disabled={store.role.list.page === 1} onclick={fetchPrevious}>&lt;</button>
       {store.role.list.page}
-      <button class="button" disabled={store.role.list.page >= store.role.list.pages} on:click={fetchNext}>&gt;</button>
+      <button class="button" disabled={store.role.list.page >= store.role.list.pages} onclick={fetchNext}>&gt;</button>
     </div>
   </div>
 {/if}
 
 <Modal open={showCreate}>
   <h2>Create</h2>
-  <form on:submit|preventDefault={create}>
-    <!-- svelte-ignore a11y-autofocus -->
+  <form onsubmit={create}>
+    <!-- svelte-ignore a11y_autofocus -->
     <input bind:value={name} autofocus />
     <div class="actions">
       <button class="button primary" type="submit">Create</button>
-      <button class="button error" on:click={toggleShowCreate}>Close</button>
+      <button class="button error" onclick={toggleShowCreate}>Close</button>
     </div>
   </form>
 </Modal>

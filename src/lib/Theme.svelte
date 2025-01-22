@@ -1,15 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { store } from '$lib'
   import { error } from '$lib/notification'
   import Spinner from './Spinner.svelte'
 
-  export let name = ''
-  let loading = true
+  let { name = '', store } = $props()
+  let loading = $state(true)
 
   onMount(async () => {
     loading = true
-    const response = await store.theme.detail.fetch(name)
+    const response = await store.theme.fetch(name)
     if (!response.ok) {
       error(response.statusText)
     }

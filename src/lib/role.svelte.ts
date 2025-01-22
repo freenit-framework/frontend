@@ -1,16 +1,16 @@
-import { methods, store } from '.'
+import { methods } from '.'
 
 export default class RoleStore {
   list = $state({ page: 0, perpage: 0, data: [], total: 0 })
   detail = $state({ id: 0, name: '' })
 
-  constructor(prefix) {
+  constructor(store, prefix: string) {
+    this.store = store
     this.prefix = prefix
-    store.role = this
   }
 
   fetchAll = async (page = 1, perpage = 10) => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.get(`${this.prefix}/roles`, {
       page,
       perpage,
@@ -24,7 +24,7 @@ export default class RoleStore {
   }
 
   create = async (fields) => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.post(`${this.prefix}/roles`, fields)
     if (response.ok) {
       const data = await response.json()
@@ -34,10 +34,11 @@ export default class RoleStore {
   }
 
   fetch = async (id) => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.get(`${this.prefix}/roles/${id}`)
     if (response.ok) {
       const data = await response.json()
+      console.log('fetch', data)
       this.detail = data
       return { ...data, ok: true }
     }
@@ -45,7 +46,7 @@ export default class RoleStore {
   }
 
   edit = async (id) => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.patch(`${this.prefix}/roles/${id}`, fields)
     if (response.ok) {
       const data = await response.json()
@@ -56,7 +57,7 @@ export default class RoleStore {
   }
 
   destroy = async (id) => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.delete(`${this.prefix}/roles/${id}`)
     if (response.ok) {
       const data = await response.json()
@@ -67,7 +68,7 @@ export default class RoleStore {
   }
 
   assign = async (role_id, user_id) => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.post(`${this.prefix}/roles/${role_id}/${user_id}`, {})
     if (response.ok) {
       const data = await response.json()
@@ -77,7 +78,7 @@ export default class RoleStore {
   }
 
   deassign = async (role_id, user_id) => {
-    await store.auth.refresh_refresh()
+    await this.store.auth.refresh_refresh()
     const response = await methods.delete(`${this.prefix}/roles/${role_id}/${user_id}`)
     if (response.ok) {
       const data = await response.json()

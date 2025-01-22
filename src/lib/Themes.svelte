@@ -3,11 +3,11 @@
   import Modal from '$lib/Modal.svelte'
   import Spinner from './Spinner.svelte'
   import { error } from '$lib/notification'
-  import { store } from '$lib'
 
-  let showCreate = false
-  let name = ''
-  let loading = true
+  let showCreate = $state(false)
+  let name = $state('')
+  let loading = $state(true)
+  let { store } = $props()
 
   onMount(async () => {
     loading = true
@@ -36,7 +36,8 @@
     showCreate = !showCreate
   }
 
-  async function create() {
+  async function create(event: Event) {
+    event.preventDefault()
     const response = await store.theme.create({ name })
     if (!response.ok) {
       error(response.statusText)
@@ -53,7 +54,7 @@
     <div class="container">
       <div class="header">
         <h2>Themes</h2>
-        <button class="button primary" on:click={toggleShowCreate}>Create</button>
+        <button class="button primary" onclick={toggleShowCreate}>Create</button>
       </div>
       <div class="table">
         <div class="heading">ID</div>
@@ -70,21 +71,21 @@
       </div>
     </div>
     <div class="actions">
-      <button class="button" disabled={store.role.list.page === 1} on:click={fetchPrevious}>&lt;</button>
+      <button class="button" disabled={store.role.list.page === 1} onclick={fetchPrevious}>&lt;</button>
       {store.role.list.page}
-      <button class="button" disabled={store.role.list.page >= store.role.list.pages} on:click={fetchNext}>&gt;</button>
+      <button class="button" disabled={store.role.list.page >= store.role.list.pages} onclick={fetchNext}>&gt;</button>
     </div>
   </div>
 {/if}
 
 <Modal open={showCreate}>
   <h2>Create</h2>
-  <form on:submit|preventDefault={create}>
-    <!-- svelte-ignore a11y-autofocus -->
+  <form onsubmit={create}>
+    <!-- svelte-ignore a11y_autofocus -->
     <input bind:value={name} autofocus />
     <div class="actions">
       <button class="button primary" type="submit">Create</button>
-      <button class="button error" on:click={toggleShowCreate}>Close</button>
+      <button class="button error" onclick={toggleShowCreate}>Close</button>
     </div>
   </form>
 </Modal>

@@ -1,17 +1,17 @@
-import { methods, store } from '.'
+import { methods } from '.'
 
 export default class UserStore {
   list = $state({ page: 0, perpage: 0, data: [], total: 0 })
   detail = $state({ id: 0, email: '', active: false, admin: false })
   profile = $state({ id: 0, email: '', active: false, admin: false })
 
-  constructor(prefix) {
+  constructor(store, prefix: string) {
+    this.store = store
     this.prefix = prefix
-    store.user = this
   }
 
   fetchAll = async () => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.get(`${this.prefix}/users`)
     if (response.ok) {
       const data = await response.json()
@@ -22,7 +22,7 @@ export default class UserStore {
   }
 
   create = async (fields) => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.post(`${this.prefix}/users`, fields)
     if (response.ok) {
       const data = await response.json()
@@ -33,7 +33,7 @@ export default class UserStore {
   }
 
   fetch = async (id) => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.get(`${this.prefix}/users/${id}`)
     if (response.ok) {
       const data = await response.json()
@@ -44,7 +44,7 @@ export default class UserStore {
   }
 
   edit = async (id, fields) => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.patch(`${this.prefix}/users/${id}`, fields)
     if (response.ok) {
       const data = await response.json()
@@ -55,7 +55,7 @@ export default class UserStore {
   }
   
   fetchProfile = async () => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.get(`${this.prefix}/profile`)
     if (response.ok) {
       const data = await response.json()
@@ -66,7 +66,7 @@ export default class UserStore {
   }
 
   editProfile = async (fields) => {
-    await store.auth.refresh_token()
+    await this.store.auth.refresh_token()
     const response = await methods.patch(`${this.prefix}/profile`, fields)
     if (response.ok) {
       const data = await response.json()

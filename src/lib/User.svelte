@@ -1,11 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { error } from '$lib/notification'
-  import { store } from '$lib'
   import Spinner from './Spinner.svelte'
 
-  export let pk = 0
-  let loading = true
+  let { pk = 0, store } = $props()
+  let loading = $state(true)
 
   onMount(async () => {
     loading = true
@@ -65,16 +64,16 @@
         <div class="data">{role.id || role.dn}</div>
         <div class="data">{role.name || role.cn}</div>
         <div class="data">
-          <input type="checkbox" checked={member(role)} on:change={toggleMembership(role)} />
+          <input type="checkbox" checked={member(role)} onchange={toggleMembership(role)} />
         </div>
         <div class="border"></div>
       {/each}
     </div>
   </div>
   <div class="actions">
-    <button class="button" disabled={store.role.list.page === 1} on:click={fetchPrevious}>&lt;</button>
+    <button class="button" disabled={store.role.list.page === 1} onclick={fetchPrevious}>&lt;</button>
     {store.role.list.page}
-    <button class="button" disabled={store.role.list.page === store.role.list.pages} on:click={fetchNext}
+    <button class="button" disabled={store.role.list.page === store.role.list.pages} onclick={fetchNext}
       >&gt;</button
     >
   </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { error } from '$lib/notification'
-  import { store } from '$lib'
+  import store from '$lib/store'
 
   onMount(async () => {
     const response = await store.user.fetchProfile()

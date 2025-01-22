@@ -1,13 +1,14 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
   import { error } from '$lib/notification'
-  import { store } from '$lib'
 
-  let email = ''
-  let password = ''
-  let repeatpassword = ''
+  let email = $state('')
+  let password = $state('')
+  let repeatpassword = $state('')
+  let { store } = $props()
 
-  const submit = async () => {
+  const submit = async (event: Event) => {
+    event.preventDefault()
     const response = await store.auth.register(email, password)
     if (!response.ok) {
       error(response.statusText)
@@ -18,9 +19,9 @@
 </script>
 
 <div class="root">
-  <form on:submit|preventDefault={submit} class="form">
+  <form onsubmit={submit} class="form">
     <label for="email">Email</label>
-    <!-- svelte-ignore a11y-autofocus -->
+    <!-- svelte-ignore a11y_autofocus -->
     <input autofocus required type="email" name="email" bind:value={email} />
 
     <label for="password">Password</label>

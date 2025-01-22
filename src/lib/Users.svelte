@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { error } from '$lib/notification'
-  import { store } from '$lib'
   import Spinner from './Spinner.svelte'
 
-  let loading = true
+  let loading = $state(true)
+  let { store } = $props()
 
   onMount(async () => {
     const response = await store.user.fetchAll()
@@ -55,9 +55,9 @@
     </div>
   </div>
   <div class="actions">
-    <button class="button" disabled={store.user.list.page === 1} on:click={fetchPrevious}>&lt;</button>
+    <button class="button" disabled={store.user.list.page === 1} onclick={fetchPrevious}>&lt;</button>
     {store.user.list.page}
-    <button class="button" disabled={store.user.list.page >= store.user.list.pages} on:click={fetchNext}>&gt;</button>
+    <button class="button" disabled={store.user.list.page >= store.user.list.pages} onclick={fetchNext}>&gt;</button>
   </div>
 {/if}
 

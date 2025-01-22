@@ -1,12 +1,12 @@
-import { methods, store } from '.'
+import { methods } from '.'
 
 export default class AuthStore {
   access = $state(new Date(0))
   refresh = $state(new Date(0))
 
-  constructor(prefix) {
+  constructor(store, prefix: string) {
+    this.store = store
     this.prefix = prefix
-    store.auth = this
   }
 
   login = async (email, password) => {
@@ -19,7 +19,7 @@ export default class AuthStore {
       const now = new Date()
       this.access = new Date(now + data.expire.access)
       this.refresh = new Date(now + data.expire.refresh)
-      store.user.profile = data.user
+      this.store.user.profile = data.user
       return { ...data, ok: true }
     }
     return response
@@ -31,7 +31,7 @@ export default class AuthStore {
       const data = await response.json()
       this.access = new Date()
       this.refresh = new Date()
-      store.user.profile = {}
+      this.store.user.profile = {}
       return { ...data, ok: true }
     }
     return response
@@ -68,7 +68,7 @@ export default class AuthStore {
         const data = await response.json()
         this.access = new Date(now + data.expire.access)
         this.refresh = new Date(now + data.expire.refresh)
-        store.user.profile = data.user
+        this.store.user.profile = data.user
         return { ...data, ok: true }
       }
     }

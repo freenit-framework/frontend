@@ -1,13 +1,11 @@
 <script>
   import 'chota'
-  import { create_store } from '$lib'
+  import '$lib/store'
   import './app.css'
   import { SvelteToast } from '@zerodevx/svelte-toast'
   import LeftPane from '$lib/LeftPane.svelte'
 
   const options = {}
-
-  create_store()
 </script>
 
 <svelte:head>

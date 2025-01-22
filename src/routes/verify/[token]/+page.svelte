@@ -2,10 +2,10 @@
   import { onMount } from 'svelte'
   import { page } from '$app/stores'
   import { goto } from '$app/navigation'
-  import { store } from '$lib'
+  import store from '$lib/store'
 
   onMount(async () => {
-    const response = await store().auth.verify($page.params.token)
+    const response = await store.auth.verify($page.params.token)
     if (response.ok) {
       goto('/login')
     }
