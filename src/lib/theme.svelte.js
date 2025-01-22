@@ -1,7 +1,7 @@
 import { methods, store } from '.'
 
 export default class ThemeStore {
-  list = $state({ page: 0, perpage: 0, data: [], total: 0 })
+  list = $state({})
   detail = $state({})
 
   constructor(prefix) {

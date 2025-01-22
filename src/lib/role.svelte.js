@@ -1,23 +1,20 @@
 import { methods, store } from '.'
 
-type UserDetail = {
-  id: number
-  email: string
-}
-
-export default class UserStore {
-  list = $state({ page: 0, perpage: 0, data: Array<UserDetail>, total: 0 })
-  detail = $state({id: 0, email: ''})
-  profile = $state({id: 0, email: ''})
+export default class RoleStore {
+  list = $state({})
+  detail = $state({})
 
   constructor(prefix) {
     this.prefix = prefix
-    store.user = this
+    store.role = this
   }
 
-  fetchAll = async () => {
+  fetchAll = async (page = 1, perpage = 10) => {
     await store.auth.refresh_token()
-    const response = await methods.get(`${this.prefix}/users`)
+    const response = await methods.get(`${this.prefix}/roles`, {
+      page,
+      perpage,
+    })
     if (response.ok) {
       const data = await response.json()
       this.list = data
@@ -26,20 +23,19 @@ export default class UserStore {
     return response
   }
 
-  create = async (fields: Record<string, any>) => {
+  create = async (fields) => {
     await store.auth.refresh_token()
-    const response = await methods.post(`${this.prefix}/users`, fields)
+    const response = await methods.post(`${this.prefix}/roles`, fields)
     if (response.ok) {
       const data = await response.json()
-      this.list = data
       return { ...data, ok: true }
     }
     return response
   }
 
-  fetch = async (id: number) => {
+  fetch = async (id) => {
     await store.auth.refresh_token()
-    const response = await methods.get(`${this.prefix}/users/${id}`)
+    const response = await methods.get(`${this.prefix}/roles/${id}`)
     if (response.ok) {
       const data = await response.json()
       this.detail = data
@@ -48,9 +44,9 @@ export default class UserStore {
     return response
   }
 
-  edit = async (id: number, fields: Record<string, any>) => {
+  edit = async (id) => {
     await store.auth.refresh_token()
-    const response = await methods.patch(`${this.prefix}/users/${id}`, fields)
+    const response = await methods.patch(`${this.prefix}/roles/${id}`, fields)
     if (response.ok) {
       const data = await response.json()
       this.detail = data
@@ -58,24 +54,33 @@ export default class UserStore {
     }
     return response
   }
-  
-  fetchProfile = async () => {
+
+  destroy = async (id) => {
     await store.auth.refresh_token()
-    const response = await methods.get(`${this.prefix}/profile`)
+    const response = await methods.delete(`${this.prefix}/roles/${id}`)
     if (response.ok) {
       const data = await response.json()
-      this.profile = data
+      this.set(data)
       return { ...data, ok: true }
     }
     return response
   }
 
-  editProfile = async (fields: Record<string, any>) => {
+  assign = async (role_id, user_id) => {
     await store.auth.refresh_token()
-    const response = await methods.patch(`${this.prefix}/profile`, fields)
+    const response = await methods.post(`${this.prefix}/roles/${role_id}/${user_id}`, {})
     if (response.ok) {
       const data = await response.json()
-      this.profile = data
+      return { ...data, ok: true }
+    }
+    return response
+  }
+
+  deassign = async (role_id, user_id) => {
+    await store.auth.refresh_refresh()
+    const response = await methods.delete(`${this.prefix}/roles/${role_id}/${user_id}`)
+    if (response.ok) {
+      const data = await response.json()
       return { ...data, ok: true }
     }
     return response

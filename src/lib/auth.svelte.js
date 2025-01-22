@@ -9,7 +9,7 @@ export default class AuthStore {
     store.auth = this
   }
 
-  login = async (email: string, password: string) => {
+  login = async (email, password) => {
     const response = await methods.post(`${this.prefix}/auth/login`, {
       email,
       password,
@@ -31,13 +31,13 @@ export default class AuthStore {
       const data = await response.json()
       this.access = new Date()
       this.refresh = new Date()
-      store.user.profile = {id: 0, email: ''}
+      store.user.profile = {}
       return { ...data, ok: true }
     }
     return response
   }
 
-  register = async (email: string, password: string) => {
+  register = async (email, password) => {
     const response = await methods.post(`${this.prefix}/auth/register`, {
       email,
       password,
@@ -49,9 +49,9 @@ export default class AuthStore {
     return response
   }
 
-  verify = async (token: string) => {
+  verify = async (verification) => {
     const response = await methods.post(`${this.prefix}/auth/verify`, {
-      verification: token,
+      verification,
     })
     if (response.ok) {
       const data = await response.json()
