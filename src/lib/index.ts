@@ -13,10 +13,10 @@ export { default as Users } from './Users.svelte'
 export { default as methods } from './methods'
 export * as notification from './notification'
 
-import AuthStore from './auth.svelte.js'
-import RoleStore from './role.svelte.js'
-import ThemeStore from './theme.svelte.js'
-import UserStore from './user.svelte.js'
+import AuthStore from './auth.svelte'
+import RoleStore from './role.svelte'
+import ThemeStore from './theme.svelte'
+import UserStore from './user.svelte'
 
 
 export const store = {}
@@ -30,4 +30,11 @@ export function create_store(prefix = '/api/v1') {
     new UserStore(prefix)
   }
   return store
+}
+
+export interface Store {
+  auth: AuthStore
+  role: RoleStore
+  theme: ThemeStore
+  user: UserStore
 }
