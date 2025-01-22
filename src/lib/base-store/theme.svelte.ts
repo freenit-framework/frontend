@@ -1,4 +1,4 @@
-import { methods } from '.'
+import { methods } from '..'
 
 export default class ThemeStore {
   list = $state({})

@@ -1,4 +1,4 @@
-import { methods } from '.'
+import { methods } from '..'
 
 export default class RoleStore {
   list = $state({ page: 0, perpage: 0, data: [], total: 0 })
