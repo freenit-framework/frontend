@@ -37,6 +37,10 @@ export default class AuthStore {
     return response
   }
 
+  loggedin = () => {
+    return Boolean(this.store.user.profile.id)
+  }
+
   register = async (email: string, password: string) => {
     const response = await methods.post(`${this.prefix}/auth/register`, {
       email,
