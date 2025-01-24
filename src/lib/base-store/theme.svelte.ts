@@ -41,7 +41,6 @@ export default class ThemeStore {
     return response
   }
 
-
   fetch = async (name: string) => {
     const response = await methods.get(`${this.prefix}/themes/${name}`)
     if (response.ok) {

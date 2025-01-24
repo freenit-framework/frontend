@@ -10,7 +10,7 @@ export default class BaseStore {
   theme: ThemeStore
   user: UserStore
 
-  constructor(prefix='/api/v1') {
+  constructor(prefix = '/api/v1') {
     this.prefix = prefix
     this.auth = new AuthStore(this, prefix)
     this.role = new RoleStore(this, prefix)

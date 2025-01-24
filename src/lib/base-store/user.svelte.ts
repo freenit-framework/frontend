@@ -53,7 +53,7 @@ export default class UserStore {
     }
     return response
   }
-  
+
   fetchProfile = async () => {
     await this.store.auth.refresh_token()
     const response = await methods.get(`${this.prefix}/profile`)
