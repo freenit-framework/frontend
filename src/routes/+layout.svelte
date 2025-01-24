@@ -1,10 +1,11 @@
 <script>
   import 'chota'
-  import '$lib/store'
   import './app.css'
+  import { onMount } from 'svelte'
   import { SvelteToast } from '@zerodevx/svelte-toast'
+  import store from '$lib/store'
   import LeftPane from '$lib/LeftPane.svelte'
-  import { mdiMenu } from '@mdi/js'
+  import MenuBar from '$lib/MenuBar.svelte'
 
   const options = {}
   let open = $state(false)
@@ -13,6 +14,8 @@
   const toggle = () => {
     open = !open
   }
+
+  onMount(async () => { await store.auth.refresh_token() })
 </script>
 
 <svelte:head>
@@ -20,15 +23,9 @@
   <meta name="Freenit" content="Freenit base for Svelte" />
 </svelte:head>
 
-<div class="menu">
-  <svg class="icon" onclick={toggle} onkeyup={toggle} onkeydown={toggle} role="button" tabindex={0}>
-    <path d={mdiMenu} />
-  </svg>
-  <a href="/" class="title">Freenit</a>
-</div>
-
 <SvelteToast {options} />
-<LeftPane {open} />
+<MenuBar {toggle} title="Freenit" />
+<LeftPane {open} {toggle} />
 <section class="root">
   <div class="main">
     {@render children?.()}
@@ -43,27 +40,5 @@
   .main {
     height: 100%;
     width: 100%;
-  }
-
-  .menu {
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    background-color: var(--color-primary);
-    color: white;
-  }
-
-  .icon {
-    width: 26px;
-    height: 26px;
-    fill: white;
-  }
-
-  .title {
-    padding: 0;
-    margin: 0;
-    color: white;
-    font-size: 3rem;
   }
 </style>

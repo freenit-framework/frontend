@@ -1,9 +1,5 @@
 <script lang="ts">
-  let { open } = $props()
-
-  const toggle = () => {
-    open = !open
-  }
+  let { open, toggle } = $props()
 </script>
 
 <div class="root" class:open>
