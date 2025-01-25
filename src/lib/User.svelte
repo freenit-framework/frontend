@@ -22,7 +22,8 @@
   })
 
   const member = (role: any) => {
-    const myroles = store.user.detail.roles.filter((r: any) => r.id === role.id)
+    const roles = store.user.detail.roles ?? []
+    const myroles = roles.filter((r: any) => r.id === role.id)
     return myroles.length > 0
   }
 
@@ -69,9 +70,10 @@
       <div class="heading">ID</div>
       <div class="heading">Name</div>
       <div class="heading">Member</div>
+
       {#each store.role.list.data as role}
-        <div class="data">{role.id || role.dn}</div>
-        <div class="data">{role.name || role.cn}</div>
+        <div class="data">{role.id ?? role.dn}</div>
+        <a class="data" href={`/roles/${role.id ?? role.dn}`}>{role.name ?? role.cn}</a>
         <div class="data">
           <input type="checkbox" checked={member(role)} onchange={toggleMembership(role)} />
         </div>

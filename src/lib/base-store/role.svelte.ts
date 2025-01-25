@@ -28,6 +28,8 @@ export default class RoleStore {
     const response = await methods.post(`${this.prefix}/roles`, fields)
     if (response.ok) {
       const data = await response.json()
+      this.list.data.push(data)
+      this.list.total += 1
       return { ...data, ok: true }
     }
     return response
@@ -38,7 +40,6 @@ export default class RoleStore {
     const response = await methods.get(`${this.prefix}/roles/${id}`)
     if (response.ok) {
       const data = await response.json()
-      console.log('fetch', data)
       this.detail = data
       return { ...data, ok: true }
     }
@@ -78,7 +79,7 @@ export default class RoleStore {
   }
 
   deassign = async (role_id: number, user_id: number) => {
-    await this.store.auth.refresh_refresh()
+    await this.store.auth.refresh_token()
     const response = await methods.delete(`${this.prefix}/roles/${role_id}/${user_id}`)
     if (response.ok) {
       const data = await response.json()

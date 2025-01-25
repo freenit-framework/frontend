@@ -39,13 +39,13 @@
     let response
     if (event.target.checked) {
       response = await store.role.assign(
-        store.role.detail.id || store.role.detail.dn,
-        user.id || user.dn,
+        store.role.detail.id ?? store.role.detail.dn,
+        user.id ?? user.dn,
       )
     } else {
       response = await store.role.deassign(
-        store.role.detail.id || store.role.detail.dn,
-        user.id || user.dn,
+        store.role.detail.id ?? store.role.detail.dn,
+        user.id ?? user.dn,
       )
     }
     if (!response.ok) {
@@ -88,9 +88,9 @@
       <div class="heading">Member</div>
       {#each store.user.list.data as user}
         <div class="data">{user.id || user.dn}</div>
-        <div class="data">{user.email}</div>
+        <a class="data" href={`/users/${user.id ?? user.dn}`}>{user.email}</a>
         <div class="data">
-          <input disabled type="checkbox" checked={user.active || user.userClass == 'enabled'} />
+          <input disabled type="checkbox" checked={user.active ?? user.userClass == 'enabled'} />
         </div>
         <div class="data">
           <input disabled type="checkbox" checked={user.admin} />

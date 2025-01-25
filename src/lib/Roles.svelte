@@ -37,7 +37,8 @@
     showCreate = !showCreate
   }
 
-  async function create() {
+  async function create(event: Event) {
+    event.preventDefault()
     const response = await store.role.create({ name })
     if (!response.ok) {
       error(response.statusText)
