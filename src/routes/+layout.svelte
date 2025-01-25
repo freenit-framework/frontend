@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import 'chota'
   import './app.css'
   import { onMount } from 'svelte'
@@ -6,6 +6,7 @@
   import store from '$lib/store'
   import LeftPane from '$lib/LeftPane.svelte'
   import MenuBar from '$lib/MenuBar.svelte'
+  import MenuItems from '$lib/MenuItems.svelte'
 
   const options = {}
   let open = $state(false)
@@ -15,7 +16,14 @@
     open = !open
   }
 
-  onMount(async () => { await store.auth.refresh_token() })
+  const logout = () => {
+    open = !open
+    store.auth.logout()
+  }
+
+  onMount(async () => {
+    await store.auth.refresh_token()
+  })
 </script>
 
 <svelte:head>
@@ -25,7 +33,9 @@
 
 <SvelteToast {options} />
 <MenuBar {toggle} title="Freenit" />
-<LeftPane {open} {toggle} />
+<LeftPane {open} {toggle}>
+  <MenuItems {toggle} {logout} />
+</LeftPane>
 <section class="root">
   <div class="main">
     {@render children?.()}

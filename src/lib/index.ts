@@ -1,5 +1,7 @@
 export { default as LeftPane } from './LeftPane.svelte'
 export { default as MenuBar } from './MenuBar.svelte'
+export { default as MenuItem } from './MenuItem.svelte'
+export { default as MenuItems } from './MenuItems.svelte'
 export { default as Login } from './Login.svelte'
 export { default as Modal } from './Modal.svelte'
 export { default as Register } from './Register.svelte'
