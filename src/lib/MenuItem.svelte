@@ -1,9 +1,17 @@
 <script lang="ts">
-  let { icon, onclick, href, children } = $props()
+  let { icon, toggle, href, children } = $props()
 </script>
 
-<a class="item" {href}>
-  <svg class="icon dark" {onclick} onkeyup={onclick} onkeydown={onclick} role="button" tabindex={0}>
+<a
+  class="item"
+  {href}
+  onclick={toggle}
+  onkeyup={toggle}
+  onkeydown={toggle}
+  role="button"
+  tabindex={0}
+>
+  <svg class="icon dark">
     <path d={icon} />
   </svg>
   {@render children?.()}
