@@ -9,10 +9,9 @@
     mdiLogoutVariant,
     mdiStamper,
   } from '@mdi/js'
-  import store from '$lib/store'
   import MenuItem from '$lib/MenuItem.svelte'
 
-  let { toggle, logout } = $props()
+  let { toggle, logout, store } = $props()
 </script>
 
 {#if store.auth.loggedin()}

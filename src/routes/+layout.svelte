@@ -34,7 +34,7 @@
 <SvelteToast {options} />
 <MenuBar {toggle} title="Freenit" />
 <LeftPane {open} {toggle}>
-  <MenuItems {toggle} {logout} />
+  <MenuItems {toggle} {logout} {store} />
 </LeftPane>
 <section class="root">
   <div class="main">
