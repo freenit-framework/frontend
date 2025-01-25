@@ -1,11 +1,11 @@
 <script lang="ts">
-  export let open = false
+  let { children, open } = $props()
 </script>
 
 {#if open}
   <div class="modal_background">
     <div class="modal">
-      <slot />
+      {@render children?.()}
     </div>
   </div>
 {/if}

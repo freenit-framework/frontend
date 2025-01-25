@@ -8,7 +8,10 @@
 
   onMount(async () => {
     loading = true
-    const [roleResponse, userResponse] = await Promise.all([store.role.fetch(pk), store.user.fetchAll()])
+    const [roleResponse, userResponse] = await Promise.all([
+      store.role.fetch(pk),
+      store.user.fetchAll(),
+    ])
     if (!roleResponse.ok) {
       error(roleResponse.statusText)
     }
@@ -35,9 +38,15 @@
   const toggleMembership = (user: any) => async (event: any) => {
     let response
     if (event.target.checked) {
-      response = await store.role.assign(store.role.detail.id || store.role.detail.dn, user.id || user.dn)
+      response = await store.role.assign(
+        store.role.detail.id || store.role.detail.dn,
+        user.id || user.dn,
+      )
     } else {
-      response = await store.role.deassign(store.role.detail.id || store.role.detail.dn, user.id || user.dn)
+      response = await store.role.deassign(
+        store.role.detail.id || store.role.detail.dn,
+        user.id || user.dn,
+      )
     }
     if (!response.ok) {
       error(response.statusText)
@@ -94,10 +103,14 @@
     </div>
   </div>
   <div class="actions">
-    <button class="button" disabled={store.user.list.page === 1} onclick={fetchPrevious}>&lt;</button>
+    <button class="button" disabled={store.user.list.page === 1} onclick={fetchPrevious}
+      >&lt;</button
+    >
     {store.user.list.page}
-    <button class="button" disabled={store.user.list.page === store.user.list.pages} onclick={fetchNext}
-      >&gt;</button
+    <button
+      class="button"
+      disabled={store.user.list.total === 0 || store.user.list.page === store.user.list.pages}
+      onclick={fetchNext}>&gt;</button
     >
   </div>
 {/if}
@@ -139,4 +152,3 @@
     margin-right: 10px;
   }
 </style>
-

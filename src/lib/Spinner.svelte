@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let size = 50
+  let { size = 50 } = $props()
 </script>
 
 <div class="root">

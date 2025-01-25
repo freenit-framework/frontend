@@ -21,7 +21,7 @@
     <MenuItem href="/themes" {toggle} icon={mdiCookieEditOutline}>Themes</MenuItem>
   {/if}
   <MenuItem href="/profile" {toggle} icon={mdiFaceManProfile}>Profile</MenuItem>
-  <MenuItem href="/logout" toggle={logout} icon={mdiLogoutVariant}>Logout</MenuItem>
+  <MenuItem href="/" toggle={logout} icon={mdiLogoutVariant}>Logout</MenuItem>
 {:else}
   <MenuItem href="/register" {toggle} icon={mdiArrowDownBoldCircleOutline}>Register</MenuItem>
   <MenuItem href="/verify" {toggle} icon={mdiStamper}>Verify</MenuItem>

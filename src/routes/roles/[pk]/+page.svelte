@@ -1,7 +1,8 @@
 <script lang="ts">
   import Role from '$lib/Role.svelte'
-  import { page } from '$app/stores'
   import store from '$lib/store'
+
+  let { data: props } = $props()
 </script>
 
-<Role pk={$page.params.id} store={store} />
+<Role pk={props.pk} store={store} />

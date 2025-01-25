@@ -1,13 +1,13 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
   import { error } from '$lib/notification'
-  import BaseStore from '$lib/base-store'
 
   let email = $state('')
   let password = $state('')
   let { store } = $props()
 
-  const submit = async () => {
+  const submit = async (event: Event) => {
+    event.preventDefault()
     const response = await store.auth.login(email, password)
     if (!response.ok) {
       error(response.statusText)

@@ -1,7 +1,8 @@
 <script lang="ts">
   import User from '$lib/User.svelte'
-  import { page } from '$app/stores'
   import store from '$lib/store'
+
+  let { data: props } = $props()
 </script>
 
-<User pk={$page.params.id} store={store} />
+<User pk={props.pk} store={store} />
