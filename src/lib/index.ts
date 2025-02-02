@@ -1,3 +1,4 @@
+export { default as Input } from './Input.svelte'
 export { default as LeftPane } from './LeftPane.svelte'
 export { default as Login } from './Login.svelte'
 export { default as MenuBar } from './MenuBar.svelte'
