@@ -1,6 +1,7 @@
 <script lang="ts">
-  let { label, name, type, value } = $props()
+  let { autofocus = false, required = false, label, name, type, value = $bindable() } = $props()
   let focused = $state(value.length > 0)
+  let input: HTMLElement
 
   const focus = () => {
     focused = true
@@ -12,34 +13,65 @@
     }
   }
 
+  const select = () => {
+    focused = true
+    if (input) {
+      input.focus()
+    }
+  }
+
   $effect(() => {
     focused = value.length > 0
   })
 </script>
 
-<div class="form-group" class:focused>
-  <label class="form-label" for="input">{label}</label>
-  <input class="input" {name} {type} onfocus={focus} onblur={blur} bind:value />
+<div class="root" class:focused>
+  <!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
+  <label
+    class="label"
+    for={name}
+    onclick={select}
+    onkeyup={select}
+    onkeydown={select}
+    role="button"
+    tabindex={0}
+  >
+    {label}
+  </label>
+  <!-- svelte-ignore a11y_autofocus -->
+  <input
+    class="input"
+    {autofocus}
+    {required}
+    {name}
+    {type}
+    onfocus={focus}
+    onblur={blur}
+    bind:value
+    bind:this={input}
+  />
 </div>
 
 <style>
-  .form-group {
+  .root {
     position: relative;
+    margin-top: 10px;
   }
 
-  .form-label {
+  .label {
     position: absolute;
     left: 0;
-    top: 10px;
+    top: 12px;
     color: #999;
     background-color: #fff0;
     z-index: 10;
+    cursor: auto;
     transition:
       transform 150ms ease-out,
       font-size 150ms ease-out;
   }
 
-  .focused .form-label {
+  .focused .label {
     transform: translateY(-125%);
     font-size: 0.75em;
   }
@@ -50,6 +82,7 @@
     width: 100%;
     outline: 0;
     border: 0;
+    border-radius: 0px;
     box-shadow: 0 1px 0 0 #e5e5e5;
     transition: box-shadow 150ms ease-out;
 

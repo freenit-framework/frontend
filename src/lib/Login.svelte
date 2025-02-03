@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
   import { error } from '$lib/notification'
+  import Input from './Input.svelte'
 
   let email = $state('')
   let password = $state('')
@@ -19,14 +20,11 @@
 
 <div class="root">
   <form onsubmit={submit} class="form">
-    <label for="email">Email</label>
-    <!-- svelte-ignore a11y_autofocus -->
-    <input autofocus required type="email" name="email" bind:value={email} />
-
-    <label for="password">Password</label>
-    <input required type="password" name="password" bind:value={password} />
+    <h2>Login</h2>
+    <Input autofocus required type="email" name="email" label="Email" bind:value={email} />
+    <Input required type="password" name="password" label="Password" bind:value={password} />
     <div class="actions">
-      <button class="button">Login</button>
+      <button class="button primary">Login</button>
     </div>
   </form>
 </div>
@@ -55,4 +53,3 @@
     margin-top: 10px;
   }
 </style>
-

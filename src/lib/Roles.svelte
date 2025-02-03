@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import Modal from '$lib/Modal.svelte'
   import { error } from '$lib/notification'
+  import Input from './Input.svelte'
   import Spinner from './Spinner.svelte'
 
   let loading = $state(true)
@@ -82,8 +83,7 @@
 <Modal open={showCreate}>
   <h2>Create</h2>
   <form onsubmit={create}>
-    <!-- svelte-ignore a11y_autofocus -->
-    <input bind:value={name} autofocus />
+    <Input bind:value={name} autofocus type="text" name="name" label="Name" />
     <div class="actions">
       <button class="button primary" type="submit">Create</button>
       <button class="button error" onclick={toggleShowCreate}>Close</button>
