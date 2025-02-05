@@ -30,11 +30,10 @@
   <label
     class="label"
     for={name}
-    onclick={select}
-    onkeyup={select}
-    onkeydown={select}
+    onclick={focused ? null : select}
+    onkeyup={focused ? null : select}
+    onkeydown={focused ? null : select}
     role="button"
-    tabindex={0}
   >
     {label}
   </label>
