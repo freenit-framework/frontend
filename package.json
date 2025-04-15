@@ -35,7 +35,7 @@
     }
   },
   "peerDependencies": {
-    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/kit": "^2.20.6",
     "@zerodevx/svelte-toast": "^0.9.6",
     "chota": "^0.9.2",
     "svelte": "^5.0.0"
@@ -45,7 +45,7 @@
     "@eslint/js": "^9.17.0",
     "@mdi/js": "^7.4.47",
     "@sveltejs/adapter-auto": "^3.0.0",
-    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/kit": "^2.20.6",
     "@sveltejs/package": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@zerodevx/svelte-toast": "^0.9.6",
