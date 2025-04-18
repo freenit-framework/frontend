@@ -33,5 +33,5 @@ body {
   --font-size: 1.6rem;
   --font-color: #333333;
   --font-family-sans: sans-serif;
-  --font-family-mono: monaco, 'Consolas', 'Lucida Console', monospace;
+  --font-family-mono: monaco, Consolas, 'Lucida Console', monospace;
 }

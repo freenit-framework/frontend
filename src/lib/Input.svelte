@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { autofocus = false, required = false, label, name, type, value = $bindable() } = $props()
+  let { autofocus = false, required = false, label, name, type, value = $bindable(), list = '' } = $props()
   let focused = $state(value.length > 0)
   let input: HTMLElement
 
@@ -48,6 +48,7 @@
     onblur={blur}
     bind:value
     bind:this={input}
+    {list}
   />
 </div>
 
