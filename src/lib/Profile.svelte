@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { utils } from '$lib'
 
   let { store } = $props()
 
@@ -9,10 +10,10 @@
 </script>
 
 <div class="root">
-  <div>ID: {store.user.profile.id || store.user.profile.dn}</div>
+  <div>ID: {utils.id(store.user.profile)}</div>
   <div>Email: {store.user.profile.email}</div>
   <div>
-    Active: {store.user.profile.active || store.user.profile.userClass == 'enabled' ? 'yes' : 'no'}
+    Active: {store.user.profile.active ? 'yes' : 'no'}
   </div>
   <div>Admin: {store.user.profile.admin ? 'yes' : 'no'}</div>
 </div>

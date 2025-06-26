@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { error } from '$lib/notification'
+  import { notification, utils } from '$lib'
   import Spinner from './Spinner.svelte'
 
   let loading = $state(true)
@@ -13,10 +13,10 @@
       store.user.fetchAll(),
     ])
     if (!roleResponse.ok) {
-      error(roleResponse.statusText)
+      notification.error(roleResponse.statusText)
     }
     if (!userResponse.ok) {
-      error(userResponse.statusText)
+      notification.error(userResponse.statusText)
     }
     loading = false
   })
@@ -38,18 +38,12 @@
   const toggleMembership = (user: any) => async (event: any) => {
     let response
     if (event.target.checked) {
-      response = await store.role.assign(
-        store.role.detail.id ?? store.role.detail.dn,
-        user.id ?? user.dn,
-      )
+      response = await store.role.assign(utils.name(store.role.detail), utils.uid(user))
     } else {
-      response = await store.role.deassign(
-        store.role.detail.id ?? store.role.detail.dn,
-        user.id ?? user.dn,
-      )
+      response = await store.role.deassign(utils.name(store.role.detail), utils.uid(user))
     }
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     } else {
       if (store.role.detail.users) {
         store.role.detail.users = [...store.role.detail.users, user]
@@ -62,14 +56,14 @@
   const fetchPrevious = async () => {
     const response = await store.user.fetchAll(store.user.list.page - 1)
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     }
   }
 
   const fetchNext = async () => {
     const response = await store.user.fetchAll(store.user.list.page + 1)
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     }
   }
 </script>
@@ -87,10 +81,10 @@
       <div class="heading">Admin</div>
       <div class="heading">Member</div>
       {#each store.user.list.data as user}
-        <div class="data">{user.id || user.dn}</div>
-        <a class="data" href={`/users/${user.id ?? user.dn}`}>{user.email}</a>
+        <div class="data">{utils.uid(user)}</div>
+        <a class="data" href={`/users/${utils.uid(user)}`}>{user.email}</a>
         <div class="data">
-          <input disabled type="checkbox" checked={user.active ?? user.userClass == 'enabled'} />
+          <input disabled type="checkbox" checked={user.active} />
         </div>
         <div class="data">
           <input disabled type="checkbox" checked={user.admin} />

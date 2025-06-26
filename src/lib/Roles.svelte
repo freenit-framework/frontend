@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import Modal from '$lib/Modal.svelte'
-  import { error } from '$lib/notification'
+  import { notification, utils } from '$lib'
   import Input from './Input.svelte'
   import Spinner from './Spinner.svelte'
 
@@ -14,7 +14,7 @@
     loading = true
     const response = await store.role.fetchAll()
     if (!response.ok) {
-      error(response.statusText)
+      notification.nerror(response.statusText)
     }
     loading = false
   })
@@ -22,14 +22,14 @@
   async function fetchPrevious() {
     const response = await store.role.fetchAll(store.role.list.page - 1)
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     }
   }
 
   async function fetchNext() {
     const response = await store.role.fetchAll(store.role.list.page + 1)
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     }
   }
 
@@ -42,7 +42,7 @@
     event.preventDefault()
     const response = await store.role.create({ name })
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     }
     name = ''
     showCreate = false
@@ -63,10 +63,10 @@
         <div class="heading">Name</div>
         {#each store.role.list.data as role}
           <div class="data">
-            <a href={`/roles/${role.id || role.dn}`}>{role.id || role.dn}</a>
+            <a href={`/roles/${utils.name(role)}`}>{utils.id(role)}</a>
           </div>
           <div class="data">
-            <a href={`/roles/${role.id || role.dn}`}>{role.name || role.cn}</a>
+            <a href={`/roles/${utils.name(role)}`}>{utils.name(role)}</a>
           </div>
           <div class="border"></div>
         {/each}

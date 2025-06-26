@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { error } from '$lib/notification'
+  import { notification, utils } from '$lib'
   import Spinner from './Spinner.svelte'
 
   let loading = $state(true)
@@ -9,7 +9,7 @@
   onMount(async () => {
     const response = await store.user.fetchAll()
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     }
     loading = false
   })
@@ -17,14 +17,14 @@
   async function fetchPrevious() {
     const response = await store.user.fetchAll(store.user.list.page - 1)
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     }
   }
 
   async function fetchNext() {
     const response = await store.user.fetchAll(store.user.list.page + 1)
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     }
   }
 </script>
@@ -40,12 +40,12 @@
       <div class="heading">Active</div>
       <div class="heading">Admin</div>
       {#each store.user.list.data as user}
-        <div class="data">{user.id || user.dn}</div>
+        <div class="data">{utils.uid(user)}</div>
         <div class="data">
-          <a href={`/users/${user.id || user.dn}`}>{user.email}</a>
+          <a href={`/users/${utils.uid(user)}`}>{user.email}</a>
         </div>
         <div class="data">
-          <input disabled type="checkbox" checked={user.active || user.userClass == 'enabled'} />
+          <input disabled type="checkbox" checked={user.active} />
         </div>
         <div class="data">
           <input disabled={!store.user.profile.admin} type="checkbox" checked={user.admin} />

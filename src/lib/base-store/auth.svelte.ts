@@ -1,4 +1,4 @@
-import { methods } from '..'
+import { methods, utils } from '..'
 
 export default class AuthStore {
   access = $state(new Date(0))
@@ -38,7 +38,7 @@ export default class AuthStore {
   }
 
   loggedin = () => {
-    return Boolean(this.store.user.profile.id)
+    return Boolean(utils.id(this.store.user.profile))
   }
 
   register = async (email: string, password: string) => {

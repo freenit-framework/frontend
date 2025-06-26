@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { error } from '$lib/notification'
+  import { notification, utils } from '$lib'
   import Spinner from './Spinner.svelte'
 
   let { pk = 0, store } = $props()
@@ -13,10 +13,10 @@
       store.role.fetchAll(),
     ])
     if (!userResponse.ok) {
-      error(userResponse.statusText)
+      notification.error(userResponse.statusText)
     }
     if (!roleResponse.ok) {
-      error(roleResponse.statusText)
+      notification.error(roleResponse.statusText)
     }
     loading = false
   })
@@ -41,21 +41,21 @@
       )
     }
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     }
   }
 
   async function fetchPrevious() {
     const response = await store.role.fetchAll(store.role.list.page - 1)
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     }
   }
 
   async function fetchNext() {
     const response = await store.role.fetchAll(store.role.list.page + 1)
     if (!response.ok) {
-      error(response.statusText)
+      notification.error(response.statusText)
     }
   }
 </script>
@@ -72,8 +72,8 @@
       <div class="heading">Member</div>
 
       {#each store.role.list.data as role}
-        <div class="data">{role.id ?? role.dn}</div>
-        <a class="data" href={`/roles/${role.id ?? role.dn}`}>{role.name ?? role.cn}</a>
+        <div class="data">{utils.id(role)}</div>
+        <a class="data" href={`/roles/${utils.name(role)}`}>{utils.name(role)}</a>
         <div class="data">
           <input type="checkbox" checked={member(role)} onchange={toggleMembership(role)} />
         </div>
