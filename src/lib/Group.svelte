@@ -9,7 +9,7 @@
   onMount(async () => {
     loading = true
     const [groupResponse, userResponse] = await Promise.all([
-      store.group.fetch(fqdn),
+      store.group.fetch(fqdn, name),
       store.user.fetchAll(),
     ])
     if (!groupResponse.ok) {
@@ -20,6 +20,25 @@
     }
     loading = false
   })
+
+  const member = (user: any) => {
+    const uids = store.group.detail.users ?? []
+    const myuids = uids.filter((uid: any) => uid === user.uidNumber)
+    return myuids.length > 0
+  }
+
+  const toggleMembership = (user: any) => async (event: any) => {
+    let response
+    const [_, domain] = user.email.split('@')
+    if (event.target.checked) {
+      response = await store.group.assign(domain, store.group.detail.cn, user.uidNumber)
+    } else {
+      response = await store.group.deassign(domain, store.group.detail.cn, user.uidNumber)
+    }
+    if (!response.ok) {
+      notification.error(response.statusText)
+    }
+  }
 
   const fetchPrevious = async () => {
     const response = await store.user.fetchAll(store.user.list.page - 1)
@@ -44,8 +63,12 @@
     <h3>Users</h3>
     <div class="table">
       <div class="heading">Name</div>
+      <div class="heading">Member</div>
       {#each store.user.list.data as user}
         <a class="data" href={`/users/${user.cn}`}>{user.cn}</a>
+        <div class="data">
+          <input type="checkbox" checked={member(user)} onchange={toggleMembership(user)} />
+        </div>
         <div class="border"></div>
       {/each}
     </div>
@@ -69,7 +92,7 @@
     border-radius: 5px;
     padding: 10px;
     display: grid;
-    grid-template-columns: repeat(1, auto);
+    grid-template-columns: repeat(2, auto);
   }
 
   .heading {
@@ -83,7 +106,7 @@
   }
 
   .border {
-    grid-column: 1 / 2;
+    grid-column: 1 / 3;
     border-top: 1px solid #eee;
   }
 

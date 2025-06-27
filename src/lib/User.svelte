@@ -5,6 +5,7 @@
 
   let { pk = 0, store } = $props()
   let loading = $state(true)
+  let domain = $state('')
 
   onMount(async () => {
     loading = true
@@ -14,10 +15,18 @@
     ])
     if (!userResponse.ok) {
       notification.error(userResponse.statusText)
+      return
     }
     if (!roleResponse.ok) {
       notification.error(roleResponse.statusText)
+      return
     }
+    const [_, d] = store.user.detail.email.split('@')
+    const groupResponse = await store.group.fetchAll(d)
+    if (!groupResponse.ok) {
+      notification.error(groupResponse.statusText)
+    }
+    domain = d
     loading = false
   })
 
@@ -61,12 +70,10 @@
     <h2>User: {store.user.detail.email}</h2>
     <h3>Roles</h3>
     <div class="table">
-      <div class="heading">ID</div>
       <div class="heading">Name</div>
       <div class="heading">Member</div>
 
       {#each store.role.list.data as role}
-        <div class="data">{utils.id(role)}</div>
         <a class="data" href={`/roles/${utils.name(role)}`}>{utils.name(role)}</a>
         <div class="data">
           <input type="checkbox" checked={member(role)} onchange={toggleMembership(role)} />
@@ -86,6 +93,32 @@
       onclick={fetchNext}>&gt;</button
     >
   </div>
+  <div class="container">
+    <h3>Groups</h3>
+    <div class="table">
+      <div class="heading">Name</div>
+      <div class="heading">Member</div>
+
+      {#each store.group.list.data as group}
+        <a class="data" href={`/groups/${domain}/${utils.name(group)}`}>{utils.name(group)}</a>
+        <div class="data">
+          <input type="checkbox" checked={member(group)} onchange={toggleMembership(group)} />
+        </div>
+        <div class="border"></div>
+      {/each}
+    </div>
+  </div>
+  <div class="actions">
+    <button class="button" disabled={store.group.list.page === 1} onclick={fetchPrevious}
+      >&lt;</button
+    >
+    {store.group.list.page}
+    <button
+      class="button"
+      disabled={store.group.list.total === 0 || store.group.list.page === store.group.list.pages}
+      onclick={fetchNext}>&gt;</button
+    >
+  </div>
 {/if}
 
 <style>
@@ -94,7 +127,7 @@
     border-radius: 5px;
     padding: 10px;
     display: grid;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(2, auto);
   }
 
   .heading {
@@ -108,7 +141,7 @@
   }
 
   .border {
-    grid-column: 1 / 4;
+    grid-column: 1 / 3;
     border-top: 1px solid #eee;
   }
 
