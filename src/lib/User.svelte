@@ -30,15 +30,9 @@
   const toggleMembership = (role: any) => async (event: any) => {
     let response
     if (event.target.checked) {
-      response = await store.role.assign(
-        role.id || role.dn,
-        store.user.detail.id || store.user.detail.dn,
-      )
+      response = await store.role.assign(utils.name(role), utils.uid(store.user.detail))
     } else {
-      response = await store.role.deassign(
-        role.id || role.dn,
-        store.user.detail.id || store.user.detail.dn,
-      )
+      response = await store.role.deassign(utils.name(role), utils.uid(store.user.detail))
     }
     if (!response.ok) {
       notification.error(response.statusText)

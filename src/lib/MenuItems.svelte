@@ -7,9 +7,10 @@
     mdiFaceManProfile,
     mdiLoginVariant,
     mdiLogoutVariant,
-    mdiStamper,
+    mdiSitemap,
   } from '@mdi/js'
   import MenuItem from '$lib/MenuItem.svelte'
+  import { dbtype } from './utils.js'
 
   let { toggle, logout, store } = $props()
 </script>
@@ -19,11 +20,13 @@
     <MenuItem href="/users" {toggle} icon={mdiAccount}>Users</MenuItem>
     <MenuItem href="/roles" {toggle} icon={mdiAccountGroup}>Roles</MenuItem>
     <MenuItem href="/themes" {toggle} icon={mdiCookieEditOutline}>Themes</MenuItem>
+    {#if dbtype(store.user.profile) === "ldap"}
+      <MenuItem href="/domains" {toggle} icon={mdiSitemap}>Domains</MenuItem>
+    {/if}
   {/if}
   <MenuItem href="/profile" {toggle} icon={mdiFaceManProfile}>Profile</MenuItem>
   <MenuItem href="/" toggle={logout} icon={mdiLogoutVariant}>Logout</MenuItem>
 {:else}
   <MenuItem href="/register" {toggle} icon={mdiArrowDownBoldCircleOutline}>Register</MenuItem>
-  <MenuItem href="/verify" {toggle} icon={mdiStamper}>Verify</MenuItem>
   <MenuItem href="/login" {toggle} icon={mdiLoginVariant}>Login</MenuItem>
 {/if}
