@@ -25,6 +25,7 @@
     overflow-x: hidden;
     overflow-y: scroll;
     transition: width 0.5s;
+    z-index: 999;
   }
 
   .wrapper {

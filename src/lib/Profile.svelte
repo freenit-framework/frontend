@@ -16,6 +16,7 @@
     Active: {store.user.profile.active ? 'yes' : 'no'}
   </div>
   <div>Admin: {store.user.profile.admin ? 'yes' : 'no'}</div>
+  <a href="/profile/password" class="button primary">Change Password</a>
 </div>
 
 <style>

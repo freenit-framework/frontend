@@ -14,15 +14,29 @@
     loading = false
   })
 
-  async function fetchPrevious() {
+  const fetchPrevious = async () => {
     const response = await store.user.fetchAll(store.user.list.page - 1)
     if (!response.ok) {
       notification.error(response.statusText)
     }
   }
 
-  async function fetchNext() {
+  const fetchNext = async () => {
     const response = await store.user.fetchAll(store.user.list.page + 1)
+    if (!response.ok) {
+      notification.error(response.statusText)
+    }
+  }
+
+  const toggleActive = (user) => async () => {
+    const response = await store.user.edit(utils.uid(user), { active: !user.active })
+    if (!response.ok) {
+      notification.error(response.statusText)
+    }
+  }
+
+  const toggleAdmin = (user) => async () => {
+    const response = await store.user.edit(utils.uid(user), { admin: !user.admin })
     if (!response.ok) {
       notification.error(response.statusText)
     }
@@ -45,19 +59,25 @@
           <a href={`/users/${utils.uid(user)}`}>{user.email}</a>
         </div>
         <div class="data">
-          <input disabled type="checkbox" checked={user.active} />
+          <input type="checkbox" checked={user.active} onclick={toggleActive(user)} />
         </div>
         <div class="data">
-          <input disabled={!store.user.profile.admin} type="checkbox" checked={user.admin} />
+          <input type="checkbox" checked={user.admin} onclick={toggleAdmin(user)} />
         </div>
         <div class="border"></div>
       {/each}
     </div>
   </div>
   <div class="actions">
-    <button class="button" disabled={store.user.list.page === 1} onclick={fetchPrevious}>&lt;</button>
+    <button class="button" disabled={store.user.list.page === 1} onclick={fetchPrevious}
+      >&lt;</button
+    >
     {store.user.list.page}
-    <button class="button" disabled={store.user.list.page >= store.user.list.pages} onclick={fetchNext}>&gt;</button>
+    <button
+      class="button"
+      disabled={store.user.list.page >= store.user.list.pages}
+      onclick={fetchNext}>&gt;</button
+    >
   </div>
 {/if}
 
@@ -98,4 +118,3 @@
     border-top: 1px solid #eee;
   }
 </style>
-
