@@ -1,3 +1,5 @@
+export { default as Domain } from './Domain.svelte'
+export { default as Domains } from './Domains.svelte'
 export { default as Input } from './Input.svelte'
 export { default as LeftPane } from './LeftPane.svelte'
 export { default as Login } from './Login.svelte'
