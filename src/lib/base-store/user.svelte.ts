@@ -75,4 +75,15 @@ export default class UserStore {
     }
     return response
   }
+
+  fetchByDomain = async (domain: string) => {
+    await this.store.auth.refresh_token()
+    const response = await methods.get(`${this.prefix}/domains/${domain}/users`)
+    if (response.ok) {
+      const data = await response.json()
+      this.list = data
+      return { ...data, ok: true }
+    }
+    return response
+  }
 }

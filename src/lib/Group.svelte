@@ -10,7 +10,7 @@
     loading = true
     const [groupResponse, userResponse] = await Promise.all([
       store.group.fetch(fqdn, name),
-      store.user.fetchAll(),
+      store.user.fetchByDomain(fqdn),
     ])
     if (!groupResponse.ok) {
       notification.error(groupResponse.statusText)
@@ -59,13 +59,13 @@
   <Spinner size={200} />
 {:else}
   <div class="container">
-    <h2>Group: {fqdn}/{name}</h2>
+    <h2>Group: {name}</h2>
     <h3>Users</h3>
     <div class="table">
       <div class="heading">Name</div>
       <div class="heading">Member</div>
       {#each store.user.list.data as user}
-        <a class="data" href={`/users/${user.cn}`}>{user.cn}</a>
+        <a class="data" href={`/users/${user.uidNumber}`}>{user.uid}</a>
         <div class="data">
           <input type="checkbox" checked={member(user)} onchange={toggleMembership(user)} />
         </div>

@@ -30,18 +30,46 @@
     loading = false
   })
 
-  const member = (role: any) => {
+  const roleMember = (role: any) => {
     const roles = store.user.detail.roles ?? []
-    const myroles = roles.filter((r: any) => r.id === role.id)
+    let myroles
+    if (utils.dbtype(store.user.profile) === "ldap") {
+      myroles = roles.filter((r: any) => r === role.dn)
+    } else {
+      myroles = roles.filter((r: any) => r === role.id)
+    }
     return myroles.length > 0
   }
 
-  const toggleMembership = (role: any) => async (event: any) => {
+  const groupMember = (group: any) => {
+    const groups = store.user.detail.groups ?? []
+    let mygroups
+    if (utils.dbtype(store.user.profile) === "ldap") {
+      mygroups = groups.filter((r: any) => r === group.gidNumber)
+    } else {
+      mygroups = groups.filter((r: any) => r === group.id)
+    }
+    return mygroups.length > 0
+  }
+
+  const toggleRoleMembership = (role: any) => async (event: any) => {
     let response
     if (event.target.checked) {
       response = await store.role.assign(utils.name(role), utils.uid(store.user.detail))
     } else {
       response = await store.role.deassign(utils.name(role), utils.uid(store.user.detail))
+    }
+    if (!response.ok) {
+      notification.error(response.statusText)
+    }
+  }
+
+  const toggleGroupMembership = (group: any) => async (event: any) => {
+    let response
+    if (event.target.checked) {
+      response = await store.group.assign(domain, utils.name(group), utils.uid(store.user.detail))
+    } else {
+      response = await store.group.deassign(domain, utils.name(group), utils.uid(store.user.detail))
     }
     if (!response.ok) {
       notification.error(response.statusText)
@@ -76,7 +104,7 @@
       {#each store.role.list.data as role}
         <a class="data" href={`/roles/${utils.name(role)}`}>{utils.name(role)}</a>
         <div class="data">
-          <input type="checkbox" checked={member(role)} onchange={toggleMembership(role)} />
+          <input type="checkbox" checked={roleMember(role)} onchange={toggleRoleMembership(role)} />
         </div>
         <div class="border"></div>
       {/each}
@@ -102,7 +130,7 @@
       {#each store.group.list.data as group}
         <a class="data" href={`/groups/${domain}/${utils.name(group)}`}>{utils.name(group)}</a>
         <div class="data">
-          <input type="checkbox" checked={member(group)} onchange={toggleMembership(group)} />
+          <input type="checkbox" checked={groupMember(group)} onchange={toggleGroupMembership(group)} />
         </div>
         <div class="border"></div>
       {/each}

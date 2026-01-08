@@ -45,7 +45,7 @@
     <div class="table">
       <div class="heading">Name</div>
       {#each store.group.list.data as group}
-        <a class="data" href={`/groups/${fqdn}/${group.cn}`}>{group.cn}</a>
+        <a class="data" href={`/domains/${fqdn}/${group.cn}`}>{group.cn}</a>
         <div class="border"></div>
       {/each}
     </div>
