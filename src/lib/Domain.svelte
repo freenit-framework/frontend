@@ -1,10 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { notification, utils } from '$lib'
+  import { notification, utils, Modal } from '$lib'
+  import Input from './Input.svelte'
   import Spinner from './Spinner.svelte'
 
   let loading = $state(true)
   let { fqdn, store } = $props()
+  let name = $state('')
+  let showCreate = $state(false)
 
   onMount(async () => {
     loading = true
@@ -34,6 +37,21 @@
       notification.error(response.statusText)
     }
   }
+
+  function toggleShowCreate(event: Event) {
+    event.preventDefault()
+    showCreate = !showCreate
+  }
+
+  async function create(event: Event) {
+    event.preventDefault()
+    const response = await store.group.create(fqdn, { name })
+    if (!response.ok) {
+      notification.error(response.statusText)
+    }
+    name = ''
+    showCreate = false
+  }
 </script>
 
 {#if loading}
@@ -41,7 +59,10 @@
 {:else}
   <div class="container">
     <h2>Domain: {fqdn}</h2>
-    <h3>Groups</h3>
+    <div class="header">
+      <h2>Groups</h2>
+      <button class="button primary" onclick={toggleShowCreate}>Create</button>
+    </div>
     <div class="table">
       <div class="heading">Name</div>
       {#each store.group.list.data as group}
@@ -51,7 +72,7 @@
     </div>
   </div>
   <div class="actions">
-    <button class="button" disabled={store.group.list.page === 1} onclick={fetchPrevious}
+    <button class="button" disabled={store.group.list.page <= 1} onclick={fetchPrevious}
       >&lt;</button
     >
     {store.group.list.page}
@@ -62,6 +83,17 @@
     >
   </div>
 {/if}
+
+<Modal open={showCreate}>
+  <h2>Create</h2>
+  <form onsubmit={create}>
+    <Input bind:value={name} autofocus type="text" name="name" label="Name" />
+    <div class="actions">
+      <button class="button primary" type="submit">Create</button>
+      <button class="button error" onclick={toggleShowCreate}>Close</button>
+    </div>
+  </form>
+</Modal>
 
 <style>
   .table {
@@ -98,5 +130,11 @@
   .actions button {
     margin-left: 10px;
     margin-right: 10px;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 </style>
