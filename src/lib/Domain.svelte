@@ -8,6 +8,8 @@
   let { fqdn, store } = $props()
   let name = $state('')
   let showCreate = $state(false)
+  let showDestroy = $state(false)
+  let groupToDestroy
 
   onMount(async () => {
     loading = true
@@ -43,6 +45,16 @@
     showCreate = !showCreate
   }
 
+  const toggleShowDestroy = (group) => (event: Event) => {
+    event.preventDefault()
+    showDestroy = !showDestroy
+    if (showDestroy) {
+      groupToDestroy = group
+    } else {
+      groupToDestroy = null
+    }
+  }
+
   async function create(event: Event) {
     event.preventDefault()
     const response = await store.group.create(fqdn, { name })
@@ -51,6 +63,17 @@
     }
     name = ''
     showCreate = false
+  }
+
+  async function destroy(event: Event) {
+    event.preventDefault()
+    console.log(groupToDestroy)
+    const response = await store.group.destroy(fqdn, groupToDestroy.cn)
+    if (!response.ok) {
+      notification.error(response.statusText)
+    }
+    groupToDestroy = null
+    showDestroy = false
   }
 </script>
 
@@ -66,7 +89,10 @@
     <div class="table">
       <div class="heading">Name</div>
       {#each store.group.list.data as group}
-        <a class="data" href={`/domains/${fqdn}/${group.cn}`}>{group.cn}</a>
+        <div class="group">
+          <a class="data" href={`/domains/${fqdn}/${group.cn}`}>{group.cn}</a>
+          <button class="button error" onclick={toggleShowDestroy(group)}>Destroy</button>
+        </div>
         <div class="border"></div>
       {/each}
     </div>
@@ -95,6 +121,16 @@
   </form>
 </Modal>
 
+<Modal open={showDestroy}>
+  <h2>Destroy</h2>
+  <form onsubmit={destroy}>
+    <div class="actions">
+      <button class="button primary" type="submit">destroy</button>
+      <button class="button error" onclick={toggleShowDestroy(null)}>Close</button>
+    </div>
+  </form>
+</Modal>
+
 <style>
   .table {
     border: 1px solid #ddd;
@@ -107,6 +143,14 @@
   .heading {
     font-weight: bold;
     background-color: #eee;
+    padding: 5px;
+  }
+
+  .group {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 5px;
   }
 

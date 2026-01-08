@@ -62,7 +62,7 @@ export default class GroupStore {
     const response = await methods.delete(`${this.prefix}/domains/${domain}/groups/${group}`)
     if (response.ok) {
       const data = await response.json()
-      this.set(data)
+      this.list.data = this.list.data.filter(gr => gr.cn !== group)
       return { ...data, ok: true }
     }
     return response
