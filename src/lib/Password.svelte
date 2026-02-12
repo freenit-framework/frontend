@@ -17,7 +17,7 @@
       notification.error('Passwords do not match')
       return
     }
-    const response = await store.user.edit(utils.uid(store.user.profile), { password })
+    const response = await store.user.editProfile({ password })
     if (!response.ok) {
       notification.error(response.statusText)
     } else {
