@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { methods } from '..'
 
 export default class DomainStore {

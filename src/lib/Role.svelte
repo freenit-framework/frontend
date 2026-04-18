@@ -4,7 +4,7 @@
   import Spinner from './Spinner.svelte'
 
   let loading = $state(true)
-  let { pk = 0, store } = $props()
+  let { pk, store } = $props<{ pk: string | number; store: any }>()
 
   onMount(async () => {
     loading = true

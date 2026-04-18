@@ -9,7 +9,7 @@
   let name = $state('')
   let showCreate = $state(false)
   let showDestroy = $state(false)
-  let groupToDestroy
+  let groupToDestroy: Record<string, any> | null = null
 
   onMount(async () => {
     loading = true
@@ -45,7 +45,7 @@
     showCreate = !showCreate
   }
 
-  const toggleShowDestroy = (group) => (event: Event) => {
+  const toggleShowDestroy = (group: Record<string, any> | null) => (event: Event) => {
     event.preventDefault()
     showDestroy = !showDestroy
     if (showDestroy) {
@@ -67,6 +67,9 @@
 
   async function destroy(event: Event) {
     event.preventDefault()
+    if (!groupToDestroy) {
+      return
+    }
     console.log(groupToDestroy)
     const response = await store.group.destroy(fqdn, groupToDestroy.cn)
     if (!response.ok) {

@@ -3,7 +3,7 @@
   import { notification, utils } from '$lib'
   import Spinner from './Spinner.svelte'
 
-  let { pk = 0, store } = $props()
+  let { pk, store } = $props<{ pk: string | number; store: any }>()
   let loading = $state(true)
   let domain = $state('')
 

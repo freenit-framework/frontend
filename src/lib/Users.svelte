@@ -28,14 +28,14 @@
     }
   }
 
-  const toggleActive = (user) => async () => {
+  const toggleActive = (user: Record<string, any>) => async () => {
     const response = await store.user.edit(utils.uid(user), { active: !user.active })
     if (!response.ok) {
       notification.error(response.statusText)
     }
   }
 
-  const toggleAdmin = (user) => async () => {
+  const toggleAdmin = (user: Record<string, any>) => async () => {
     const response = await store.user.edit(utils.uid(user), { admin: !user.admin })
     if (!response.ok) {
       notification.error(response.statusText)

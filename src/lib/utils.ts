@@ -1,4 +1,6 @@
-export const dbtype = (data) => {
+type Entity = Record<string, any> | null | undefined
+
+export const dbtype = (data: Entity) => {
   if (!data) {
     return null
   }
@@ -10,7 +12,10 @@ export const dbtype = (data) => {
   }
 }
 
-export const id = (data) => {
+export const id = (data: Entity) => {
+  if (!data) {
+    return
+  }
   const dbt = dbtype(data)
   if (dbt === 'sql') {
     return data.id
@@ -20,7 +25,10 @@ export const id = (data) => {
   }
 }
 
-export const uid = (data) => {
+export const uid = (data: Entity) => {
+  if (!data) {
+    return
+  }
   const dbt = dbtype(data)
   if (dbt === 'sql') {
     return data.id
@@ -35,7 +43,10 @@ export const uid = (data) => {
   }
 }
 
-export const name = (data) => {
+export const name = (data: Entity) => {
+  if (!data) {
+    return
+  }
   const dbt = dbtype(data)
   if (dbt === 'sql') {
     return data.name

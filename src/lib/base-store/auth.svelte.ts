@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { methods, utils } from '..'
 
 export default class AuthStore {

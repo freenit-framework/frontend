@@ -1,23 +1,26 @@
 import { defineConfig } from 'vitest/config'
+import { loadEnv, type UserConfig } from 'vite'
 import { sveltekit } from '@sveltejs/kit/vite'
 
-const config = defineConfig({
-  plugins: [sveltekit()],
-
-  test: {
-    include: ['src/**/*.{test,spec}.{js,ts}'],
-  },
-})
-
-if (process.env.BACKEND_URL) {
-  config.server = {
-    proxy: {
-      '/api': {
-        target: process.env.BACKEND_URL,
-        changeOrigin: true,
-      },
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, '.', '')
+  const config: UserConfig = {
+    plugins: [sveltekit()],
+    test: {
+      include: ['src/**/*.{test,spec}.{js,ts}'],
     },
   }
-}
 
-export default config
+  if (env.BACKEND_URL) {
+    config.server = {
+      proxy: {
+        '/api': {
+          target: env.BACKEND_URL,
+          changeOrigin: true,
+        },
+      },
+    }
+  }
+
+  return config
+})

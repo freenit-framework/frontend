@@ -16,6 +16,8 @@ export function error(message: string) {
   })
 }
 
+export const nerror = error
+
 export function success(message: string) {
   const style = getComputedStyle(document.body)
   const background = style.getPropertyValue('--color-primary')

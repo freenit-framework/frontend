@@ -1,5 +1,5 @@
 <script lang="ts">
-  import 'chota'
+  import 'chota/dist/chota.min.css'
   import './app.css'
   import { onMount } from 'svelte'
   import { SvelteToast } from '@zerodevx/svelte-toast'
