@@ -15,6 +15,7 @@ if (process.env.BACKEND_URL) {
       '/api': {
         target: process.env.BACKEND_URL,
         changeOrigin: true,
+        ws: true,
       },
     },
   }

@@ -1,0 +1,452 @@
+import { writable, derived, get } from 'svelte/store'
+import type { Mailbox, Email, JMAPSession, Identity, ComposeParams, EmailAddress } from './types'
+
+// WebSocket push
+let ws: WebSocket | null = null
+let wsReconnectTimer: ReturnType<typeof setTimeout> | null = null
+let wsReconnectDelay = 1000
+
+async function refreshSession() {
+  try {
+    const response = await fetch('/api/v1/mail/jmap/session', {
+      headers: { Accept: 'application/json' },
+    })
+    if (!response.ok) return
+    jmapSession.set(await response.json())
+  } catch { /* non-fatal */ }
+}
+
+export function connectMailWebSocket() {
+  if (ws?.readyState === WebSocket.OPEN || ws?.readyState === WebSocket.CONNECTING) return
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:'
+  ws = new WebSocket(`${proto}//${location.host}/api/v1/mail/jmap/ws`)
+
+  ws.onopen = async () => {
+    wsReconnectDelay = 1000
+    // Re-fetch session on reconnect in case server restarted and accountIds changed
+    await refreshSession()
+    ws!.send(JSON.stringify({
+      '@type': 'WebSocketPushEnable',
+      dataTypes: ['Email', 'Mailbox', 'Thread', 'EmailDelivery'],
+      pushState: null,
+    }))
+  }
+
+  ws.onmessage = async (ev) => {
+    try {
+      const msg = JSON.parse(ev.data as string)
+      if (msg['@type'] === 'StateChange') await handleStateChange(msg.changed ?? {})
+    } catch { /* ignore malformed frames */ }
+  }
+
+  ws.onclose = () => {
+    ws = null
+    wsReconnectTimer = setTimeout(() => {
+      wsReconnectTimer = null
+      connectMailWebSocket()
+    }, wsReconnectDelay)
+    wsReconnectDelay = Math.min(wsReconnectDelay * 2, 30000)
+  }
+
+  ws.onerror = () => ws?.close()
+}
+
+export function disconnectMailWebSocket() {
+  if (wsReconnectTimer) { clearTimeout(wsReconnectTimer); wsReconnectTimer = null }
+  ws?.close()
+  ws = null
+}
+
+async function handleStateChange(changed: Record<string, Record<string, string>>) {
+  const accountId = get(primaryAccountId)
+  // Match on any account if our primary isn't listed (impersonation may shift ids)
+  const changes = accountId ? (changed[accountId] ?? Object.values(changed)[0]) : Object.values(changed)[0]
+  if (!changes) return
+
+  if ('Mailbox' in changes) await fetchMailboxes()
+
+  const mailboxId = get(selectedMailboxId)
+  if ('Email' in changes && mailboxId) await fetchEmails(mailboxId)
+}
+
+// Data
+export const jmapSession = writable<JMAPSession | null>(null)
+export const mailboxes = writable<Mailbox[]>([])
+export const emails = writable<Email[]>([])
+export const emailContent = writable<Record<string, Email>>({})
+export const identities = writable<Identity[]>([])
+export const selectedMailboxId = writable<string | null>(null)
+export const selectedEmailId = writable<string | null>(null)
+export const composeParams = writable<ComposeParams | null>(null)
+
+// UI
+export const mailLoading = writable(false)
+export const mailError = writable<string | null>(null)
+
+// Derived
+export const primaryAccountId = derived(jmapSession, session => {
+  if (!session) return null
+  return (
+    session.primaryAccounts['urn:ietf:params:jmap:mail'] ??
+    Object.keys(session.accounts)[0] ??
+    null
+  )
+})
+
+export const selectedMailbox = derived(
+  [mailboxes, selectedMailboxId],
+  ([$mailboxes, $id]) => $mailboxes.find(m => m.id === $id) ?? null,
+)
+
+export const selectedEmail = derived(
+  [emails, selectedEmailId],
+  ([$emails, $id]) => $emails.find(e => e.id === $id) ?? null,
+)
+
+export const inboxMailbox = derived(mailboxes, $mailboxes =>
+  $mailboxes.find(m => m.role === 'inbox') ?? null,
+)
+
+// JMAP request — auth is handled server-side via the freenit session cookie
+async function jmapRequest(methodCalls: unknown[]): Promise<{
+  methodResponses: Array<[string, Record<string, unknown>, string]>
+}> {
+  const response = await fetch('/api/v1/mail/jmap', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      using: [
+        'urn:ietf:params:jmap:core',
+        'urn:ietf:params:jmap:mail',
+        'urn:ietf:params:jmap:submission',
+      ],
+      methodCalls,
+    }),
+  })
+
+  if (response.status === 401 || response.status === 403) {
+    throw new Error('session_expired')
+  }
+  if (!response.ok) {
+    throw new Error(`JMAP error: ${response.status} ${response.statusText}`)
+  }
+  return response.json()
+}
+
+function getResponseList<T>(
+  result: { methodResponses: Array<[string, Record<string, unknown>, string]> },
+  name: string,
+): T[] {
+  const r = result.methodResponses.find(r => r[0] === name)
+  return ((r?.[1] as { list?: T[] })?.list ?? []) as T[]
+}
+
+const ROLE_ORDER: Record<string, number> = {
+  inbox: 0,
+  sent: 1,
+  drafts: 2,
+  junk: 3,
+  trash: 4,
+  archive: 5,
+}
+
+export async function initMail(): Promise<void> {
+  mailLoading.set(true)
+  mailError.set(null)
+  try {
+    const response = await fetch('/api/v1/mail/jmap/session', {
+      headers: { Accept: 'application/json' },
+    })
+    if (!response.ok) throw new Error(`Session error: ${response.status}`)
+    jmapSession.set(await response.json())
+    await Promise.all([fetchMailboxes(), fetchIdentities()])
+    connectMailWebSocket()
+  } catch (e) {
+    mailError.set(e instanceof Error ? e.message : 'Failed to connect to mail server')
+  } finally {
+    mailLoading.set(false)
+  }
+}
+
+export async function fetchMailboxes(): Promise<void> {
+  const accountId = get(primaryAccountId)
+  if (!accountId) return
+
+  try {
+    const result = await jmapRequest([
+      ['Mailbox/get', { accountId, ids: null }, 'mailboxes'],
+    ])
+    const list = getResponseList<Mailbox>(result, 'Mailbox/get')
+    const sorted = list.sort((a, b) => {
+      const ap = ROLE_ORDER[a.role ?? ''] ?? 10
+      const bp = ROLE_ORDER[b.role ?? ''] ?? 10
+      return ap !== bp ? ap - bp : a.sortOrder - b.sortOrder
+    })
+    mailboxes.set(sorted)
+
+    if (!get(selectedMailboxId)) {
+      const inbox = sorted.find(m => m.role === 'inbox')
+      if (inbox) {
+        selectedMailboxId.set(inbox.id)
+        await fetchEmails(inbox.id)
+      }
+    }
+  } catch (e) {
+    mailError.set(e instanceof Error ? e.message : 'Failed to load mailboxes')
+  }
+}
+
+export async function fetchEmails(mailboxId: string): Promise<void> {
+  const accountId = get(primaryAccountId)
+  if (!accountId) return
+
+  mailLoading.set(true)
+  mailError.set(null)
+  emails.set([])
+  selectedEmailId.set(null)
+
+  try {
+    const result = await jmapRequest([
+      [
+        'Email/query',
+        {
+          accountId,
+          filter: { inMailbox: mailboxId },
+          sort: [{ property: 'receivedAt', isAscending: false }],
+          limit: 50,
+          position: 0,
+        },
+        'emailIds',
+      ],
+      [
+        'Email/get',
+        {
+          accountId,
+          '#ids': { resultOf: 'emailIds', name: 'Email/query', path: '/ids' },
+          properties: [
+            'id', 'threadId', 'mailboxIds', 'keywords', 'from', 'to',
+            'subject', 'receivedAt', 'preview', 'hasAttachment', 'size',
+          ],
+        },
+        'emails',
+      ],
+    ])
+    emails.set(getResponseList<Email>(result, 'Email/get'))
+  } catch (e) {
+    mailError.set(e instanceof Error ? e.message : 'Failed to load emails')
+  } finally {
+    mailLoading.set(false)
+  }
+}
+
+export async function fetchEmailContent(emailId: string): Promise<Email | null> {
+  const cached = get(emailContent)[emailId]
+  if (cached) return cached
+
+  const accountId = get(primaryAccountId)
+  if (!accountId) return null
+
+  try {
+    const result = await jmapRequest([
+      [
+        'Email/get',
+        {
+          accountId,
+          ids: [emailId],
+          properties: [
+            'id', 'threadId', 'mailboxIds', 'keywords',
+            'from', 'to', 'cc', 'bcc', 'replyTo',
+            'inReplyTo', 'references',
+            'subject', 'receivedAt', 'preview', 'hasAttachment', 'size',
+            'bodyValues', 'textBody', 'htmlBody', 'attachments',
+          ],
+          fetchAllBodyValues: true,
+          maxBodyValueBytes: 2 * 1024 * 1024,
+        },
+        'email',
+      ],
+    ])
+    const list = getResponseList<Email>(result, 'Email/get')
+    if (list.length > 0) {
+      emailContent.update(cache => ({ ...cache, [list[0].id]: list[0] }))
+      return list[0]
+    }
+  } catch (e) {
+    mailError.set(e instanceof Error ? e.message : 'Failed to load email')
+  }
+  return null
+}
+
+export async function fetchIdentities(): Promise<void> {
+  const accountId = get(primaryAccountId)
+  if (!accountId) return
+
+  try {
+    const result = await jmapRequest([
+      ['Identity/get', { accountId, ids: null }, 'identities'],
+    ])
+    identities.set(getResponseList<Identity>(result, 'Identity/get'))
+  } catch {
+    // Non-fatal
+  }
+}
+
+export async function markAsRead(emailId: string, read: boolean): Promise<void> {
+  const accountId = get(primaryAccountId)
+  if (!accountId) return
+
+  try {
+    await jmapRequest([
+      [
+        'Email/set',
+        {
+          accountId,
+          update: { [emailId]: { 'keywords/$seen': read ? true : null } },
+        },
+        'update',
+      ],
+    ])
+    emails.update(list =>
+      list.map(e => {
+        if (e.id !== emailId) return e
+        const keywords = { ...e.keywords }
+        if (read) keywords['$seen'] = true
+        else delete keywords['$seen']
+        return { ...e, keywords }
+      }),
+    )
+  } catch (e) {
+    mailError.set(e instanceof Error ? e.message : 'Failed to update email')
+  }
+}
+
+export async function moveEmail(emailId: string, targetMailboxId: string): Promise<void> {
+  const accountId = get(primaryAccountId)
+  if (!accountId) return
+
+  try {
+    await jmapRequest([
+      [
+        'Email/set',
+        {
+          accountId,
+          update: { [emailId]: { mailboxIds: { [targetMailboxId]: true } } },
+        },
+        'move',
+      ],
+    ])
+    emails.update(list => list.filter(e => e.id !== emailId))
+    selectedEmailId.update(id => (id === emailId ? null : id))
+  } catch (e) {
+    mailError.set(e instanceof Error ? e.message : 'Failed to move email')
+  }
+}
+
+export async function deleteEmail(emailId: string): Promise<void> {
+  const trash = get(mailboxes).find(m => m.role === 'trash')
+  if (trash) {
+    await moveEmail(emailId, trash.id)
+    return
+  }
+  const accountId = get(primaryAccountId)
+  if (!accountId) return
+
+  try {
+    await jmapRequest([['Email/set', { accountId, destroy: [emailId] }, 'destroy']])
+    emails.update(list => list.filter(e => e.id !== emailId))
+    selectedEmailId.update(id => (id === emailId ? null : id))
+  } catch (e) {
+    mailError.set(e instanceof Error ? e.message : 'Failed to delete email')
+  }
+}
+
+export async function sendEmail(params: {
+  identityId: string
+  from: EmailAddress
+  to: EmailAddress[]
+  cc?: EmailAddress[]
+  bcc?: EmailAddress[]
+  subject: string
+  textBody?: string
+  htmlBody?: string
+  inReplyTo?: string[]
+  references?: string[]
+}): Promise<void> {
+  const accountId = get(primaryAccountId)
+  if (!accountId) throw new Error('Not connected to mail server')
+
+  mailLoading.set(true)
+  mailError.set(null)
+  try {
+    const sentMailbox = get(mailboxes).find(m => m.role === 'sent')
+    const bodyValues: Record<string, { value: string }> = {}
+    const textBody: unknown[] = []
+    const htmlBody: unknown[] = []
+
+    if (params.htmlBody) {
+      bodyValues['html'] = { value: params.htmlBody }
+      htmlBody.push({ partId: 'html', type: 'text/html' })
+    }
+    if (params.textBody || !params.htmlBody) {
+      bodyValues['text'] = { value: params.textBody ?? '' }
+      textBody.push({ partId: 'text', type: 'text/plain' })
+    }
+
+    const emailCreate: Record<string, unknown> = {
+      from: [params.from],
+      to: params.to,
+      subject: params.subject,
+      mailboxIds: sentMailbox ? { [sentMailbox.id]: true } : {},
+      bodyValues,
+      textBody,
+      htmlBody,
+    }
+    if (params.cc?.length) emailCreate.cc = params.cc
+    if (params.bcc?.length) emailCreate.bcc = params.bcc
+    if (params.inReplyTo?.length) emailCreate.inReplyTo = params.inReplyTo
+    if (params.references?.length) emailCreate.references = params.references
+
+    const rcptTo = [
+      ...params.to,
+      ...(params.cc ?? []),
+      ...(params.bcc ?? []),
+    ].map(a => ({ email: a.email }))
+
+    await jmapRequest([
+      ['Email/set', { accountId, create: { draft: emailCreate } }, 'createEmail'],
+      [
+        'EmailSubmission/set',
+        {
+          accountId,
+          create: {
+            send: {
+              emailId: '#draft',
+              identityId: params.identityId,
+              envelope: { mailFrom: { email: params.from.email }, rcptTo },
+            },
+          },
+        },
+        'submit',
+      ],
+    ])
+  } catch (e) {
+    mailError.set(e instanceof Error ? e.message : 'Failed to send email')
+    throw e
+  } finally {
+    mailLoading.set(false)
+  }
+}
+
+export async function selectMailbox(mailboxId: string): Promise<void> {
+  selectedMailboxId.set(mailboxId)
+  await fetchEmails(mailboxId)
+}
+
+export async function selectEmail(emailId: string): Promise<void> {
+  selectedEmailId.set(emailId)
+  await markAsRead(emailId, true)
+  await fetchEmailContent(emailId)
+}
