@@ -1,10 +1,12 @@
 import { methods } from '..'
 
 export default class ThemeStore {
+  store: any
+  prefix: string
   list = $state({})
   detail = $state({})
 
-  constructor(store, prefix: string) {
+  constructor(store: any, prefix: string) {
     this.store = store
     this.prefix = prefix
   }
@@ -51,7 +53,7 @@ export default class ThemeStore {
     return response
   }
 
-  edit = async (name: string, fields: Record<string, fields>) => {
+  edit = async (name: string, fields: Record<string, any>) => {
     await this.store.auth.refresh_token()
     const response = await methods.patch(`${this.prefix}/themes/${name}`, fields)
     if (response.ok) {

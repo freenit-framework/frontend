@@ -1,11 +1,13 @@
 import { methods } from '..'
 
 export default class UserStore {
-  list = $state({ page: 0, perpage: 0, data: [], total: 0 })
-  detail = $state({ id: 0, email: '', active: false, admin: false, roles: [] })
-  profile = $state({ id: 0, email: '', active: false, admin: false, roles: [] })
+  store: any
+  prefix: string
+  list = $state({ page: 0, perpage: 0, data: [] as any[], total: 0 })
+  detail = $state({ id: 0, email: '', active: false, admin: false, roles: [] as any[] })
+  profile = $state<any>({ id: 0, email: '', active: false, admin: false, roles: [] })
 
-  constructor(store, prefix: string) {
+  constructor(store: any, prefix: string) {
     this.store = store
     this.prefix = prefix
   }

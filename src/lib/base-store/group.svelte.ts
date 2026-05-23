@@ -1,15 +1,17 @@
 import { methods } from '..'
 
 export default class GroupStore {
-  list = $state({ page: 0, perpage: 0, data: [], total: 0 })
-  detail = $state({ cn: '', gidNumber: 0, memberUid: [] })
+  store: any
+  prefix: string
+  list = $state({ page: 0, perpage: 0, data: [] as any[], total: 0 })
+  detail = $state({ cn: '', gidNumber: 0, memberUid: [] as string[] })
 
-  constructor(store, prefix: string) {
+  constructor(store: any, prefix: string) {
     this.store = store
     this.prefix = prefix
   }
 
-  fetchAll = async (domain, page = 1, perpage = 10) => {
+  fetchAll = async (domain: any, page = 1, perpage = 10) => {
     await this.store.auth.refresh_token()
     const response = await methods.get(`${this.prefix}/domains/${domain}/groups`, {
       page,
@@ -23,7 +25,7 @@ export default class GroupStore {
     return response
   }
 
-  create = async (domain, fields: Record<string, any>) => {
+  create = async (domain: any, fields: Record<string, any>) => {
     await this.store.auth.refresh_token()
     const response = await methods.post(`${this.prefix}/domains/${domain}/groups`, fields)
     if (response.ok) {
@@ -35,7 +37,7 @@ export default class GroupStore {
     return response
   }
 
-  fetch = async (domain, group: string) => {
+  fetch = async (domain: any, group: string) => {
     await this.store.auth.refresh_token()
     const response = await methods.get(`${this.prefix}/domains/${domain}/groups/${group}`)
     if (response.ok) {
@@ -46,7 +48,7 @@ export default class GroupStore {
     return response
   }
 
-  edit = async (domain, group: string) => {
+  edit = async (domain: any, group: string, fields: Record<string, any>) => {
     await this.store.auth.refresh_token()
     const response = await methods.patch(`${this.prefix}/domains/${domain}/groups/${group}`, fields)
     if (response.ok) {
@@ -57,7 +59,7 @@ export default class GroupStore {
     return response
   }
 
-  destroy = async (domain, group: string) => {
+  destroy = async (domain: any, group: string) => {
     await this.store.auth.refresh_token()
     const response = await methods.delete(`${this.prefix}/domains/${domain}/groups/${group}`)
     if (response.ok) {
@@ -68,7 +70,7 @@ export default class GroupStore {
     return response
   }
 
-  assign = async (domain, group: string, user_id: number) => {
+  assign = async (domain: any, group: string, user_id: number) => {
     await this.store.auth.refresh_token()
     const response = await methods.post(`${this.prefix}/domains/${domain}/groups/${group}/${user_id}`, {})
     if (response.ok) {
@@ -78,7 +80,7 @@ export default class GroupStore {
     return response
   }
 
-  deassign = async (domain, group: str, user_id: number) => {
+  deassign = async (domain: any, group: string, user_id: number) => {
     await this.store.auth.refresh_token()
     const response = await methods.delete(`${this.prefix}/domains/${domain}/groups/${group}/${user_id}`)
     if (response.ok) {

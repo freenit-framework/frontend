@@ -9,7 +9,7 @@
   let name = $state('')
   let showCreate = $state(false)
   let showDestroy = $state(false)
-  let groupToDestroy
+  let groupToDestroy: { cn: string } | null = null
 
   onMount(async () => {
     loading = true
@@ -45,7 +45,7 @@
     showCreate = !showCreate
   }
 
-  const toggleShowDestroy = (group) => (event: Event) => {
+  const toggleShowDestroy = (group: { cn: string } | null) => (event: Event) => {
     event.preventDefault()
     showDestroy = !showDestroy
     if (showDestroy) {
@@ -68,7 +68,7 @@
   async function destroy(event: Event) {
     event.preventDefault()
     console.log(groupToDestroy)
-    const response = await store.group.destroy(fqdn, groupToDestroy.cn)
+    const response = await store.group.destroy(fqdn, groupToDestroy?.cn)
     if (!response.ok) {
       notification.error(response.statusText)
     }

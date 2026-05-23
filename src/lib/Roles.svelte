@@ -14,7 +14,7 @@
     loading = true
     const response = await store.role.fetchAll()
     if (!response.ok) {
-      notification.nerror(response.statusText)
+      notification.error(response.statusText)
     }
     loading = false
   })

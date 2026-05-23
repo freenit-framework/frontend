@@ -1,4 +1,4 @@
-export const dbtype = (data) => {
+export const dbtype = (data: any) => {
   if (!data) {
     return null
   }
@@ -10,7 +10,7 @@ export const dbtype = (data) => {
   }
 }
 
-export const id = (data) => {
+export const id = (data: any) => {
   const dbt = dbtype(data)
   if (dbt === 'sql') {
     return data.id
@@ -20,7 +20,7 @@ export const id = (data) => {
   }
 }
 
-export const uid = (data) => {
+export const uid = (data: any) => {
   const dbt = dbtype(data)
   if (dbt === 'sql') {
     return data.id
@@ -35,7 +35,7 @@ export const uid = (data) => {
   }
 }
 
-export const name = (data) => {
+export const name = (data: any) => {
   const dbt = dbtype(data)
   if (dbt === 'sql') {
     return data.name

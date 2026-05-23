@@ -32,11 +32,11 @@
 </svelte:head>
 
 <SvelteToast {options} />
-<MenuBar {toggle} title="Freenit" />
 <LeftPane {open} {toggle}>
   <MenuItems {toggle} {logout} {store} />
 </LeftPane>
 <section class="root">
+  <MenuBar {toggle} title="Freenit" />
   <div class="main">
     {@render children?.()}
   </div>
@@ -45,10 +45,11 @@
 <style>
   .root {
     height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   .main {
-    height: 100%;
-    width: 100%;
+    flex: 1;
   }
 </style>

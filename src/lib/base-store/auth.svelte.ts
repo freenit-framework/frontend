@@ -1,10 +1,12 @@
 import { methods, utils } from '..'
 
 export default class AuthStore {
+  store: any
+  prefix: string
   access = $state(new Date(0))
   refresh = $state(new Date(0))
 
-  constructor(store, prefix: string) {
+  constructor(store: any, prefix: string) {
     this.store = store
     this.prefix = prefix
   }
@@ -26,7 +28,7 @@ export default class AuthStore {
   }
 
   logout = async () => {
-    const response = await methods.post(`${this.prefix}/auth/logout`)
+    const response = await methods.post(`${this.prefix}/auth/logout`, {})
     if (response.ok) {
       const data = await response.json()
       this.access = new Date()
