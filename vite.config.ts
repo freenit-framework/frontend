@@ -4,6 +4,10 @@ import { sveltekit } from '@sveltejs/kit/vite'
 const config = defineConfig({
   plugins: [sveltekit()],
 
+  optimizeDeps: {
+    include: ['events'],
+  },
+
   test: {
     include: ['src/**/*.{test,spec}.{js,ts}'],
   },

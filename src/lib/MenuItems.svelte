@@ -12,6 +12,8 @@
     mdiCalendarBlank,
     mdiContactsOutline,
     mdiFolder,
+    mdiFilterOutline,
+    mdiChatOutline,
   } from '@mdi/js'
   import MenuItem from '$lib/MenuItem.svelte'
   import { dbtype } from './utils.js'
@@ -33,6 +35,8 @@
   <MenuItem href="/calendar" {toggle} icon={mdiCalendarBlank}>Calendar</MenuItem>
   <MenuItem href="/contacts" {toggle} icon={mdiContactsOutline}>Contacts</MenuItem>
   <MenuItem href="/files" {toggle} icon={mdiFolder}>Files</MenuItem>
+  <MenuItem href="/sieve" {toggle} icon={mdiFilterOutline}>Filters</MenuItem>
+  <MenuItem href="/jabber" {toggle} icon={mdiChatOutline}>Jabber</MenuItem>
   <MenuItem href="/" toggle={logout} icon={mdiLogoutVariant}>Logout</MenuItem>
 {:else}
   <MenuItem href="/register" {toggle} icon={mdiArrowDownBoldCircleOutline}>Register</MenuItem>

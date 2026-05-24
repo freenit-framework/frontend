@@ -34,3 +34,11 @@ export { default as EmailViewer } from './components/mail/EmailViewer.svelte'
 export { default as MailSidebar } from './components/mail/MailSidebar.svelte'
 export * as mailStore from './mail/store'
 export * as mailTypes from './mail/types'
+
+export { default as Sieve } from './Sieve.svelte'
+export * as sieveStore from './sieve/store'
+export * as sieveTypes from './sieve/types'
+
+export { default as Jabber } from './Jabber.svelte'
+export { jabberStore } from './jabber/store.svelte'
+export * from './jabber/types'
