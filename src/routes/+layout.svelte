@@ -7,6 +7,7 @@
   import LeftPane from '$lib/LeftPane.svelte'
   import MenuBar from '$lib/MenuBar.svelte'
   import MenuItems from '$lib/MenuItems.svelte'
+  import '$lib/theme.svelte'
 
   const options = {}
   let open = $state(false)

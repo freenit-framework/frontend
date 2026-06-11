@@ -1,5 +1,5 @@
 import { writable, derived, get } from 'svelte/store'
-import type { Mailbox, Email, JMAPSession, Identity, ComposeParams, EmailAddress } from './types'
+import type { Mailbox, MailboxNode, Email, JMAPSession, Identity, ComposeParams, EmailAddress } from './types'
 
 // WebSocket push
 let ws: WebSocket | null = null
@@ -81,6 +81,7 @@ export const composeParams = writable<ComposeParams | null>(null)
 
 // UI
 export const mailLoading = writable(false)
+export const emailsLoading = writable(false)
 export const mailError = writable<string | null>(null)
 
 // Derived
@@ -106,6 +107,45 @@ export const selectedEmail = derived(
 export const inboxMailbox = derived(mailboxes, $mailboxes =>
   $mailboxes.find(m => m.role === 'inbox') ?? null,
 )
+
+function sortMailboxes(nodes: MailboxNode[]): MailboxNode[] {
+  return nodes.sort((a, b) => {
+    const ap = ROLE_ORDER[a.role ?? ''] ?? 10
+    const bp = ROLE_ORDER[b.role ?? ''] ?? 10
+    if (ap !== bp) return ap - bp
+    if (a.sortOrder !== b.sortOrder) return a.sortOrder - b.sortOrder
+    return a.name.localeCompare(b.name)
+  })
+}
+
+export const mailboxTree = derived(mailboxes, $mailboxes => {
+  const map = new Map<string, MailboxNode>()
+
+  for (const m of $mailboxes) {
+    map.set(m.id, { ...m, children: [] })
+  }
+
+  for (const m of $mailboxes) {
+    const node = map.get(m.id)!
+    if (m.parentId && map.has(m.parentId)) {
+      map.get(m.parentId)!.children.push(node)
+    }
+  }
+
+  for (const node of map.values()) {
+    node.children = sortMailboxes(node.children)
+  }
+
+  const roots: MailboxNode[] = []
+  for (const m of $mailboxes) {
+    const node = map.get(m.id)!
+    if (!m.parentId || !map.has(m.parentId)) {
+      roots.push(node)
+    }
+  }
+
+  return sortMailboxes(roots)
+})
 
 // JMAP request — auth is handled server-side via the freenit session cookie
 async function jmapRequest(methodCalls: unknown[]): Promise<{
@@ -203,7 +243,7 @@ export async function fetchEmails(mailboxId: string, resetSelection = false): Pr
   const accountId = get(primaryAccountId)
   if (!accountId) return
 
-  mailLoading.set(true)
+  emailsLoading.set(true)
   mailError.set(null)
   emails.set([])
   if (resetSelection) selectedEmailId.set(null)
@@ -238,7 +278,7 @@ export async function fetchEmails(mailboxId: string, resetSelection = false): Pr
   } catch (e) {
     mailError.set(e instanceof Error ? e.message : 'Failed to load emails')
   } finally {
-    mailLoading.set(false)
+    emailsLoading.set(false)
   }
 }
 
@@ -363,6 +403,31 @@ export async function deleteEmail(emailId: string): Promise<void> {
   }
 }
 
+async function uploadFile(
+  accountId: string,
+  file: File,
+): Promise<{ blobId: string; type: string; size: number }> {
+  const response = await fetch(
+    `/api/v1/mail/jmap/upload/${encodeURIComponent(accountId)}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': file.type || 'application/octet-stream',
+      },
+      body: file,
+    },
+  )
+  if (!response.ok) {
+    throw new Error(`Upload failed: ${response.status}`)
+  }
+  const result = await response.json()
+  return {
+    blobId: result.blobId,
+    type: result.type || file.type || 'application/octet-stream',
+    size: result.size ?? file.size,
+  }
+}
+
 export async function sendEmail(params: {
   identityId: string
   from: EmailAddress
@@ -374,11 +439,11 @@ export async function sendEmail(params: {
   htmlBody?: string
   inReplyTo?: string[]
   references?: string[]
+  attachments?: File[]
 }): Promise<void> {
   const accountId = get(primaryAccountId)
   if (!accountId) throw new Error('Not connected to mail server')
 
-  mailLoading.set(true)
   mailError.set(null)
   try {
     const sentMailbox = get(mailboxes).find(m => m.role === 'sent')
@@ -410,6 +475,19 @@ export async function sendEmail(params: {
     if (params.inReplyTo?.length) emailCreate.inReplyTo = params.inReplyTo
     if (params.references?.length) emailCreate.references = params.references
 
+    if (params.attachments?.length) {
+      const uploaded = await Promise.all(
+        params.attachments.map(file => uploadFile(accountId, file)),
+      )
+      emailCreate.attachments = uploaded.map((u, i) => ({
+        blobId: u.blobId,
+        type: u.type,
+        name: params.attachments![i].name,
+        size: u.size,
+        disposition: 'attachment',
+      }))
+    }
+
     const rcptTo = [
       ...params.to,
       ...(params.cc ?? []),
@@ -436,8 +514,6 @@ export async function sendEmail(params: {
   } catch (e) {
     mailError.set(e instanceof Error ? e.message : 'Failed to send email')
     throw e
-  } finally {
-    mailLoading.set(false)
   }
 }
 

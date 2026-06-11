@@ -5,7 +5,6 @@
     identities,
     composeParams,
     sendEmail,
-    mailLoading,
     mailError,
     emailContent,
   } from '$lib/mail/store'
@@ -23,6 +22,9 @@
   let showBcc = $state(false)
   let sendError = $state<string | null>(null)
   let sending = $state(false)
+  let attachments = $state<{ id: string; file: File }[]>([])
+  let fileInput = $state<HTMLInputElement | null>(null)
+  let attachCounter = 0
 
   $effect(() => {
     if ($identities.length && !identity) {
@@ -91,6 +93,7 @@
         textBody: body,
         inReplyTo: params?.inReplyTo,
         references: params?.references,
+        attachments: attachments.map(a => a.file),
       })
       composeParams.set(null)
       await goto('/mail')
@@ -105,6 +108,21 @@
     composeParams.set(null)
     await goto('/mail')
   }
+
+  function handleFileSelect() {
+    const files = fileInput?.files
+    if (!files) return
+    const newFiles = Array.from(files).map(file => ({
+      id: `${Date.now()}-${attachCounter++}`,
+      file,
+    }))
+    attachments = [...attachments, ...newFiles]
+    if (fileInput) fileInput.value = ''
+  }
+
+  function removeAttachment(id: string) {
+    attachments = attachments.filter(a => a.id !== id)
+  }
 </script>
 
 <div class="composer">
@@ -114,7 +132,7 @@
       <button
         class="send-btn"
         onclick={handleSend}
-        disabled={sending || $mailLoading || !toRaw.trim() || !identity?.id}
+        disabled={sending || !toRaw.trim() || !identity?.id}
       >
         {sending ? 'Sending…' : '➤ Send'}
       </button>
@@ -172,6 +190,34 @@
     </div>
   </div>
 
+  <div class="attachments-bar">
+    <input
+      type="file"
+      multiple
+      bind:this={fileInput}
+      onchange={handleFileSelect}
+      style="display: none;"
+    />
+    <button type="button" class="attach-btn" onclick={() => fileInput?.click()}>
+      📎 Attach
+    </button>
+    {#if attachments.length > 0}
+      <div class="attach-list">
+        {#each attachments as att (att.id)}
+          <span class="attach-chip">
+            {att.file.name}
+            <button
+              type="button"
+              class="attach-remove"
+              onclick={() => removeAttachment(att.id)}
+              title="Remove"
+            >✕</button>
+          </span>
+        {/each}
+      </div>
+    {/if}
+  </div>
+
   <div class="body-area">
     <textarea
       bind:value={body}
@@ -186,7 +232,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background: #fff;
+    background: var(--bg-color);
     overflow: hidden;
   }
 
@@ -224,7 +270,7 @@
   }
 
   .send-btn:hover:not(:disabled) {
-    background: #1e50d8;
+    filter: brightness(1.1);
   }
 
   .send-btn:disabled {
@@ -249,8 +295,8 @@
   }
 
   .error-bar {
-    background: #fff0f0;
-    border-bottom: 1px solid #fcc;
+    background: var(--bg-error);
+    border-bottom: 1px solid var(--color-error);
     color: var(--color-error, #d43939);
     font-size: 0.875rem;
     padding: 0.5rem 1rem;
@@ -289,13 +335,13 @@
     font-size: 0.9rem;
     padding: 0.6rem 0;
     background: transparent;
-    color: var(--color-darkGrey, #1b2433);
+    color: var(--font-color, #333333);
   }
 
   .field-static {
     flex: 1;
     font-size: 0.9rem;
-    color: var(--color-darkGrey, #1b2433);
+    color: var(--font-color, #333333);
     padding: 0.6rem 0;
   }
 
@@ -335,6 +381,67 @@
     font-size: 0.9rem;
     font-family: inherit;
     line-height: 1.6;
-    color: var(--color-darkGrey, #1b2433);
+    color: var(--font-color, #333333);
+    background: transparent;
+  }
+
+  .attachments-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--color-lightGrey, #d9e0eb);
+    flex-shrink: 0;
+    background: var(--bg-secondary-color, #f5f7fb);
+    overflow-x: auto;
+  }
+
+  .attach-btn {
+    background: none;
+    border: 1px solid var(--color-lightGrey, #d9e0eb);
+    border-radius: 4px;
+    color: var(--color-grey, #60708a);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+    transition: color 0.1s, border-color 0.1s;
+    flex-shrink: 0;
+  }
+
+  .attach-btn:hover {
+    color: var(--color-primary, #2f63f0);
+    border-color: var(--color-primary, #2f63f0);
+  }
+
+  .attach-list {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .attach-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: var(--bg-color);
+    border: 1px solid var(--color-lightGrey, #d9e0eb);
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+    color: var(--font-color, #333333);
+  }
+
+  .attach-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-grey, #60708a);
+    font-size: 0.75rem;
+    padding: 0 0.1rem;
+    line-height: 1;
+  }
+
+  .attach-remove:hover {
+    color: var(--color-error, #d43939);
   }
 </style>

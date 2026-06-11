@@ -3,7 +3,7 @@
     emails,
     selectedEmailId,
     selectedMailbox,
-    mailLoading,
+    emailsLoading,
     mailError,
     selectEmail,
     deleteEmail,
@@ -30,7 +30,9 @@
   )
 
   async function handleSelect(emailId: string) {
-    await selectEmail(emailId)
+    if ($selectedEmailId !== emailId) {
+      await selectEmail(emailId)
+    }
   }
 
   async function handleDelete(emailId: string) {
@@ -66,7 +68,7 @@
     <div class="error-bar">{$mailError}</div>
   {/if}
 
-  {#if $mailLoading && $emails.length === 0}
+  {#if $emailsLoading && $emails.length === 0}
     <div class="status">Loading…</div>
   {:else if filteredEmails.length === 0}
     <div class="status">
@@ -108,7 +110,7 @@
     height: 100%;
     border-right: 1px solid var(--color-lightGrey, #d9e0eb);
     overflow: hidden;
-    background: #fff;
+    background: var(--bg-color);
   }
 
   .list-header {
@@ -156,10 +158,10 @@
 
   .error-bar {
     padding: 0.5rem 1rem;
-    background: #fff0f0;
+    background: var(--bg-error);
     color: var(--color-error, #d43939);
     font-size: 0.85rem;
-    border-bottom: 1px solid #fcc;
+    border-bottom: 1px solid var(--color-error);
     flex-shrink: 0;
   }
 
@@ -187,7 +189,7 @@
     transform: translateY(-50%);
     display: none;
     gap: 0.25rem;
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--bg-color);
     border-radius: 4px;
     padding: 0.15rem;
   }
@@ -209,10 +211,10 @@
 
   .action-btn:hover {
     opacity: 1;
-    background: rgba(0, 0, 0, 0.08);
+    background: var(--color-lightGrey);
   }
 
   .action-btn.delete:hover {
-    background: rgba(212, 57, 57, 0.1);
+    background: var(--bg-error);
   }
 </style>

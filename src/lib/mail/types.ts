@@ -14,6 +14,10 @@ export interface Mailbox {
   isSubscribed?: boolean
 }
 
+export interface MailboxNode extends Mailbox {
+  children: MailboxNode[]
+}
+
 export interface EmailBodyPart {
   partId?: string
   blobId?: string

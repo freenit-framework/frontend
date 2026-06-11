@@ -161,7 +161,7 @@
     height: 100%;
     border-right: 1px solid var(--color-lightGrey, #d9e0eb);
     overflow: hidden;
-    background: #fff;
+    background: var(--bg-color);
   }
 
   .roster-header,
@@ -183,7 +183,7 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--color-darkGrey, #1b2433);
+    color: var(--font-color, #333333);
     flex: 1;
   }
 
@@ -232,7 +232,8 @@
     padding: 0.3rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 4px;
-    background: white;
+    background: var(--bg-color);
+    color: var(--font-color, #333333);
     font-size: 0.8rem;
     cursor: pointer;
   }
@@ -266,10 +267,10 @@
 
   .error-bar {
     padding: 0.5rem 1rem;
-    background: #fff0f0;
+    background: var(--bg-error);
     color: var(--color-error, #d43939);
     font-size: 0.85rem;
-    border-bottom: 1px solid #fcc;
+    border-bottom: 1px solid var(--color-error);
     flex-shrink: 0;
   }
 
@@ -297,7 +298,7 @@
     width: 100%;
     padding: 0.6rem 0.75rem;
     border: none;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--color-lightGrey, #d9e0eb);
     background: none;
     cursor: pointer;
     text-align: left;
@@ -327,7 +328,7 @@
   .name {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--color-darkGrey, #1b2433);
+    color: var(--font-color, #333333);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

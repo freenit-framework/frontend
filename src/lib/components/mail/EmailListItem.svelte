@@ -71,10 +71,6 @@
     border-left: 3px solid var(--color-primary, #2f63f0);
   }
 
-  .item.unread {
-    background: #fff;
-  }
-
   .item-top {
     display: flex;
     justify-content: space-between;

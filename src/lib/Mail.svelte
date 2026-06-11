@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte'
-  import { initMail, mailLoading, mailError, disconnectMailWebSocket } from './mail/store'
+  import { initMail, disconnectMailWebSocket } from './mail/store'
   import MailSidebar from './components/mail/MailSidebar.svelte'
   import EmailList from './components/mail/EmailList.svelte'
   import EmailViewer from './components/mail/EmailViewer.svelte'
@@ -10,23 +10,17 @@
 </script>
 
 <div class="mail-shell">
-  {#if $mailLoading && !$mailError}
-    <div class="mail-loading">Connecting to mail server…</div>
-  {:else if $mailError}
-    <div class="mail-error">{$mailError}</div>
-  {:else}
-    <div class="mail-layout">
-      <div class="mail-sidebar">
-        <MailSidebar />
-      </div>
-      <div class="mail-list">
-        <EmailList />
-      </div>
-      <div class="mail-viewer">
-        <EmailViewer />
-      </div>
+  <div class="mail-layout">
+    <div class="mail-sidebar">
+      <MailSidebar />
     </div>
-  {/if}
+    <div class="mail-list">
+      <EmailList />
+    </div>
+    <div class="mail-viewer">
+      <EmailViewer />
+    </div>
+  </div>
 </div>
 
 <style>
@@ -34,22 +28,6 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-  }
-
-  .mail-loading,
-  .mail-error {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.95rem;
-  }
-
-  .mail-loading {
-    color: var(--color-grey, #60708a);
-  }
-
-  .mail-error {
-    color: var(--color-error, #d43939);
   }
 
   .mail-layout {

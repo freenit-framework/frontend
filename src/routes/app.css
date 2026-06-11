@@ -28,10 +28,41 @@ body {
   --color-darkGrey: #1b2433;
   --color-error: #d43939;
   --color-success: #28bd14;
+  --bg-error: #fff0f0;
+  --bg-success: #f0fff0;
   --grid-maxWidth: 120rem;
   --grid-gutter: 2rem;
   --font-size: 1.6rem;
   --font-color: #333333;
   --font-family-sans: sans-serif;
   --font-family-mono: monaco, Consolas, 'Lucida Console', monospace;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1b2433;
+  --bg-secondary-color: #2a3546;
+  --color-primary: #5b8bf7;
+  --color-lightGrey: #3a4a5e;
+  --color-grey: #8a9ab0;
+  --color-darkGrey: #d9e0eb;
+  --color-error: #e85d5d;
+  --color-success: #4cd137;
+  --bg-error: rgba(232, 93, 93, 0.15);
+  --bg-success: rgba(76, 209, 55, 0.15);
+  --font-color: #e0e6ed;
+}
+
+[data-theme="dark"] input:not([type="checkbox"], [type="radio"], [type="submit"], [type="color"], [type="button"], [type="reset"]),
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background-color: var(--bg-color);
+  color: var(--font-color);
+}
+
+[data-theme="dark"] select {
+  background-color: var(--bg-color);
+}
+
+[data-theme="dark"] a {
+  color: #7aa2ff;
 }

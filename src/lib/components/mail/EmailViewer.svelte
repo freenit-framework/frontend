@@ -10,6 +10,7 @@
     mailboxes,
     moveEmail,
   } from '$lib/mail/store'
+  import { getEffectiveTheme } from '$lib/theme.svelte'
   import type { Email, EmailAddress } from '$lib/mail/types'
 
   const email = $derived(
@@ -46,6 +47,39 @@
     const part = email.textBody[0]
     if (!part.partId) return null
     return email.bodyValues[part.partId]?.value ?? null
+  })
+
+  function buildEmailSrcdoc(html: string): string {
+    const isDark = getEffectiveTheme() === 'dark'
+    const textColor = isDark ? '#e0e6ed' : '#333333'
+    const bgColor = isDark ? '#1b2433' : '#ffffff'
+    const linkColor = isDark ? '#7aa2ff' : '#2f63f0'
+
+    return `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      :root { color-scheme: ${isDark ? 'dark' : 'light'}; }
+      body {
+        margin: 0;
+        padding: 1rem;
+        color: ${textColor};
+        background-color: ${bgColor};
+        font-family: sans-serif;
+        line-height: 1.5;
+      }
+      a { color: ${linkColor}; }
+      img { max-width: 100%; height: auto; }
+    </style>
+  </head>
+  <body>${html}</body>
+</html>`
+  }
+
+  const htmlSrcdoc = $derived.by(() => {
+    if (!htmlBody) return ''
+    return buildEmailSrcdoc(htmlBody)
   })
 
   async function downloadAttachment(blobId: string, name: string) {
@@ -185,7 +219,7 @@
       {:else if htmlBody}
         <iframe
           title="Email content"
-          srcdoc={htmlBody}
+          srcdoc={htmlSrcdoc}
           sandbox="allow-same-origin"
           class="html-frame"
         ></iframe>
@@ -203,7 +237,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background: #fff;
+    background: var(--bg-color);
     overflow: hidden;
   }
 
@@ -245,7 +279,7 @@
     margin: 0;
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--color-darkGrey, #1b2433);
+    color: var(--font-color, #333333);
     line-height: 1.3;
     word-break: break-word;
   }
@@ -261,7 +295,7 @@
     background: none;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 4px;
-    color: var(--color-darkGrey, #1b2433);
+    color: var(--font-color, #333333);
     cursor: pointer;
     font-size: 0.8rem;
     padding: 0.3rem 0.6rem;
@@ -275,7 +309,7 @@
   }
 
   .action-btn.danger:hover {
-    background: #fff0f0;
+    background: var(--bg-error);
     border-color: var(--color-error, #d43939);
     color: var(--color-error, #d43939);
   }
@@ -301,7 +335,7 @@
   }
 
   .meta-value {
-    color: var(--color-darkGrey, #1b2433);
+    color: var(--font-color, #333333);
     word-break: break-all;
   }
 
@@ -371,7 +405,7 @@
     white-space: pre-wrap;
     word-break: break-word;
     overflow-y: auto;
-    color: var(--color-darkGrey, #1b2433);
+    color: var(--font-color, #333333);
   }
 
   .no-body {

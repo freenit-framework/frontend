@@ -91,7 +91,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background: #fff;
+    background: var(--bg-color);
     overflow: hidden;
   }
 
@@ -116,7 +116,7 @@
   .chat-with {
     font-weight: 600;
     font-size: 1rem;
-    color: var(--color-darkGrey, #1b2433);
+    color: var(--font-color, #333333);
   }
 
   .chat-jid {
@@ -173,7 +173,7 @@
 
   .incoming .bubble {
     background: var(--bg-secondary-color, #f5f7fb);
-    color: var(--color-darkGrey, #1b2433);
+    color: var(--font-color, #333333);
     border-bottom-left-radius: 4px;
   }
 
@@ -207,7 +207,7 @@
     padding: 0.75rem 1rem;
     border-top: 1px solid var(--color-lightGrey, #d9e0eb);
     flex-shrink: 0;
-    background: #fff;
+    background: var(--bg-color);
   }
 
   .composer textarea {
@@ -237,7 +237,7 @@
   }
 
   .composer button:hover:not(:disabled) {
-    background: #1e4fd8;
+    filter: brightness(1.1);
   }
 
   .composer button:disabled {

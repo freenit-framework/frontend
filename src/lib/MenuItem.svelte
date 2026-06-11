@@ -11,7 +11,7 @@
   role="button"
   tabindex={0}
 >
-  <svg class="icon dark">
+  <svg class="icon">
     <path d={icon} />
   </svg>
   {@render children?.()}
@@ -28,10 +28,6 @@
   .icon {
     width: 26px;
     height: 26px;
-    fill: white;
-  }
-
-  .dark {
-    fill: black;
+    fill: var(--font-color);
   }
 </style>

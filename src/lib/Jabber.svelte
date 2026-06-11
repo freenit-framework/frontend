@@ -135,8 +135,8 @@
     padding: 0.4rem 0.8rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 4px;
-    background: white;
-    color: var(--color-darkGrey, #1b2433);
+    background: var(--bg-color);
+    color: var(--font-color, #333333);
     font-size: 0.875rem;
     cursor: pointer;
     transition: background 0.1s;
@@ -153,10 +153,10 @@
 
   .global-error {
     padding: 0.5rem 1rem;
-    background: #fff0f0;
+    background: var(--bg-error);
     color: var(--color-error, #d43939);
     font-size: 0.85rem;
-    border-bottom: 1px solid #fcc;
+    border-bottom: 1px solid var(--color-error);
     flex-shrink: 0;
   }
 

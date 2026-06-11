@@ -19,7 +19,8 @@
     width: 0;
     height: 100vh;
     max-width: 300px;
-    background-color: white;
+    background-color: var(--bg-color);
+    color: var(--font-color);
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
@@ -38,7 +39,7 @@
     width: 100%;
     border-right-style: solid;
     border-width: 1px;
-    border-color: #eee;
+    border-color: var(--color-lightGrey);
   }
 
   .relative {
