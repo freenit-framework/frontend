@@ -132,7 +132,7 @@
       <label>
         <span class="label">Addressbook</span>
         <select bind:value={addressbook} disabled={!isNew}>
-          {#each $addressbooks as book}
+          {#each $addressbooks as book (book.name)}
             <option value={book.name}>{book.displayName || book.name}</option>
           {/each}
         </select>

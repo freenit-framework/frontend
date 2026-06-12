@@ -1,6 +1,7 @@
 import * as XMPP from 'stanza'
 import type { Agent, Stanzas } from 'stanza'
 import type { ChatMessage, OmemoBundle, RosterItem, Room } from './types'
+import { OmemoManager } from './omemo/OmemoManager'
 import { error, notification } from '../notification'
 
 function bareJid(jid: string): string {
@@ -22,6 +23,8 @@ class JabberStore {
   attemptedURL = $state('')
   historyFetched = $state<Set<string>>(new Set())
   historyLoading = $state<Set<string>>(new Set())
+  omemoManager = $state<OmemoManager | null>(null)
+  omemoEnabled = $state<Record<string, boolean>>({})
 
   // Reconnect state
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null
@@ -29,6 +32,11 @@ class JabberStore {
   private reconnectAttempts = 0
   private maxReconnectDelay = 30000
   private maxReconnectAttempts = 5
+
+  // Outgoing self-OMEMO messages are stored by id so that the carbon copy can
+  // be shown as plaintext without trying to decrypt our own Signal ciphertext.
+  private pendingSelfOmemo = new Map<string, { body: string; time: number }>()
+  private pendingSelfOmemoMaxAge = 5 * 60 * 1000
 
   async fetchConfig(): Promise<void> {
     try {
@@ -102,6 +110,16 @@ class JabberStore {
       this.reconnectAttempts = 0
       this.reconnectDelay = 2000
       try {
+        this.omemoManager = new OmemoManager()
+        await this.omemoManager.init(this.client!, bareJid(this.myJid))
+        console.log('OMEMO initialized, device id:', this.omemoManager.getDeviceId())
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e)
+        console.error('Failed to initialize OMEMO:', e)
+        error(`OMEMO initialization failed: ${msg}`)
+        this.omemoManager = null
+      }
+      try {
         const roster = await this.client!.getRoster()
         const items: RosterItem[] = (roster.items || []).map((item: any) => ({
           jid: bareJid(item.jid || ''),
@@ -110,6 +128,16 @@ class JabberStore {
           presence: 'unavailable',
           status: '',
         }))
+        const selfJid = bareJid(this.myJid)
+        if (selfJid && !items.some((item) => item.jid === selfJid)) {
+          items.push({
+            jid: selfJid,
+            name: 'Me',
+            subscription: 'both',
+            presence: 'available',
+            status: '',
+          })
+        }
         this.roster = items
       } catch (e) {
         console.error('Failed to get roster:', e)
@@ -136,7 +164,26 @@ class JabberStore {
       } catch (e) {
         console.error('Failed to get bookmarks:', e)
       }
+      try {
+        if (typeof (this.client as any).enableCarbons === 'function') {
+          await (this.client as any).enableCarbons()
+        } else {
+          await this.client!.sendIQ({
+            type: 'set',
+            carbons: { action: 'enable' },
+          } as any)
+        }
+        console.log('Message carbons enabled')
+      } catch (e) {
+        console.error('Failed to enable message carbons:', e)
+      }
       this.client!.sendPresence()
+
+      if (this.selectedJid) {
+        this.historyFetched.delete(this.selectedJid)
+        this.historyLoading.delete(this.selectedJid)
+        this.fetchHistory(this.selectedJid, this.selectedIsRoom)
+      }
     })
 
     this.client.on('disconnected', (reason?: Error) => {
@@ -169,33 +216,43 @@ class JabberStore {
       this.connecting = false
     })
 
-    this.client.on('chat', (msg: Stanzas.ReceivedMessage) => {
-      if (msg.body) {
-        this.addMessage({
-          id: msg.id || Math.random().toString(36).slice(2),
-          from: bareJid(msg.from || ''),
-          to: bareJid(msg.to || ''),
-          body: msg.body,
-          timestamp: new Date(),
-          incoming: true,
-        })
-        const name = this.roster.find((r) => r.jid === bareJid(msg.from || ''))?.name
-        if (!this.selectedJid || this.selectedJid !== bareJid(msg.from || '')) {
-          notification(`Message from ${name || msg.from}: ${msg.body.substring(0, 60)}`)
+    this.client.on('message', async (msg: Stanzas.ReceivedMessage) => {
+      if ((msg as any).carbon) {
+        return
+      }
+
+      if (msg.type === 'groupchat') {
+        if (msg.body) {
+          this.addMessage({
+            id: msg.id || Math.random().toString(36).slice(2),
+            from: bareJid(msg.from || ''),
+            to: bareJid(msg.to || ''),
+            body: msg.body,
+            timestamp: new Date(),
+            incoming: true,
+            type: 'groupchat',
+          })
         }
+        return
+      }
+
+      const hasPayload = msg.body || msg.omemo
+      if (hasPayload && (msg.type === 'chat' || msg.type === 'normal' || !msg.type)) {
+        await this.handleChatMessage(msg)
       }
     })
 
-    this.client.on('message', (msg: Stanzas.ReceivedMessage) => {
-      if (msg.body && msg.type === 'groupchat') {
-        this.addMessage({
-          id: msg.id || Math.random().toString(36).slice(2),
-          from: bareJid(msg.from || ''),
-          to: bareJid(msg.to || ''),
-          body: msg.body,
-          timestamp: new Date(),
-          incoming: true,
-        })
+    this.client.on('carbon:received', async (msg: any) => {
+      const forwarded = msg.carbon?.forward?.message as Stanzas.ReceivedMessage | undefined
+      if (forwarded) {
+        await this.handleChatMessage(forwarded)
+      }
+    })
+
+    this.client.on('carbon:sent', async (msg: any) => {
+      const forwarded = msg.carbon?.forward?.message as Stanzas.ReceivedMessage | undefined
+      if (forwarded) {
+        await this.handleChatMessage(forwarded)
       }
     })
 
@@ -207,6 +264,16 @@ class JabberStore {
         presence: 'unavailable',
         status: '',
       }))
+      const selfJid = bareJid(this.myJid)
+      if (selfJid && !items.some((item) => item.jid === selfJid)) {
+        items.push({
+          jid: selfJid,
+          name: 'Me',
+          subscription: 'both',
+          presence: 'available',
+          status: '',
+        })
+      }
       this.roster = items
     })
 
@@ -221,6 +288,10 @@ class JabberStore {
         return item
       })
     })
+
+    // Disable live re-pruning of device-list updates. Other clients can
+    // legitimately republish stale ids, causing an endless prune/republish
+    // loop. Initial pruning on connect is still done in OmemoManager.init().
 
     // Enable raw XML logging for debugging
     ;(this.client as any).on('raw:incoming', (data: string) => {
@@ -315,12 +386,95 @@ class JabberStore {
     }
   }
 
+  private cleanupPendingSelfOmemo() {
+    const cutoff = Date.now() - this.pendingSelfOmemoMaxAge
+    for (const [id, entry] of this.pendingSelfOmemo) {
+      if (entry.time < cutoff) {
+        this.pendingSelfOmemo.delete(id)
+      }
+    }
+  }
+
   private addMessage(msg: ChatMessage, roomJid?: string) {
     const key = roomJid || (msg.incoming ? msg.from : msg.to)
+    console.log('addMessage', {
+      key,
+      id: msg.id,
+      incoming: msg.incoming,
+      body: msg.body.substring(0, 40),
+    })
     const existing = this.messages[key] || []
     if (existing.some((m) => m.id === msg.id)) return
     const merged = [...existing, msg].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
     this.messages = { ...this.messages, [key]: merged }
+  }
+
+  private async handleChatMessage(msg: Stanzas.ReceivedMessage) {
+    const from = bareJid(msg.from || '')
+    const to = bareJid(msg.to || '')
+    const isOutgoing = from === bareJid(this.myJid)
+    console.log('handleChatMessage', {
+      from,
+      to,
+      isOutgoing,
+      hasOmemo: !!msg.omemo,
+      hasBody: !!msg.body,
+    })
+
+    let body = msg.body
+    let encrypted = false
+    let decryptionFailed = false
+
+    if (msg.omemo) {
+      encrypted = true
+      if (this.omemoManager) {
+        const payload = this.omemoManager.parseStanzaPayload(msg)
+        if (payload) {
+          const isSelf = isOutgoing && from === to
+          const pending = isSelf ? this.pendingSelfOmemo.get(msg.id || '') : undefined
+          if (pending) {
+            body = pending.body
+            this.pendingSelfOmemo.delete(msg.id || '')
+          } else {
+            const decrypted = await this.omemoManager.decrypt(from, payload)
+            if (decrypted !== null) {
+              body = decrypted
+            } else {
+              body = '[Unable to decrypt OMEMO message]'
+              decryptionFailed = true
+            }
+          }
+        }
+      } else {
+        body = '[OMEMO message — unable to decrypt]'
+        decryptionFailed = true
+      }
+    }
+
+    if (!body) return
+
+    this.addMessage({
+      id: msg.id || Math.random().toString(36).slice(2),
+      from: isOutgoing ? bareJid(this.myJid) : from,
+      to: isOutgoing ? to : bareJid(this.myJid),
+      body,
+      timestamp: new Date(),
+      incoming: !isOutgoing,
+      type: 'chat',
+      ...(encrypted ? { encrypted: true } : {}),
+      ...(decryptionFailed ? { decryptionFailed: true } : {}),
+    })
+
+    if (!isOutgoing) {
+      const name = this.roster.find((r) => r.jid === from)?.name
+      if (!this.selectedJid || this.selectedJid !== from) {
+        notification(`Message from ${name || msg.from}: ${body.substring(0, 60)}`)
+      }
+    }
+
+    if (isOutgoing && to === from && !this.selectedJid) {
+      this.selectJid(to, false)
+    }
   }
 
   isHistoryLoading(jid: string): boolean {
@@ -396,7 +550,7 @@ class JabberStore {
       if (!this.rooms.find((r) => r.jid === jid)) {
         this.rooms = [...this.rooms, { jid, name: jid.split('@')[0], nick, joined: true }]
       }
-    } catch (e) {
+    } catch {
       error(`Failed to join ${jid}`)
     }
   }
@@ -414,11 +568,18 @@ class JabberStore {
     }
   }
 
-  sendRoomMessage(roomJid: string, body: string) {
+  async sendRoomMessage(roomJid: string, body: string) {
     if (!this.client || !this.connected) return
     const room = this.rooms.find((r) => r.jid === roomJid)
     if (!room) return
     const id = Math.random().toString(36).slice(2)
+
+    if (this.omemoEnabled[roomJid] && this.omemoManager) {
+      // TODO: MUC OMEMO requires encrypting for all participant devices.
+      // For now fall back to plaintext with a console warning.
+      console.warn('MUC OMEMO not yet implemented; sending plaintext')
+    }
+
     this.client.sendMessage({ to: roomJid, body, id, type: 'groupchat' })
     this.addMessage(
       {
@@ -434,19 +595,63 @@ class JabberStore {
     )
   }
 
-  sendMessage(to: string, body: string) {
+  isOmemoEnabled(jid: string): boolean {
+    return this.omemoEnabled[jid] !== false
+  }
+
+  async sendMessage(to: string, body: string) {
     if (!this.client || !this.connected) return
     const id = Math.random().toString(36).slice(2)
+    const toBare = bareJid(to)
+
+    console.log('sendMessage', {
+      toBare,
+      omemoEnabled: this.isOmemoEnabled(toBare),
+      hasManager: !!this.omemoManager,
+    })
+
+    if (this.isOmemoEnabled(toBare) && this.omemoManager) {
+      const encrypted = await this.omemoManager.encrypt(toBare, body)
+      console.log('encrypt result', { encrypted: !!encrypted })
+      if (encrypted) {
+        if (toBare === bareJid(this.myJid)) {
+          this.pendingSelfOmemo.set(id, { body, time: Date.now() })
+          this.cleanupPendingSelfOmemo()
+        }
+        this.client.sendMessage({
+          to,
+          id,
+          omemo: this.omemoManager.buildStanzaPayload(encrypted) as any,
+        })
+        this.addMessage({
+          id,
+          from: bareJid(this.myJid),
+          to: toBare,
+          body,
+          timestamp: new Date(),
+          incoming: false,
+          type: 'chat',
+          encrypted: true,
+        })
+        return
+      }
+      console.warn(`OMEMO encryption unavailable for ${toBare}; falling back to plaintext`)
+    }
+
     this.client.sendMessage({ to, body, id })
     this.addMessage({
       id,
       from: bareJid(this.myJid),
-      to: bareJid(to),
+      to: toBare,
       body,
       timestamp: new Date(),
       incoming: false,
       type: 'chat',
     })
+  }
+
+  toggleOmemo(jid: string) {
+    this.omemoEnabled = { ...this.omemoEnabled, [jid]: !this.isOmemoEnabled(jid) }
   }
 
   selectJid(jid: string | null, isRoom = false) {

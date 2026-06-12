@@ -11,7 +11,7 @@
     moveEmail,
   } from '$lib/mail/store'
   import { getEffectiveTheme } from '$lib/theme.svelte'
-  import type { Email, EmailAddress } from '$lib/mail/types'
+  import type { EmailAddress } from '$lib/mail/types'
 
   const email = $derived(
     $selectedEmailId ? ($emailContent[$selectedEmailId] ?? $emails.find(e => e.id === $selectedEmailId) ?? null) : null
@@ -97,7 +97,6 @@
 
   async function handleReply() {
     if (!email) return
-    const fromAddr = email.from?.[0] ?? { email: '' }
     const replyTo = email.replyTo?.length ? email.replyTo : email.from ?? []
 
     composeParams.set({
@@ -196,7 +195,7 @@
       {#if email.attachments?.length}
         <div class="attachments">
           <span class="attach-label">📎 Attachments:</span>
-          {#each email.attachments as att}
+          {#each email.attachments as att (att.blobId ?? att.name)}
             {#if att.blobId}
               <button
                 class="attach-link"
@@ -377,7 +376,8 @@
 
   .body-area {
     flex: 1;
-    overflow: hidden;
+    overflow-y: auto;
+    min-height: 0;
     display: flex;
     flex-direction: column;
   }
@@ -393,6 +393,7 @@
     height: 100%;
     border: none;
     flex: 1;
+    display: block;
   }
 
   .text-body {

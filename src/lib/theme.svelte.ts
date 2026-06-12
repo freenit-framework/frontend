@@ -49,7 +49,7 @@ export function toggleTheme(): void {
 
 if (browser) {
   applyTheme(state.mode)
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
     systemDark = event.matches
     applyTheme(state.mode)
   })

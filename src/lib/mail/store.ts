@@ -1,5 +1,13 @@
 import { writable, derived, get } from 'svelte/store'
-import type { Mailbox, MailboxNode, Email, JMAPSession, Identity, ComposeParams, EmailAddress } from './types'
+import type {
+  Mailbox,
+  MailboxNode,
+  Email,
+  JMAPSession,
+  Identity,
+  ComposeParams,
+  EmailAddress,
+} from './types'
 
 // WebSocket push
 let ws: WebSocket | null = null
@@ -13,7 +21,9 @@ async function refreshSession() {
     })
     if (!response.ok) return
     jmapSession.set(await response.json())
-  } catch { /* non-fatal */ }
+  } catch {
+    /* non-fatal */
+  }
 }
 
 export function connectMailWebSocket() {
@@ -25,18 +35,22 @@ export function connectMailWebSocket() {
     wsReconnectDelay = 1000
     // Re-fetch session on reconnect in case server restarted and accountIds changed
     await refreshSession()
-    ws!.send(JSON.stringify({
-      '@type': 'WebSocketPushEnable',
-      dataTypes: ['Email', 'Mailbox', 'Thread', 'EmailDelivery'],
-      pushState: null,
-    }))
+    ws!.send(
+      JSON.stringify({
+        '@type': 'WebSocketPushEnable',
+        dataTypes: ['Email', 'Mailbox', 'Thread', 'EmailDelivery'],
+        pushState: null,
+      }),
+    )
   }
 
   ws.onmessage = async (ev) => {
     try {
       const msg = JSON.parse(ev.data as string)
       if (msg['@type'] === 'StateChange') await handleStateChange(msg.changed ?? {})
-    } catch { /* ignore malformed frames */ }
+    } catch {
+      /* ignore malformed frames */
+    }
   }
 
   ws.onclose = () => {
@@ -52,7 +66,10 @@ export function connectMailWebSocket() {
 }
 
 export function disconnectMailWebSocket() {
-  if (wsReconnectTimer) { clearTimeout(wsReconnectTimer); wsReconnectTimer = null }
+  if (wsReconnectTimer) {
+    clearTimeout(wsReconnectTimer)
+    wsReconnectTimer = null
+  }
   ws?.close()
   ws = null
 }
@@ -60,7 +77,9 @@ export function disconnectMailWebSocket() {
 async function handleStateChange(changed: Record<string, Record<string, string>>) {
   const accountId = get(primaryAccountId)
   // Match on any account if our primary isn't listed (impersonation may shift ids)
-  const changes = accountId ? (changed[accountId] ?? Object.values(changed)[0]) : Object.values(changed)[0]
+  const changes = accountId
+    ? (changed[accountId] ?? Object.values(changed)[0])
+    : Object.values(changed)[0]
   if (!changes) return
 
   if ('Mailbox' in changes) await fetchMailboxes()
@@ -85,27 +104,26 @@ export const emailsLoading = writable(false)
 export const mailError = writable<string | null>(null)
 
 // Derived
-export const primaryAccountId = derived(jmapSession, session => {
+export const primaryAccountId = derived(jmapSession, (session) => {
   if (!session) return null
   return (
-    session.primaryAccounts['urn:ietf:params:jmap:mail'] ??
-    Object.keys(session.accounts)[0] ??
-    null
+    session.primaryAccounts['urn:ietf:params:jmap:mail'] ?? Object.keys(session.accounts)[0] ?? null
   )
 })
 
 export const selectedMailbox = derived(
   [mailboxes, selectedMailboxId],
-  ([$mailboxes, $id]) => $mailboxes.find(m => m.id === $id) ?? null,
+  ([$mailboxes, $id]) => $mailboxes.find((m) => m.id === $id) ?? null,
 )
 
 export const selectedEmail = derived(
   [emails, selectedEmailId],
-  ([$emails, $id]) => $emails.find(e => e.id === $id) ?? null,
+  ([$emails, $id]) => $emails.find((e) => e.id === $id) ?? null,
 )
 
-export const inboxMailbox = derived(mailboxes, $mailboxes =>
-  $mailboxes.find(m => m.role === 'inbox') ?? null,
+export const inboxMailbox = derived(
+  mailboxes,
+  ($mailboxes) => $mailboxes.find((m) => m.role === 'inbox') ?? null,
 )
 
 function sortMailboxes(nodes: MailboxNode[]): MailboxNode[] {
@@ -118,7 +136,7 @@ function sortMailboxes(nodes: MailboxNode[]): MailboxNode[] {
   })
 }
 
-export const mailboxTree = derived(mailboxes, $mailboxes => {
+export const mailboxTree = derived(mailboxes, ($mailboxes) => {
   const map = new Map<string, MailboxNode>()
 
   for (const m of $mailboxes) {
@@ -180,7 +198,7 @@ function getResponseList<T>(
   result: { methodResponses: Array<[string, Record<string, unknown>, string]> },
   name: string,
 ): T[] {
-  const r = result.methodResponses.find(r => r[0] === name)
+  const r = result.methodResponses.find((r) => r[0] === name)
   return ((r?.[1] as { list?: T[] })?.list ?? []) as T[]
 }
 
@@ -216,9 +234,7 @@ export async function fetchMailboxes(): Promise<void> {
   if (!accountId) return
 
   try {
-    const result = await jmapRequest([
-      ['Mailbox/get', { accountId, ids: null }, 'mailboxes'],
-    ])
+    const result = await jmapRequest([['Mailbox/get', { accountId, ids: null }, 'mailboxes']])
     const list = getResponseList<Mailbox>(result, 'Mailbox/get')
     const sorted = list.sort((a, b) => {
       const ap = ROLE_ORDER[a.role ?? ''] ?? 10
@@ -228,7 +244,7 @@ export async function fetchMailboxes(): Promise<void> {
     mailboxes.set(sorted)
 
     if (!get(selectedMailboxId)) {
-      const inbox = sorted.find(m => m.role === 'inbox')
+      const inbox = sorted.find((m) => m.role === 'inbox')
       if (inbox) {
         selectedMailboxId.set(inbox.id)
         await fetchEmails(inbox.id, true)
@@ -267,8 +283,17 @@ export async function fetchEmails(mailboxId: string, resetSelection = false): Pr
           accountId,
           '#ids': { resultOf: 'emailIds', name: 'Email/query', path: '/ids' },
           properties: [
-            'id', 'threadId', 'mailboxIds', 'keywords', 'from', 'to',
-            'subject', 'receivedAt', 'preview', 'hasAttachment', 'size',
+            'id',
+            'threadId',
+            'mailboxIds',
+            'keywords',
+            'from',
+            'to',
+            'subject',
+            'receivedAt',
+            'preview',
+            'hasAttachment',
+            'size',
           ],
         },
         'emails',
@@ -297,11 +322,26 @@ export async function fetchEmailContent(emailId: string): Promise<Email | null> 
           accountId,
           ids: [emailId],
           properties: [
-            'id', 'threadId', 'mailboxIds', 'keywords',
-            'from', 'to', 'cc', 'bcc', 'replyTo',
-            'inReplyTo', 'references',
-            'subject', 'receivedAt', 'preview', 'hasAttachment', 'size',
-            'bodyValues', 'textBody', 'htmlBody', 'attachments',
+            'id',
+            'threadId',
+            'mailboxIds',
+            'keywords',
+            'from',
+            'to',
+            'cc',
+            'bcc',
+            'replyTo',
+            'inReplyTo',
+            'references',
+            'subject',
+            'receivedAt',
+            'preview',
+            'hasAttachment',
+            'size',
+            'bodyValues',
+            'textBody',
+            'htmlBody',
+            'attachments',
           ],
           fetchAllBodyValues: true,
           maxBodyValueBytes: 2 * 1024 * 1024,
@@ -311,7 +351,7 @@ export async function fetchEmailContent(emailId: string): Promise<Email | null> 
     ])
     const list = getResponseList<Email>(result, 'Email/get')
     if (list.length > 0) {
-      emailContent.update(cache => ({ ...cache, [list[0].id]: list[0] }))
+      emailContent.update((cache) => ({ ...cache, [list[0].id]: list[0] }))
       return list[0]
     }
   } catch (e) {
@@ -325,9 +365,7 @@ export async function fetchIdentities(): Promise<void> {
   if (!accountId) return
 
   try {
-    const result = await jmapRequest([
-      ['Identity/get', { accountId, ids: null }, 'identities'],
-    ])
+    const result = await jmapRequest([['Identity/get', { accountId, ids: null }, 'identities']])
     identities.set(getResponseList<Identity>(result, 'Identity/get'))
   } catch {
     // Non-fatal
@@ -349,8 +387,8 @@ export async function markAsRead(emailId: string, read: boolean): Promise<void> 
         'update',
       ],
     ])
-    emails.update(list =>
-      list.map(e => {
+    emails.update((list) =>
+      list.map((e) => {
         if (e.id !== emailId) return e
         const keywords = { ...e.keywords }
         if (read) keywords['$seen'] = true
@@ -378,15 +416,15 @@ export async function moveEmail(emailId: string, targetMailboxId: string): Promi
         'move',
       ],
     ])
-    emails.update(list => list.filter(e => e.id !== emailId))
-    selectedEmailId.update(id => (id === emailId ? null : id))
+    emails.update((list) => list.filter((e) => e.id !== emailId))
+    selectedEmailId.update((id) => (id === emailId ? null : id))
   } catch (e) {
     mailError.set(e instanceof Error ? e.message : 'Failed to move email')
   }
 }
 
 export async function deleteEmail(emailId: string): Promise<void> {
-  const trash = get(mailboxes).find(m => m.role === 'trash')
+  const trash = get(mailboxes).find((m) => m.role === 'trash')
   if (trash) {
     await moveEmail(emailId, trash.id)
     return
@@ -396,8 +434,8 @@ export async function deleteEmail(emailId: string): Promise<void> {
 
   try {
     await jmapRequest([['Email/set', { accountId, destroy: [emailId] }, 'destroy']])
-    emails.update(list => list.filter(e => e.id !== emailId))
-    selectedEmailId.update(id => (id === emailId ? null : id))
+    emails.update((list) => list.filter((e) => e.id !== emailId))
+    selectedEmailId.update((id) => (id === emailId ? null : id))
   } catch (e) {
     mailError.set(e instanceof Error ? e.message : 'Failed to delete email')
   }
@@ -407,16 +445,13 @@ async function uploadFile(
   accountId: string,
   file: File,
 ): Promise<{ blobId: string; type: string; size: number }> {
-  const response = await fetch(
-    `/api/v1/mail/jmap/upload/${encodeURIComponent(accountId)}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': file.type || 'application/octet-stream',
-      },
-      body: file,
+  const response = await fetch(`/api/v1/mail/jmap/upload/${encodeURIComponent(accountId)}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': file.type || 'application/octet-stream',
     },
-  )
+    body: file,
+  })
   if (!response.ok) {
     throw new Error(`Upload failed: ${response.status}`)
   }
@@ -446,7 +481,7 @@ export async function sendEmail(params: {
 
   mailError.set(null)
   try {
-    const sentMailbox = get(mailboxes).find(m => m.role === 'sent')
+    const sentMailbox = get(mailboxes).find((m) => m.role === 'sent')
     const bodyValues: Record<string, { value: string }> = {}
     const textBody: unknown[] = []
     const htmlBody: unknown[] = []
@@ -464,7 +499,7 @@ export async function sendEmail(params: {
       from: [params.from],
       to: params.to,
       subject: params.subject,
-      keywords: { '$seen': true },
+      keywords: { $seen: true },
       mailboxIds: sentMailbox ? { [sentMailbox.id]: true } : {},
       bodyValues,
       textBody,
@@ -477,7 +512,7 @@ export async function sendEmail(params: {
 
     if (params.attachments?.length) {
       const uploaded = await Promise.all(
-        params.attachments.map(file => uploadFile(accountId, file)),
+        params.attachments.map((file) => uploadFile(accountId, file)),
       )
       emailCreate.attachments = uploaded.map((u, i) => ({
         blobId: u.blobId,
@@ -488,11 +523,9 @@ export async function sendEmail(params: {
       }))
     }
 
-    const rcptTo = [
-      ...params.to,
-      ...(params.cc ?? []),
-      ...(params.bcc ?? []),
-    ].map(a => ({ email: a.email }))
+    const rcptTo = [...params.to, ...(params.cc ?? []), ...(params.bcc ?? [])].map((a) => ({
+      email: a.email,
+    }))
 
     await jmapRequest([
       ['Email/set', { accountId, create: { draft: emailCreate } }, 'createEmail'],

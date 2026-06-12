@@ -175,7 +175,7 @@
       return
     }
     const book = $addressbooks.find((b) => b.name === bookName)
-    const fileName = `${(book?.displayName || bookName).replace(/[^a-z0-9_\-]/gi, '_')}.vcf`
+    const fileName = `${(book?.displayName || bookName).replace(/[^a-z0-9_-]/gi, '_')}.vcf`
     downloadVCard(vcf, fileName)
   }
 </script>

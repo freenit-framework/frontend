@@ -129,7 +129,7 @@
           <label>
             <span class="label">Import into</span>
             <select bind:value={importCalendar}>
-              {#each $calendars as cal}
+              {#each $calendars as cal (cal.name)}
                 <option value={cal.name}>{cal.displayName}</option>
               {/each}
             </select>
@@ -157,7 +157,7 @@
               </button>
             </div>
             <ul class="preview-list">
-              {#each importPreview.slice(0, 20) as ev}
+              {#each importPreview.slice(0, 20) as ev (ev.uid ?? ev.title)}
                 <li>
                   <span class="ev-title">{ev.title}</span>
                   <span class="ev-date">{dateFmt.format(ev.start)}</span>

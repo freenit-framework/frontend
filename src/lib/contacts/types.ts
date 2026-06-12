@@ -5,7 +5,7 @@ export interface Addressbook {
 
 export interface Contact {
   uid: string
-  href: string       // API-relative path: /card/{book}/{uid}.vcf
+  href: string // API-relative path: /card/{book}/{uid}.vcf
   etag: string
   addressbook: string
   displayName: string

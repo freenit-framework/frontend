@@ -26,7 +26,10 @@ function parseLine(line: string): ICalProp {
   return { name, params, value }
 }
 
-function parseDateTime(value: string, params: Record<string, string>): { date: Date; allDay: boolean } {
+function parseDateTime(
+  value: string,
+  params: Record<string, string>,
+): { date: Date; allDay: boolean } {
   if (params['VALUE'] === 'DATE' || /^\d{8}$/.test(value)) {
     const y = parseInt(value.slice(0, 4))
     const m = parseInt(value.slice(4, 6)) - 1
@@ -51,23 +54,31 @@ function parseDateTime(value: string, params: Record<string, string>): { date: D
 function parseDuration(value: string): number {
   const m = value.match(/P(?:(\d+)W)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?/)
   if (!m) return 0
-  return (parseInt(m[1] ?? '0') * 7 * 86400
-        + parseInt(m[2] ?? '0') * 86400
-        + parseInt(m[3] ?? '0') * 3600
-        + parseInt(m[4] ?? '0') * 60
-        + parseInt(m[5] ?? '0')) * 1000
+  return (
+    (parseInt(m[1] ?? '0') * 7 * 86400 +
+      parseInt(m[2] ?? '0') * 86400 +
+      parseInt(m[3] ?? '0') * 3600 +
+      parseInt(m[4] ?? '0') * 60 +
+      parseInt(m[5] ?? '0')) *
+    1000
+  )
 }
 
 function decodeText(value: string): string {
   return value
-    .replace(/\\n/g, '\n').replace(/\\N/g, '\n')
-    .replace(/\\,/g, ',').replace(/\\;/g, ';').replace(/\\\\/g, '\\')
+    .replace(/\\n/g, '\n')
+    .replace(/\\N/g, '\n')
+    .replace(/\\,/g, ',')
+    .replace(/\\;/g, ';')
+    .replace(/\\\\/g, '\\')
 }
 
 function encodeText(value: string): string {
   return value
-    .replace(/\\/g, '\\\\').replace(/\n/g, '\\n')
-    .replace(/,/g, '\\,').replace(/;/g, '\\;')
+    .replace(/\\/g, '\\\\')
+    .replace(/\n/g, '\\n')
+    .replace(/,/g, '\\,')
+    .replace(/;/g, '\\;')
 }
 
 // RRULE
@@ -77,17 +88,26 @@ interface RRule {
   interval: number
   count?: number
   until?: Date
-  byday?: number[]   // 0=Sun … 6=Sat
+  byday?: number[] // 0=Sun … 6=Sat
   bymonthday?: number[]
 }
 
 const BYDAY_MAP: Record<string, number> = {
-  SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6,
+  SU: 0,
+  MO: 1,
+  TU: 2,
+  WE: 3,
+  TH: 4,
+  FR: 5,
+  SA: 6,
 }
 
 function parseRRule(value: string): RRule | null {
   const parts = Object.fromEntries(
-    value.split(';').map((p) => { const i = p.indexOf('='); return [p.slice(0, i), p.slice(i + 1)] })
+    value.split(';').map((p) => {
+      const i = p.indexOf('=')
+      return [p.slice(0, i), p.slice(i + 1)]
+    }),
   )
   const freq = parts['FREQ'] as RRule['freq']
   if (!['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'].includes(freq)) return null
@@ -102,10 +122,18 @@ function parseRRule(value: string): RRule | null {
 
 function advancePeriod(d: Date, rule: RRule) {
   switch (rule.freq) {
-    case 'DAILY': d.setDate(d.getDate() + rule.interval); break
-    case 'WEEKLY': d.setDate(d.getDate() + 7 * rule.interval); break
-    case 'MONTHLY': d.setMonth(d.getMonth() + rule.interval); break
-    case 'YEARLY': d.setFullYear(d.getFullYear() + rule.interval); break
+    case 'DAILY':
+      d.setDate(d.getDate() + rule.interval)
+      break
+    case 'WEEKLY':
+      d.setDate(d.getDate() + 7 * rule.interval)
+      break
+    case 'MONTHLY':
+      d.setMonth(d.getMonth() + rule.interval)
+      break
+    case 'YEARLY':
+      d.setFullYear(d.getFullYear() + rule.interval)
+      break
   }
 }
 
@@ -152,8 +180,18 @@ interface RawEvent {
 
 function expandRecurring(ev: RawEvent, rangeStart: Date, rangeEnd: Date): ParsedEvent[] {
   if (!ev.rrule) {
-    return [{ uid: ev.uid, title: ev.title, start: ev.start, end: ev.end,
-              allDay: ev.allDay, description: ev.description, location: ev.location, status: ev.status }]
+    return [
+      {
+        uid: ev.uid,
+        title: ev.title,
+        start: ev.start,
+        end: ev.end,
+        allDay: ev.allDay,
+        description: ev.description,
+        location: ev.location,
+        status: ev.status,
+      },
+    ]
   }
 
   const rule = ev.rrule
@@ -178,7 +216,7 @@ function expandRecurring(ev: RawEvent, rangeStart: Date, rangeEnd: Date): Parsed
 
       occurrenceCount++
 
-      const dateKey = `${cand.getFullYear()}${String(cand.getMonth() + 1).padStart(2,'0')}${String(cand.getDate()).padStart(2,'0')}`
+      const dateKey = `${cand.getFullYear()}${String(cand.getMonth() + 1).padStart(2, '0')}${String(cand.getDate()).padStart(2, '0')}`
       if (ev.exdates.has(dateKey)) continue
       if (cand < rangeStart) continue
 
@@ -205,9 +243,16 @@ export function parseICalEvents(raw: string, rangeStart?: Date, rangeEnd?: Date)
   const rawEvents: RawEvent[] = []
 
   let inEvent = false
-  let uid = '', title = '', startRaw = '', endRaw = '', durationRaw = ''
-  let startParams: Record<string, string> = {}, endParams: Record<string, string> = {}
-  let description = '', location = '', status = 'CONFIRMED'
+  let uid = '',
+    title = '',
+    startRaw = '',
+    endRaw = '',
+    durationRaw = ''
+  let startParams: Record<string, string> = {},
+    endParams: Record<string, string> = {}
+  let description = '',
+    location = '',
+    status = 'CONFIRMED'
   let rruleRaw = ''
   const exdates: Set<string> = new Set()
 
@@ -215,7 +260,8 @@ export function parseICalEvents(raw: string, rangeStart?: Date, rangeEnd?: Date)
     if (line === 'BEGIN:VEVENT') {
       inEvent = true
       uid = title = startRaw = endRaw = durationRaw = description = location = rruleRaw = ''
-      startParams = {}; endParams = {}
+      startParams = {}
+      endParams = {}
       status = 'CONFIRMED'
       exdates.clear()
       continue
@@ -230,9 +276,15 @@ export function parseICalEvents(raw: string, rangeStart?: Date, rangeEnd?: Date)
         else end = new Date(start.getTime() + (allDay ? 86400000 : 3600000))
 
         rawEvents.push({
-          uid, title: title || '(No title)', start, end, allDay,
-          description, location, status,
-          rrule: rruleRaw ? parseRRule(rruleRaw) ?? undefined : undefined,
+          uid,
+          title: title || '(No title)',
+          start,
+          end,
+          allDay,
+          description,
+          location,
+          status,
+          rrule: rruleRaw ? (parseRRule(rruleRaw) ?? undefined) : undefined,
           exdates: new Set(exdates),
         })
       }
@@ -242,20 +294,42 @@ export function parseICalEvents(raw: string, rangeStart?: Date, rangeEnd?: Date)
 
     const { name, params, value } = parseLine(line)
     switch (name) {
-      case 'UID': uid = value; break
-      case 'SUMMARY': title = decodeText(value); break
-      case 'DTSTART': startRaw = value; startParams = params; break
-      case 'DTEND': endRaw = value; endParams = params; break
-      case 'DURATION': durationRaw = value; break
-      case 'DESCRIPTION': description = decodeText(value); break
-      case 'LOCATION': location = decodeText(value); break
-      case 'STATUS': status = value; break
-      case 'RRULE': rruleRaw = value; break
+      case 'UID':
+        uid = value
+        break
+      case 'SUMMARY':
+        title = decodeText(value)
+        break
+      case 'DTSTART':
+        startRaw = value
+        startParams = params
+        break
+      case 'DTEND':
+        endRaw = value
+        endParams = params
+        break
+      case 'DURATION':
+        durationRaw = value
+        break
+      case 'DESCRIPTION':
+        description = decodeText(value)
+        break
+      case 'LOCATION':
+        location = decodeText(value)
+        break
+      case 'STATUS':
+        status = value
+        break
+      case 'RRULE':
+        rruleRaw = value
+        break
       case 'EXDATE':
         // value may be comma-separated list of dates
         for (const d of value.split(',')) {
           const { date } = parseDateTime(d.trim(), params)
-          exdates.add(`${date.getFullYear()}${String(date.getMonth()+1).padStart(2,'0')}${String(date.getDate()).padStart(2,'0')}`)
+          exdates.add(
+            `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}`,
+          )
         }
         break
     }
@@ -264,8 +338,14 @@ export function parseICalEvents(raw: string, rangeStart?: Date, rangeEnd?: Date)
   if (!rangeStart || !rangeEnd) {
     // No range: return base occurrences only
     return rawEvents.map((ev) => ({
-      uid: ev.uid, title: ev.title, start: ev.start, end: ev.end,
-      allDay: ev.allDay, description: ev.description, location: ev.location, status: ev.status,
+      uid: ev.uid,
+      title: ev.title,
+      start: ev.start,
+      end: ev.end,
+      allDay: ev.allDay,
+      description: ev.description,
+      location: ev.location,
+      status: ev.status,
     }))
   }
 
@@ -290,10 +370,16 @@ export function parseICalTasks(raw: string): ParsedTask[] {
   const tasks: ParsedTask[] = []
 
   let inTodo = false
-  let uid = '', title = '', dueRaw = '', completedRaw = ''
+  let uid = '',
+    title = '',
+    dueRaw = '',
+    completedRaw = ''
   let dueParams: Record<string, string> = {}
-  let description = '', location = '', status = 'NEEDS-ACTION'
-  let priority = 0, percentComplete = 0
+  let description = '',
+    location = '',
+    status = 'NEEDS-ACTION'
+  let priority = 0,
+    percentComplete = 0
 
   for (const line of lines) {
     if (line === 'BEGIN:VTODO') {
@@ -338,39 +424,69 @@ export function parseICalTasks(raw: string): ParsedTask[] {
 
     const { name, params, value } = parseLine(line)
     switch (name) {
-      case 'UID': uid = value; break
-      case 'SUMMARY': title = decodeText(value); break
-      case 'DUE': dueRaw = value; dueParams = params; break
-      case 'COMPLETED': completedRaw = value; break
-      case 'DESCRIPTION': description = decodeText(value); break
-      case 'LOCATION': location = decodeText(value); break
-      case 'STATUS': status = value; break
-      case 'PRIORITY': priority = parseInt(value, 10) || 0; break
-      case 'PERCENT-COMPLETE': percentComplete = parseInt(value, 10) || 0; break
+      case 'UID':
+        uid = value
+        break
+      case 'SUMMARY':
+        title = decodeText(value)
+        break
+      case 'DUE':
+        dueRaw = value
+        dueParams = params
+        break
+      case 'COMPLETED':
+        completedRaw = value
+        break
+      case 'DESCRIPTION':
+        description = decodeText(value)
+        break
+      case 'LOCATION':
+        location = decodeText(value)
+        break
+      case 'STATUS':
+        status = value
+        break
+      case 'PRIORITY':
+        priority = parseInt(value, 10) || 0
+        break
+      case 'PERCENT-COMPLETE':
+        percentComplete = parseInt(value, 10) || 0
+        break
     }
   }
 
   return tasks
 }
 
-function pad2(n: number): string { return String(n).padStart(2, '0') }
+function pad2(n: number): string {
+  return String(n).padStart(2, '0')
+}
 
 function formatDateUTC(d: Date): string {
-  return `${d.getUTCFullYear()}${pad2(d.getUTCMonth()+1)}${pad2(d.getUTCDate())}T${pad2(d.getUTCHours())}${pad2(d.getUTCMinutes())}${pad2(d.getUTCSeconds())}Z`
+  return `${d.getUTCFullYear()}${pad2(d.getUTCMonth() + 1)}${pad2(d.getUTCDate())}T${pad2(d.getUTCHours())}${pad2(d.getUTCMinutes())}${pad2(d.getUTCSeconds())}Z`
 }
 
 function formatDateLocal(d: Date): string {
-  return `${d.getFullYear()}${pad2(d.getMonth()+1)}${pad2(d.getDate())}`
+  return `${d.getFullYear()}${pad2(d.getMonth() + 1)}${pad2(d.getDate())}`
 }
 
 export function serializeEvent(event: {
-  uid: string; title: string; start: Date; end: Date
-  allDay: boolean; description?: string; location?: string
+  uid: string
+  title: string
+  start: Date
+  end: Date
+  allDay: boolean
+  description?: string
+  location?: string
   status?: string
 }): string {
   const lines = [
-    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//freenit//EN',
-    'BEGIN:VEVENT', `UID:${event.uid}`, `SUMMARY:${encodeText(event.title)}`,
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//freenit//EN',
+    'BEGIN:VEVENT',
+    `UID:${event.uid}`,
+    `SUMMARY:${encodeText(event.title)}`,
   ]
   if (event.allDay) {
     lines.push(`DTSTART;VALUE=DATE:${formatDateLocal(event.start)}`)
@@ -386,7 +502,18 @@ export function serializeEvent(event: {
   return lines.join('\r\n')
 }
 
-export function serializeEvents(events: { uid: string; title: string; start: Date; end: Date; allDay: boolean; description?: string; location?: string; status?: string }[]): string {
+export function serializeEvents(
+  events: {
+    uid: string
+    title: string
+    start: Date
+    end: Date
+    allDay: boolean
+    description?: string
+    location?: string
+    status?: string
+  }[],
+): string {
   const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//freenit//EN']
   for (const event of events) {
     lines.push('BEGIN:VEVENT', `UID:${event.uid}`, `SUMMARY:${encodeText(event.title)}`)
@@ -418,9 +545,7 @@ function serializeTaskLines(task: {
   percentComplete?: number
   completed?: Date | null
 }): string[] {
-  const lines = [
-    'BEGIN:VTODO', `UID:${task.uid}`, `SUMMARY:${encodeText(task.title)}`,
-  ]
+  const lines = ['BEGIN:VTODO', `UID:${task.uid}`, `SUMMARY:${encodeText(task.title)}`]
   if (task.due) {
     if (task.allDay) {
       lines.push(`DUE;VALUE=DATE:${formatDateLocal(task.due)}`)
@@ -450,21 +575,29 @@ export function serializeTask(task: {
   percentComplete?: number
   completed?: Date | null
 }): string {
-  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//freenit//EN', ...serializeTaskLines(task), 'END:VCALENDAR'].join('\r\n')
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//freenit//EN',
+    ...serializeTaskLines(task),
+    'END:VCALENDAR',
+  ].join('\r\n')
 }
 
-export function serializeTasks(tasks: {
-  uid: string
-  title: string
-  due: Date | null
-  allDay: boolean
-  description?: string
-  location?: string
-  status?: string
-  priority?: number
-  percentComplete?: number
-  completed?: Date | null
-}[]): string {
+export function serializeTasks(
+  tasks: {
+    uid: string
+    title: string
+    due: Date | null
+    allDay: boolean
+    description?: string
+    location?: string
+    status?: string
+    priority?: number
+    percentComplete?: number
+    completed?: Date | null
+  }[],
+): string {
   const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//freenit//EN']
   for (const task of tasks) {
     lines.push(...serializeTaskLines(task))
@@ -473,12 +606,14 @@ export function serializeTasks(tasks: {
   return lines.join('\r\n')
 }
 
-export function localInputToDate(value: string): Date { return new Date(value) }
+export function localInputToDate(value: string): Date {
+  return new Date(value)
+}
 
 export function dateToLocalInput(d: Date): string {
-  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}T${pad2(d.getHours())}:${pad2(d.getMinutes())}`
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}T${pad2(d.getHours())}:${pad2(d.getMinutes())}`
 }
 
 export function dateToDateInput(d: Date): string {
-  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { deleteContact, selectContact } from '$lib/contacts/store'
+  import { deleteContact } from '$lib/contacts/store'
   import type { Contact } from '$lib/contacts/types'
 
   let { contact, onEdit }: { contact: Contact; onEdit: () => void } = $props()
@@ -49,7 +49,7 @@
       <div class="field">
         <span class="field-label">Email</span>
         <span class="field-values">
-          {#each contact.emails as email}
+          {#each contact.emails as email (email)}
             <a href="mailto:{email}" class="field-link">{email}</a>
           {/each}
         </span>
@@ -60,7 +60,7 @@
       <div class="field">
         <span class="field-label">Phone</span>
         <span class="field-values">
-          {#each contact.phones as phone}
+          {#each contact.phones as phone (phone)}
             <a href="tel:{phone}" class="field-link">{phone}</a>
           {/each}
         </span>

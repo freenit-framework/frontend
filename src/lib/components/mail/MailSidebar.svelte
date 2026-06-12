@@ -129,6 +129,7 @@
   .mailbox-list {
     flex: 1;
     overflow-y: auto;
+    min-height: 0;
     padding: 0.5rem 0;
   }
 

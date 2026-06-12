@@ -95,7 +95,7 @@
 <div class="files-page">
   <div class="toolbar">
     <nav class="breadcrumb" aria-label="Path">
-      {#each crumbs as crumb, i}
+      {#each crumbs as crumb, i (crumb.path)}
         {#if i > 0}<span class="sep">/</span>{/if}
         <button class="crumb-btn" onclick={() => navigate(crumb.path)}>{crumb.label}</button>
       {/each}

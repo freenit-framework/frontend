@@ -172,10 +172,10 @@
 
   {#if view === 'month'}
     <div class="grid month-grid">
-      {#each DAY_NAMES as name}
+      {#each DAY_NAMES as name (name)}
         <div class="day-name">{name}</div>
       {/each}
-      {#each viewDates as date}
+      {#each viewDates as date, index (index)}
         {#if date === null}
           <div class="cell empty"></div>
         {:else}
@@ -204,10 +204,10 @@
     </div>
   {:else if view === 'multiweek'}
     <div class="grid multiweek-grid">
-      {#each DAY_NAMES as name}
+      {#each DAY_NAMES as name (name)}
         <div class="day-name">{name}</div>
       {/each}
-      {#each viewDates as date}
+      {#each viewDates as date, index (index)}
         {#if date}
           {@const dayEvents = eventsOnDay(date)}
           {@const isToday = date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate()}
@@ -236,7 +236,7 @@
     <div class="time-grid" class:day-view={view === 'day'} class:three-day-view={view === '3day'} class:week-view={view === 'week'}>
       <div class="time-header">
         <div class="time-column-header"></div>
-        {#each viewDates as date}
+        {#each viewDates as date, index (index)}
           {#if date}
             {@const isToday = date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate()}
             <div class="day-header" class:today={isToday}>
@@ -248,16 +248,16 @@
       </div>
       <div class="time-body">
         <div class="time-gutter">
-          {#each Array.from({ length: 24 }, (_, h) => h) as h}
+          {#each Array.from({ length: 24 }, (_, h) => h) as h (h)}
             <div class="hour-label">{formatHour(h)}</div>
           {/each}
         </div>
-        {#each viewDates as date}
+        {#each viewDates as date, index (index)}
           {#if date}
             {@const dayStart = startOfDay(date)}
             {@const dayEvents = eventsOnDay(date)}
             <div class="day-column">
-              {#each Array.from({ length: 24 }, (_, h) => h) as h}
+              {#each Array.from({ length: 24 }, (_, i) => i) as _, index (index)}
                 <div class="hour-slot"></div>
               {/each}
               {#each dayEvents as ev (ev.uid)}

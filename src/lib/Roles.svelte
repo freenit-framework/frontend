@@ -61,7 +61,7 @@
       <div class="table">
         <div class="heading">ID</div>
         <div class="heading">Name</div>
-        {#each store.role.list.data as role}
+        {#each store.role.list.data as role (role.id)}
           <div class="data">
             <a href={`/roles/${utils.name(role)}`}>{utils.id(role)}</a>
           </div>

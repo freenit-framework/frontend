@@ -38,7 +38,7 @@ body {
   --font-family-mono: monaco, Consolas, 'Lucida Console', monospace;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --bg-color: #1b2433;
   --bg-secondary-color: #2a3546;
   --color-primary: #5b8bf7;
@@ -52,17 +52,25 @@ body {
   --font-color: #e0e6ed;
 }
 
-[data-theme="dark"] input:not([type="checkbox"], [type="radio"], [type="submit"], [type="color"], [type="button"], [type="reset"]),
-[data-theme="dark"] textarea,
-[data-theme="dark"] select {
+[data-theme='dark']
+  input:not(
+    [type='checkbox'],
+    [type='radio'],
+    [type='submit'],
+    [type='color'],
+    [type='button'],
+    [type='reset']
+  ),
+[data-theme='dark'] textarea,
+[data-theme='dark'] select {
   background-color: var(--bg-color);
   color: var(--font-color);
 }
 
-[data-theme="dark"] select {
+[data-theme='dark'] select {
   background-color: var(--bg-color);
 }
 
-[data-theme="dark"] a {
+[data-theme='dark'] a {
   color: #7aa2ff;
 }

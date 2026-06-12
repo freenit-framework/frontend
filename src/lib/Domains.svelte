@@ -60,7 +60,7 @@
       </div>
       <div class="table">
         <div class="heading">FQDN</div>
-        {#each store.domain.list.data as domain}
+        {#each store.domain.list.data as domain (domain.ou)}
           <div class="data">
             <a href={`/domains/${domain.ou}`}>{domain.ou}</a>
           </div>

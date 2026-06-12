@@ -2,3 +2,6 @@
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+
+# Generated OMEMO WASM artifacts
+src/lib/jabber/omemo/wasm/freenit_omemo*

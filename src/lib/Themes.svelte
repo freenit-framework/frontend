@@ -60,7 +60,7 @@
       <div class="table">
         <div class="heading">ID</div>
         <div class="heading">Name</div>
-        {#each store.role.list.data as theme}
+        {#each store.role.list.data as theme (theme.id)}
           <div class="data">
             <a href={`/themes/${theme.name}`}>{theme.id}</a>
           </div>

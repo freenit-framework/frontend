@@ -1,21 +1,37 @@
 <script lang="ts">
   import { jabberStore } from '$lib/jabber/store.svelte'
-  import type { RosterItem, Room } from '$lib/jabber/types'
+  import type { RosterItem } from '$lib/jabber/types'
 
   let searchQuery = $state('')
   let showJoinRoom = $state(false)
   let roomJid = $state('')
   let roomNick = $state('')
 
-  const filteredRoster = $derived(
-    searchQuery.trim()
+  const filteredRoster = $derived.by(() => {
+    const query = searchQuery.trim().toLowerCase()
+    const selfJid = jabberStore.myJid
+    let items = query
       ? jabberStore.roster.filter(
           r =>
-            r.jid.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (r.name && r.name.toLowerCase().includes(searchQuery.toLowerCase()))
+            r.jid.toLowerCase().includes(query) ||
+            (r.name && r.name.toLowerCase().includes(query))
         )
-      : jabberStore.roster
-  )
+      : [...jabberStore.roster]
+
+    if (selfJid && !items.some((r) => r.jid === selfJid)) {
+      items.push({ jid: selfJid, name: 'Me', subscription: 'both', presence: 'available', status: '' })
+    }
+
+    items.sort((a, b) => {
+      if (a.jid === selfJid) return -1
+      if (b.jid === selfJid) return 1
+      const aName = (a.name || a.jid).toLowerCase()
+      const bName = (b.name || b.jid).toLowerCase()
+      return aName.localeCompare(bName)
+    })
+
+    return items
+  })
 
   const filteredRooms = $derived(
     searchQuery.trim()

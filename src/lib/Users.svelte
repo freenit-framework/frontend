@@ -53,7 +53,7 @@
       <div class="heading">EMail</div>
       <div class="heading">Active</div>
       <div class="heading">Admin</div>
-      {#each store.user.list.data as user}
+      {#each store.user.list.data as user (user.uidNumber)}
         <div class="data">{utils.uid(user)}</div>
         <div class="data">
           <a href={`/users/${utils.uid(user)}`}>{user.email}</a>

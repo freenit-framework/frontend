@@ -219,7 +219,7 @@
                       field: e.currentTarget.value as SieveCondition['field'],
                     })}
                 >
-                  {#each conditionFields as field}
+                  {#each conditionFields as field (field.value)}
                     <option value={field.value}>{field.label}</option>
                   {/each}
                 </select>
@@ -230,7 +230,7 @@
                       op: e.currentTarget.value as SieveCondition['op'],
                     })}
                 >
-                  {#each conditionOps as op}
+                  {#each conditionOps as op (op.value)}
                     <option value={op.value}>{op.label}</option>
                   {/each}
                 </select>
@@ -262,7 +262,7 @@
               value={rule.action.type}
               onchange={(e) => {
                 const type = e.currentTarget.value as SieveAction['type']
-                let action: SieveAction = { type: 'keep' }
+                let action: SieveAction
                 switch (type) {
                   case 'fileinto':
                     action = { type: 'fileinto', folder: '' }
@@ -285,7 +285,7 @@
                 updateAction(index, action)
               }}
             >
-              {#each actionTypes as at}
+              {#each actionTypes as at (at.value)}
                 <option value={at.value}>{at.label}</option>
               {/each}
             </select>

@@ -1,5 +1,12 @@
 node_modules
 
+# Vendored dependencies
+vendor/
+
+# Rust OMEMO crate build artifacts
+omemo/target
+omemo/.cargo-bin
+
 # Output
 .output
 .vercel

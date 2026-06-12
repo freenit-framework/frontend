@@ -64,7 +64,7 @@ export default class GroupStore {
     const response = await methods.delete(`${this.prefix}/domains/${domain}/groups/${group}`)
     if (response.ok) {
       const data = await response.json()
-      this.list.data = this.list.data.filter(gr => gr.cn !== group)
+      this.list.data = this.list.data.filter((gr) => gr.cn !== group)
       return { ...data, ok: true }
     }
     return response
@@ -72,7 +72,10 @@ export default class GroupStore {
 
   assign = async (domain: any, group: string, user_id: number) => {
     await this.store.auth.refresh_token()
-    const response = await methods.post(`${this.prefix}/domains/${domain}/groups/${group}/${user_id}`, {})
+    const response = await methods.post(
+      `${this.prefix}/domains/${domain}/groups/${group}/${user_id}`,
+      {},
+    )
     if (response.ok) {
       const data = await response.json()
       return { ...data, ok: true }
@@ -82,7 +85,9 @@ export default class GroupStore {
 
   deassign = async (domain: any, group: string, user_id: number) => {
     await this.store.auth.refresh_token()
-    const response = await methods.delete(`${this.prefix}/domains/${domain}/groups/${group}/${user_id}`)
+    const response = await methods.delete(
+      `${this.prefix}/domains/${domain}/groups/${group}/${user_id}`,
+    )
     if (response.ok) {
       const data = await response.json()
       return { ...data, ok: true }

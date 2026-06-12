@@ -80,7 +80,7 @@
       <div class="heading">Active</div>
       <div class="heading">Admin</div>
       <div class="heading">Member</div>
-      {#each store.user.list.data as user}
+      {#each store.user.list.data as user (user.email)}
         <div class="data">{utils.uid(user)}</div>
         <a class="data" href={`/users/${utils.uid(user)}`}>{user.email}</a>
         <div class="data">

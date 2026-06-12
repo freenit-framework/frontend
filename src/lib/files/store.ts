@@ -3,7 +3,7 @@ import { davRequest, parseMultiStatus, extractRelPath } from '$lib/dav'
 
 export interface FileEntry {
   name: string
-  href: string        // API-relative path: /file/path/to/name
+  href: string // API-relative path: /file/path/to/name
   isDir: boolean
   size: string
   modified: string

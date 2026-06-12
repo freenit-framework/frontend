@@ -2,7 +2,6 @@
   import {
     tasks,
     selectedCalendarName,
-    selectedTask,
     selectTask,
     deleteTask,
     toggleTaskComplete,

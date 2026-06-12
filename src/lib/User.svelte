@@ -21,7 +21,7 @@
       notification.error(roleResponse.statusText)
       return
     }
-    const [_, d] = store.user.detail.email.split('@')
+    const [, d] = store.user.detail.email.split('@')
     const groupResponse = await store.group.fetchAll(d)
     if (!groupResponse.ok) {
       notification.error(groupResponse.statusText)
@@ -101,7 +101,7 @@
       <div class="heading">Name</div>
       <div class="heading">Member</div>
 
-      {#each store.role.list.data as role}
+      {#each store.role.list.data as role (role.id ?? role.dn)}
         <a class="data" href={`/roles/${utils.name(role)}`}>{utils.name(role)}</a>
         <div class="data">
           <input type="checkbox" checked={roleMember(role)} onchange={toggleRoleMembership(role)} />
@@ -127,7 +127,7 @@
       <div class="heading">Name</div>
       <div class="heading">Member</div>
 
-      {#each store.group.list.data as group}
+      {#each store.group.list.data as group (group.id ?? group.gidNumber)}
         <a class="data" href={`/groups/${domain}/${utils.name(group)}`}>{utils.name(group)}</a>
         <div class="data">
           <input type="checkbox" checked={groupMember(group)} onchange={toggleGroupMembership(group)} />

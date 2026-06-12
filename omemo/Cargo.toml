@@ -1,0 +1,36 @@
+[package]
+name = "freenit-omemo"
+version = "0.1.0"
+edition = "2021"
+authors = ["Goran Mekić <meka@tilda.center>"]
+license = "BSD-2-Clause"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2.123"
+wasm-bindgen-futures = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde-wasm-bindgen = "0.6"
+wa-rs-libsignal = "0.2.0"
+aes-gcm = "0.10"
+hkdf = "0.12"
+sha2 = "0.10"
+rand = "0.9"
+rand_core = "0.9"
+chrono = "0.4"
+base64 = "0.22"
+thiserror = "2"
+async-trait = "0.1"
+bincode = "1"
+console_error_panic_hook = "0.1"
+
+# The dependency graph pulls in getrandom 0.2 (via wa-rs-libsignal -> rand 0.8?)
+# and 0.3 (via rand 0.9).  Both must be configured for wasm32-unknown-unknown.
+getrandom = { version = "0.2", features = ["js"] }
+getrandom-v03 = { package = "getrandom", version = "0.3", features = ["wasm_js"] }
+
+[profile.release]
+opt-level = 3
+lto = true

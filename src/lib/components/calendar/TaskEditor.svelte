@@ -144,7 +144,7 @@
       <label>
         <span class="label">Calendar</span>
         <select bind:value={calendarName}>
-          {#each $calendars as cal}
+          {#each $calendars as cal (cal.name)}
             <option value={cal.name}>{cal.displayName}</option>
           {/each}
         </select>

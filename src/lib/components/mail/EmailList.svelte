@@ -176,6 +176,7 @@
   .list-body {
     flex: 1;
     overflow-y: auto;
+    min-height: 0;
   }
 
   .item-wrap {

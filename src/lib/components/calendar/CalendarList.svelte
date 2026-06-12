@@ -154,7 +154,7 @@
       return
     }
     const cal = $calendars.find((c) => c.name === calName)
-    const fileName = `${(cal?.displayName || calName).replace(/[^a-z0-9_\-]/gi, '_')}.ics`
+    const fileName = `${(cal?.displayName || calName).replace(/[^a-z0-9_-]/gi, '_')}.ics`
     downloadICal(ics, fileName)
   }
 

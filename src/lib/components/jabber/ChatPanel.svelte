@@ -3,20 +3,29 @@
 
   let messageText = $state('')
 
-  const messages = $derived(() => {
+  const messages = $derived.by(() => {
     if (!jabberStore.selectedJid) return []
     return jabberStore.getMessages(jabberStore.selectedJid)
   })
 
-  function send() {
+  async function send() {
     const text = messageText.trim()
     if (!text || !jabberStore.selectedJid) return
     if (jabberStore.selectedIsRoom) {
-      jabberStore.sendRoomMessage(jabberStore.selectedJid, text)
+      await jabberStore.sendRoomMessage(jabberStore.selectedJid, text)
     } else {
-      jabberStore.sendMessage(jabberStore.selectedJid, text)
+      await jabberStore.sendMessage(jabberStore.selectedJid, text)
     }
     messageText = ''
+  }
+
+  function isOmemoEnabled(): boolean {
+    return jabberStore.selectedJid ? jabberStore.isOmemoEnabled(jabberStore.selectedJid) : false
+  }
+
+  function toggleOmemo() {
+    if (!jabberStore.selectedJid) return
+    jabberStore.toggleOmemo(jabberStore.selectedJid)
   }
 
   function handleKey(e: KeyboardEvent) {
@@ -51,21 +60,36 @@
       {#if jabberStore.selectedIsRoom}
         <span class="chat-badge">room</span>
       {/if}
+      {#if !jabberStore.selectedIsRoom}
+        <button
+          class="omemo-toggle"
+          class:active={isOmemoEnabled()}
+          onclick={toggleOmemo}
+          title={isOmemoEnabled() ? 'OMEMO encryption enabled' : 'OMEMO encryption disabled'}
+        >
+          {isOmemoEnabled() ? '🔒' : '🔓'}
+        </button>
+      {/if}
     </div>
 
     <div class="messages">
       {#if jabberStore.isHistoryLoading(jabberStore.selectedJid)}
         <div class="loading-history">Loading history…</div>
-      {:else if messages().length === 0}
+      {:else if messages.length === 0}
         <div class="no-messages">No messages yet</div>
       {:else}
-        {#each messages() as msg (msg.id)}
+        {#each messages as msg (msg.id)}
           <div class="message" class:incoming={msg.incoming} class:outgoing={!msg.incoming}>
             <div class="bubble">
               {#if msg.type === 'groupchat'}
                 <div class="sender">{msg.from}</div>
               {/if}
-              <div class="body">{msg.body}</div>
+              <div class="body" class:failed={msg.decryptionFailed}>
+                {msg.body}
+                {#if msg.encrypted}
+                  <span class="lock" title="OMEMO encrypted">🔒</span>
+                {/if}
+              </div>
               <div class="meta">{formatTime(msg.timestamp)}</div>
             </div>
           </div>
@@ -136,6 +160,22 @@
     margin-top: 0.2rem;
   }
 
+  .omemo-toggle {
+    align-self: flex-start;
+    background: none;
+    border: 1px solid var(--color-lightGrey, #d9e0eb);
+    border-radius: 5px;
+    padding: 0.2rem 0.4rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+  }
+
+  .omemo-toggle.active {
+    background: var(--color-success, #28bd14);
+    border-color: var(--color-success, #28bd14);
+  }
+
   .messages {
     flex: 1;
     overflow-y: auto;
@@ -202,6 +242,16 @@
     margin-top: 0.3rem;
     opacity: 0.7;
     text-align: right;
+  }
+
+  .bubble .body .lock {
+    margin-left: 0.3rem;
+    font-size: 0.75rem;
+  }
+
+  .bubble .body.failed {
+    font-style: italic;
+    opacity: 0.7;
   }
 
   .composer {

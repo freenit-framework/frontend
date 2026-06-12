@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { notification, utils } from '$lib'
+  import { notification } from '$lib'
   import Spinner from './Spinner.svelte'
 
   let loading = $state(true)
@@ -29,7 +29,7 @@
 
   const toggleMembership = (user: any) => async (event: any) => {
     let response
-    const [_, domain] = user.email.split('@')
+    const [, domain] = user.email.split('@')
     if (event.target.checked) {
       response = await store.group.assign(domain, store.group.detail.cn, user.uidNumber)
     } else {
@@ -64,7 +64,7 @@
     <div class="table">
       <div class="heading">Name</div>
       <div class="heading">Member</div>
-      {#each store.user.list.data as user}
+      {#each store.user.list.data as user (user.uidNumber)}
         <a class="data" href={`/users/${user.uidNumber}`}>{user.uid}</a>
         <div class="data">
           <input type="checkbox" checked={member(user)} onchange={toggleMembership(user)} />

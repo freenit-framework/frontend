@@ -207,7 +207,7 @@ function parseAction(line: string): { action: SieveAction; stop: boolean } | nul
   if (m) {
     const days = parseInt(m[1], 10)
     let subject = ''
-    let message = m[2]
+    let message: string
     if (m[2] && m[3]) {
       subject = m[2].replace(/\\"/g, '"').replace(/\\\\/g, '\\')
       const msgParsed = parseString(m[3])
@@ -229,7 +229,7 @@ function parseIfBlock(lines: string[], start: number): { rule: SieveRule; end: n
 
   const testStr = m[1].trim()
   let all = false
-  let conditionStrs: string[] = []
+  let conditionStrs: string[]
 
   const allofMatch = testStr.match(/^allof\s*\((.*)\)$/is)
   const anyofMatch = testStr.match(/^anyof\s*\((.*)\)$/is)

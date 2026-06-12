@@ -5,7 +5,7 @@ export interface Calendar {
 
 export interface CalendarEvent {
   uid: string
-  href: string       // API-relative path: /cal/{calendar}/{uid}.ics
+  href: string // API-relative path: /cal/{calendar}/{uid}.ics
   etag: string
   calendarName: string
   title: string
@@ -27,8 +27,8 @@ export interface CalendarTask {
   allDay: boolean
   description: string
   location: string
-  status: string        // NEEDS-ACTION, IN-PROCESS, COMPLETED, CANCELLED
-  priority: number      // 0-9, where 1 is highest
+  status: string // NEEDS-ACTION, IN-PROCESS, COMPLETED, CANCELLED
+  priority: number // 0-9, where 1 is highest
   percentComplete: number
   completed: Date | null
 }

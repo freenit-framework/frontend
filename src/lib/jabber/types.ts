@@ -6,6 +6,8 @@ export interface ChatMessage {
   timestamp: Date
   incoming: boolean
   type?: 'chat' | 'groupchat'
+  encrypted?: boolean
+  decryptionFailed?: boolean
 }
 
 export interface RosterItem {

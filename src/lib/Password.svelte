@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { goto } from '$app/navigation'
-  import { Input, notification, utils } from '$lib'
+  import { Input, notification } from '$lib'
 
   let { store } = $props()
   let password = $state('')

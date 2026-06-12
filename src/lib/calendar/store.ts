@@ -1,6 +1,13 @@
 import { writable, derived, get } from 'svelte/store'
 import { davRequest, parseMultiStatus, extractRelPath } from '$lib/dav'
-import { parseICalEvents, parseICalTasks, serializeEvent, serializeEvents, serializeTask, serializeTasks } from './ical'
+import {
+  parseICalEvents,
+  parseICalTasks,
+  serializeEvent,
+  serializeEvents,
+  serializeTask,
+  serializeTasks,
+} from './ical'
 import type { Calendar, CalendarEvent, CalendarTask } from './types'
 
 export type CalendarView = 'day' | '3day' | 'week' | 'multiweek' | 'month'
@@ -249,13 +256,14 @@ export function selectCalendar(name: string) {
 }
 
 export async function createCalendar(name: string, displayName: string): Promise<void> {
-  const safeName = name
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 40) || 'calendar'
+  const safeName =
+    name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 40) || 'calendar'
 
   const { status } = await davRequest('MKCALENDAR', `/cal/${safeName}/`, {
     body: MKCALENDAR_BODY(displayName),

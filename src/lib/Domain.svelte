@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { notification, utils, Modal } from '$lib'
+  import { notification, Modal } from '$lib'
   import Input from './Input.svelte'
   import Spinner from './Spinner.svelte'
 
@@ -88,7 +88,7 @@
     </div>
     <div class="table">
       <div class="heading">Name</div>
-      {#each store.group.list.data as group}
+      {#each store.group.list.data as group (group.cn)}
         <div class="group">
           <a class="data" href={`/domains/${fqdn}/${group.cn}`}>{group.cn}</a>
           <button class="button error" onclick={toggleShowDestroy(group)}>Destroy</button>
