@@ -54,7 +54,9 @@
     </div>
 
     <div class="messages">
-      {#if messages().length === 0}
+      {#if jabberStore.isHistoryLoading(jabberStore.selectedJid)}
+        <div class="loading-history">Loading history…</div>
+      {:else if messages().length === 0}
         <div class="no-messages">No messages yet</div>
       {:else}
         {#each messages() as msg (msg.id)}
@@ -143,7 +145,8 @@
     gap: 0.5rem;
   }
 
-  .no-messages {
+  .no-messages,
+  .loading-history {
     text-align: center;
     color: var(--color-grey, #60708a);
     padding: 2rem;

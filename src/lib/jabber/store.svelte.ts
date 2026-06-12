@@ -20,6 +20,8 @@ class JabberStore {
   myJid = $state('')
   wsURL = $state('')
   attemptedURL = $state('')
+  historyFetched = $state<Set<string>>(new Set())
+  historyLoading = $state<Set<string>>(new Set())
 
   // Reconnect state
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null
@@ -177,7 +179,7 @@ class JabberStore {
           timestamp: new Date(),
           incoming: true,
         })
-        const name = this.roster.find(r => r.jid === bareJid(msg.from || ''))?.name
+        const name = this.roster.find((r) => r.jid === bareJid(msg.from || ''))?.name
         if (!this.selectedJid || this.selectedJid !== bareJid(msg.from || '')) {
           notification(`Message from ${name || msg.from}: ${msg.body.substring(0, 60)}`)
         }
@@ -212,7 +214,7 @@ class JabberStore {
       const from = bareJid(presence.from || '')
       const show = presence.show || (presence.type === 'unavailable' ? 'unavailable' : 'available')
       const status = presence.status || ''
-      this.roster = this.roster.map(item => {
+      this.roster = this.roster.map((item) => {
         if (item.jid === from) {
           return { ...item, presence: show, status }
         }
@@ -243,7 +245,8 @@ class JabberStore {
   private scheduleReconnect(email: string) {
     if (this.reconnectTimer) return
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      this.error = 'Connection failed after 5 attempts. Check server config or wait for fail2ban to clear.'
+      this.error =
+        'Connection failed after 5 attempts. Check server config or wait for fail2ban to clear.'
       this.connecting = false
       return
     }
@@ -303,6 +306,8 @@ class JabberStore {
     this.connecting = false
     this.roster = []
     this.rooms = []
+    this.historyFetched = new Set()
+    this.historyLoading = new Set()
     if (clearMessages) {
       this.messages = {}
       this.selectedJid = null
@@ -313,14 +318,82 @@ class JabberStore {
   private addMessage(msg: ChatMessage, roomJid?: string) {
     const key = roomJid || (msg.incoming ? msg.from : msg.to)
     const existing = this.messages[key] || []
-    this.messages = { ...this.messages, [key]: [...existing, msg] }
+    if (existing.some((m) => m.id === msg.id)) return
+    const merged = [...existing, msg].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
+    this.messages = { ...this.messages, [key]: merged }
+  }
+
+  isHistoryLoading(jid: string): boolean {
+    return this.historyLoading.has(jid)
+  }
+
+  async fetchHistory(jid: string, isRoom = false) {
+    if (
+      !this.client ||
+      !this.connected ||
+      this.historyFetched.has(jid) ||
+      this.historyLoading.has(jid)
+    ) {
+      return
+    }
+
+    const archiveJid = isRoom ? jid : bareJid(this.myJid)
+    if (!archiveJid) return
+
+    this.historyLoading = new Set([...this.historyLoading, jid])
+    try {
+      const result = await this.client.searchHistory(archiveJid, {
+        ...(isRoom ? {} : { with: jid }),
+        paging: { max: 50 },
+      })
+
+      for (const item of result.results || []) {
+        const forward = item.item
+        const msg = forward.message
+        if (!msg?.body) continue
+
+        const delay = forward.delay || (msg as any).delay
+        const timestamp = delay?.timestamp ? new Date(delay.timestamp) : new Date()
+        const type: 'chat' | 'groupchat' = isRoom ? 'groupchat' : 'chat'
+
+        let from = bareJid(msg.from || '')
+        let isIncoming = bareJid(msg.from || '') !== bareJid(this.myJid)
+        if (isRoom) {
+          const parts = (msg.from || '').split('/')
+          const nick = parts.length > 1 ? parts.slice(1).join('/') : ''
+          from = nick || from
+          const room = this.rooms.find((r) => r.jid === jid)
+          isIncoming = nick !== (room?.nick || '')
+        }
+
+        this.addMessage(
+          {
+            id: item.id || msg.id || Math.random().toString(36).slice(2),
+            from,
+            to: bareJid(msg.to || ''),
+            body: msg.body,
+            timestamp,
+            incoming: isIncoming,
+            type,
+          },
+          isRoom ? jid : undefined,
+        )
+      }
+      this.historyFetched = new Set([...this.historyFetched, jid])
+    } catch (e) {
+      console.error('Failed to fetch history for', jid, e)
+    } finally {
+      const next = new Set(this.historyLoading)
+      next.delete(jid)
+      this.historyLoading = next
+    }
   }
 
   async joinRoom(jid: string, nick: string) {
     if (!this.client || !this.connected) return
     try {
       await this.client.joinRoom(jid, nick)
-      if (!this.rooms.find(r => r.jid === jid)) {
+      if (!this.rooms.find((r) => r.jid === jid)) {
         this.rooms = [...this.rooms, { jid, name: jid.split('@')[0], nick, joined: true }]
       }
     } catch (e) {
@@ -330,10 +403,10 @@ class JabberStore {
 
   leaveRoom(jid: string) {
     if (!this.client || !this.connected) return
-    const room = this.rooms.find(r => r.jid === jid)
+    const room = this.rooms.find((r) => r.jid === jid)
     if (room) {
       this.client.leaveRoom(jid, room.nick)
-      this.rooms = this.rooms.filter(r => r.jid !== jid)
+      this.rooms = this.rooms.filter((r) => r.jid !== jid)
       if (this.selectedJid === jid) {
         this.selectedJid = null
         this.selectedIsRoom = false
@@ -343,19 +416,22 @@ class JabberStore {
 
   sendRoomMessage(roomJid: string, body: string) {
     if (!this.client || !this.connected) return
-    const room = this.rooms.find(r => r.jid === roomJid)
+    const room = this.rooms.find((r) => r.jid === roomJid)
     if (!room) return
     const id = Math.random().toString(36).slice(2)
     this.client.sendMessage({ to: roomJid, body, id, type: 'groupchat' })
-    this.addMessage({
-      id,
-      from: room.nick,
-      to: roomJid,
-      body,
-      timestamp: new Date(),
-      incoming: false,
-      type: 'groupchat',
-    }, roomJid)
+    this.addMessage(
+      {
+        id,
+        from: room.nick,
+        to: roomJid,
+        body,
+        timestamp: new Date(),
+        incoming: false,
+        type: 'groupchat',
+      },
+      roomJid,
+    )
   }
 
   sendMessage(to: string, body: string) {
@@ -376,6 +452,9 @@ class JabberStore {
   selectJid(jid: string | null, isRoom = false) {
     this.selectedJid = jid
     this.selectedIsRoom = isRoom
+    if (jid) {
+      this.fetchHistory(jid, isRoom)
+    }
   }
 
   getMessages(jid: string): ChatMessage[] {

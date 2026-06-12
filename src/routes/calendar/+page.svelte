@@ -1,14 +1,17 @@
 <script lang="ts">
+  import CalendarList from '$lib/components/calendar/CalendarList.svelte'
   import CalendarGrid from '$lib/components/calendar/CalendarGrid.svelte'
   import EventViewer from '$lib/components/calendar/EventViewer.svelte'
   import EventEditor from '$lib/components/calendar/EventEditor.svelte'
-  import { selectedEvent, selectEvent, calendars, saveEvent } from '$lib/calendar/store'
+  import TaskList from '$lib/components/calendar/TaskList.svelte'
+  import TaskEditor from '$lib/components/calendar/TaskEditor.svelte'
+  import { selectedEvent, selectedTask, selectEvent, selectTask, calendars, selectedCalendarName, saveEvent } from '$lib/calendar/store'
   import { parseICalEvents } from '$lib/calendar/ical'
   import type { CalendarEvent } from '$lib/calendar/types'
 
-  type Panel = 'view' | 'edit' | 'new' | 'import'
+  type Panel = 'tasks' | 'view' | 'edit' | 'new' | 'import' | 'taskNew' | 'taskEdit'
 
-  let panel = $state<Panel>('view')
+  let panel = $state<Panel>('tasks')
   let importUrl = $state('')
   let importLoading = $state(false)
   let importError = $state('')
@@ -16,11 +19,13 @@
   let importCalendar = $state('')
   let importDone = $state(false)
 
-  $effect(() => { importCalendar = $calendars[0]?.name ?? '' })
+  $effect(() => { importCalendar = $selectedCalendarName || '' })
 
-  function handleNew() { selectEvent(null); panel = 'new' }
+  function handleNew() { selectTask(null); selectEvent(null); panel = 'new' }
   function handleEdit() { panel = 'edit' }
-  function handleCancel() { panel = 'view' }
+  function handleCancel() { panel = 'tasks' }
+  function handleNewTask() { selectEvent(null); selectTask(null); panel = 'taskNew' }
+  function handleEditTask() { panel = 'taskEdit' }
   $effect(() => { if ($selectedEvent) panel = 'view' })
 
   async function fetchIcal() {
@@ -83,7 +88,7 @@
       importDone = true
       importPreview = []
       importUrl = ''
-      setTimeout(() => { panel = 'view'; importDone = false }, 1500)
+      setTimeout(() => { panel = 'tasks'; importDone = false }, 1500)
     }
   }
 
@@ -91,10 +96,12 @@
 </script>
 
 <div class="calendar-layout">
+  <CalendarList />
+
   <div class="grid-pane">
     <div class="toolbar">
-      <button class="new-btn" onclick={handleNew}>New Event</button>
-      <button class="import-btn" onclick={() => { panel = panel === 'import' ? 'view' : 'import' }}>
+      <button class="new-btn" onclick={handleNew} disabled={!$selectedCalendarName}>New Event</button>
+      <button class="import-btn" onclick={() => { panel = panel === 'import' ? 'view' : 'import' }} disabled={!$selectedCalendarName}>
         Subscribe to Calendar
       </button>
     </div>
@@ -174,6 +181,20 @@
         <EventViewer event={$selectedEvent} onEdit={handleEdit} />
       {/if}
     </div>
+  {:else if panel === 'taskNew' || panel === 'taskEdit' || $selectedTask}
+    <div class="detail-pane">
+      {#if panel === 'taskNew'}
+        <TaskEditor onCancel={handleCancel} />
+      {:else if panel === 'taskEdit' && $selectedTask}
+        <TaskEditor task={$selectedTask} onCancel={handleCancel} />
+      {:else if $selectedTask}
+        <TaskList onNew={handleNewTask} onEdit={handleEditTask} />
+      {/if}
+    </div>
+  {:else}
+    <div class="detail-pane">
+      <TaskList onNew={handleNewTask} onEdit={handleEditTask} />
+    </div>
   {/if}
 </div>
 
@@ -214,7 +235,8 @@
     transition: background 0.15s;
   }
 
-  .new-btn:hover { background: #1e50d8; }
+  .new-btn:hover:not(:disabled) { background: #1e50d8; }
+  .new-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .import-btn {
     padding: 0.35rem 0.9rem;
@@ -227,7 +249,8 @@
     transition: background 0.15s;
   }
 
-  .import-btn:hover { background: var(--color-lightGrey, #d9e0eb); }
+  .import-btn:hover:not(:disabled) { background: var(--color-lightGrey, #d9e0eb); }
+  .import-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .grid-wrapper { flex: 1; overflow: hidden; }
 

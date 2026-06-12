@@ -1,40 +1,31 @@
 <script lang="ts">
-  import { calendars, selectedCalendarName, saveEvent, selectEvent } from '$lib/calendar/store'
-  import type { CalendarEvent } from '$lib/calendar/types'
-  import { dateToLocalInput, dateToDateInput, localInputToDate } from '$lib/calendar/ical'
+  import { calendars, selectedCalendarName, saveTask, selectTask } from '$lib/calendar/store'
+  import type { CalendarTask } from '$lib/calendar/types'
+  import { dateToDateInput, dateToLocalInput, localInputToDate } from '$lib/calendar/ical'
 
   let {
-    event = null,
-    defaultDate = null,
+    task = null,
     onCancel,
   }: {
-    event?: CalendarEvent | null
-    defaultDate?: Date | null
+    task?: CalendarTask | null
     onCancel: () => void
   } = $props()
 
-  const isNew = !event
-  const base = defaultDate ?? new Date()
+  const isNew = !task
+  const baseDue = task?.due ?? new Date()
 
-  // Round default start to next hour
-  const defaultStart = new Date(base)
-  defaultStart.setMinutes(0, 0, 0)
-  defaultStart.setHours(defaultStart.getHours() + 1)
-  const defaultEnd = new Date(defaultStart.getTime() + 3600000)
-
-  let title = $state(event?.title ?? '')
-  let allDay = $state(event?.allDay ?? false)
-  let startInput = $state(
-    event ? (event.allDay ? dateToDateInput(event.start) : dateToLocalInput(event.start))
-          : dateToLocalInput(defaultStart)
+  let title = $state(task?.title ?? '')
+  let allDay = $state(task?.allDay ?? true)
+  let dueInput = $state(
+    task ? (task.allDay ? dateToDateInput(task.due ?? new Date()) : dateToLocalInput(task.due ?? new Date()))
+         : dateToDateInput(baseDue),
   )
-  let endInput = $state(
-    event ? (event.allDay ? dateToDateInput(event.end) : dateToLocalInput(event.end))
-          : dateToLocalInput(defaultEnd)
-  )
-  let description = $state(event?.description ?? '')
-  let location = $state(event?.location ?? '')
-  let calendarName = $state(event?.calendarName ?? $selectedCalendarName ?? $calendars[0]?.name ?? '')
+  let description = $state(task?.description ?? '')
+  let location = $state(task?.location ?? '')
+  let status = $state(task?.status ?? 'NEEDS-ACTION')
+  let priority = $state(task?.priority ?? 0)
+  let percentComplete = $state(task?.percentComplete ?? 0)
+  let calendarName = $state(task?.calendarName ?? $selectedCalendarName ?? $calendars[0]?.name ?? '')
 
   let saving = $state(false)
   let error = $state('')
@@ -49,35 +40,28 @@
       return
     }
 
-    const start = allDay ? new Date(startInput) : localInputToDate(startInput)
-    const end = allDay ? new Date(endInput) : localInputToDate(endInput)
-
-    if (end <= start) {
-      error = 'End must be after start'
-      return
-    }
-
     saving = true
     error = ''
     try {
-      const uid = event?.uid ?? crypto.randomUUID()
-      const href = event?.href ?? `/cal/${calendarName}/${uid}.ics`
-
-      await saveEvent({
+      const uid = task?.uid ?? crypto.randomUUID()
+      const due = allDay ? new Date(dueInput) : localInputToDate(dueInput)
+      await saveTask({
         uid,
-        href,
-        etag: event?.etag ?? '',
+        href: task?.href ?? `/cal/${calendarName}/${uid}.ics`,
+        etag: task?.etag ?? '',
         calendarName,
         title: title.trim(),
-        start,
-        end,
+        due,
         allDay,
         description: description.trim(),
         location: location.trim(),
-        status: event?.status ?? 'CONFIRMED',
+        status,
+        priority,
+        percentComplete,
+        completed: status === 'COMPLETED' ? (task?.completed ?? new Date()) : null,
         isNew,
       })
-      selectEvent(uid)
+      selectTask(uid)
       onCancel()
     } catch (e) {
       error = e instanceof Error ? e.message : 'Save failed'
@@ -89,7 +73,7 @@
 
 <div class="editor">
   <div class="editor-header">
-    <h2>{isNew ? 'New Event' : 'Edit Event'}</h2>
+    <h2>{isNew ? 'New Task' : 'Edit Task'}</h2>
     <div class="header-actions">
       <button class="btn-secondary" onclick={onCancel} disabled={saving}>Cancel</button>
       <button class="btn-primary" onclick={handleSave} disabled={saving}>
@@ -105,7 +89,7 @@
   <div class="form">
     <label>
       <span class="label">Title</span>
-      <input type="text" bind:value={title} placeholder="Event title" autofocus />
+      <input type="text" bind:value={title} placeholder="Task title" autofocus />
     </label>
 
     <div class="allday-row">
@@ -115,23 +99,34 @@
       </label>
     </div>
 
+    <label>
+      <span class="label">Due</span>
+      {#if allDay}
+        <input type="date" bind:value={dueInput} />
+      {:else}
+        <input type="datetime-local" bind:value={dueInput} />
+      {/if}
+    </label>
+
+    <label>
+      <span class="label">Status</span>
+      <select bind:value={status}>
+        <option value="NEEDS-ACTION">Needs action</option>
+        <option value="IN-PROCESS">In process</option>
+        <option value="COMPLETED">Completed</option>
+        <option value="CANCELLED">Cancelled</option>
+      </select>
+    </label>
+
     <div class="field-row">
       <label>
-        <span class="label">Start</span>
-        {#if allDay}
-          <input type="date" bind:value={startInput} />
-        {:else}
-          <input type="datetime-local" bind:value={startInput} />
-        {/if}
+        <span class="label">Priority</span>
+        <input type="number" min="0" max="9" bind:value={priority} />
       </label>
 
       <label>
-        <span class="label">End</span>
-        {#if allDay}
-          <input type="date" bind:value={endInput} />
-        {:else}
-          <input type="datetime-local" bind:value={endInput} />
-        {/if}
+        <span class="label">%</span>
+        <input type="number" min="0" max="100" bind:value={percentComplete} />
       </label>
     </div>
 
@@ -197,17 +192,11 @@
     transition: background 0.15s;
   }
 
-  .btn-primary:hover:not(:disabled) {
-    background: #1e50d8;
-  }
-
-  .btn-primary:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+  .btn-primary:hover:not(:disabled) { background: #1e50d8; }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .btn-secondary {
-    padding: 0.4rem 0.9rem;
+    padding: 0.4rem 1rem;
     background: none;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
@@ -217,58 +206,28 @@
     transition: background 0.15s;
   }
 
-  .btn-secondary:hover:not(:disabled) {
-    background: var(--color-lightGrey, #d9e0eb);
-  }
-
-  .btn-secondary:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+  .btn-secondary:hover:not(:disabled) { background: var(--color-lightGrey, #d9e0eb); }
+  .btn-secondary:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .error {
     color: var(--color-error, #d43939);
-    font-size: 0.88rem;
-    margin-bottom: 1rem;
-    padding: 0.5rem 0.75rem;
     background: #fff0f0;
+    padding: 0.5rem 0.75rem;
     border-radius: 5px;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
   }
 
   .form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-  }
-
-  .field-row {
-    display: flex;
-    gap: 1rem;
-  }
-
-  .field-row label {
-    flex: 1;
+    gap: 0.9rem;
   }
 
   label {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
-  }
-
-  .allday-row {
-    display: flex;
-    align-items: center;
-  }
-
-  .checkbox-label {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: var(--color-darkGrey, #1b2433);
   }
 
   .label {
@@ -279,27 +238,35 @@
     letter-spacing: 0.04em;
   }
 
-  input:not([type='checkbox']),
-  textarea,
-  select {
-    padding: 0.5rem 0.7rem;
+  input, select, textarea {
+    padding: 0.45rem 0.65rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
-    font-size: 0.9rem;
-    font-family: inherit;
+    font-size: 0.88rem;
     background: var(--bg-color, #fff);
     color: var(--color-darkGrey, #1b2433);
-    transition: border-color 0.15s;
   }
 
-  input:not([type='checkbox']):focus,
-  textarea:focus,
-  select:focus {
+  input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: var(--color-primary, #2f63f0);
   }
 
-  textarea {
-    resize: vertical;
+  .allday-row {
+    display: flex;
+  }
+
+  .checkbox-label {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    color: var(--color-darkGrey, #1b2433);
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
   }
 </style>

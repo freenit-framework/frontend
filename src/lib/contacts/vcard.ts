@@ -92,6 +92,31 @@ export function parseVCard(raw: string): ParsedVCard {
   return result
 }
 
+export function splitVCards(raw: string): string[] {
+  const cards: string[] = []
+  const lines = raw.split(/\r\n|\n|\r/)
+  let current: string[] = []
+  let inside = false
+
+  for (const line of lines) {
+    const upper = line.trim().toUpperCase()
+    if (upper === 'BEGIN:VCARD') {
+      inside = true
+      current = []
+    } else if (upper === 'END:VCARD') {
+      if (inside) {
+        cards.push(['BEGIN:VCARD', ...current, 'END:VCARD'].join('\r\n'))
+      }
+      inside = false
+      current = []
+    } else if (inside) {
+      current.push(line)
+    }
+  }
+
+  return cards
+}
+
 export function serializeVCard(contact: {
   uid: string
   displayName: string

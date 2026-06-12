@@ -272,6 +272,87 @@ export function parseICalEvents(raw: string, rangeStart?: Date, rangeEnd?: Date)
   return rawEvents.flatMap((ev) => expandRecurring(ev, rangeStart, rangeEnd))
 }
 
+export interface ParsedTask {
+  uid: string
+  title: string
+  due: Date | null
+  allDay: boolean
+  description: string
+  location: string
+  status: string
+  priority: number
+  percentComplete: number
+  completed: Date | null
+}
+
+export function parseICalTasks(raw: string): ParsedTask[] {
+  const lines = unfold(raw).split(/\r\n|\n|\r/)
+  const tasks: ParsedTask[] = []
+
+  let inTodo = false
+  let uid = '', title = '', dueRaw = '', completedRaw = ''
+  let dueParams: Record<string, string> = {}
+  let description = '', location = '', status = 'NEEDS-ACTION'
+  let priority = 0, percentComplete = 0
+
+  for (const line of lines) {
+    if (line === 'BEGIN:VTODO') {
+      inTodo = true
+      uid = title = dueRaw = completedRaw = description = location = ''
+      dueParams = {}
+      status = 'NEEDS-ACTION'
+      priority = 0
+      percentComplete = 0
+      continue
+    }
+    if (line === 'END:VTODO') {
+      inTodo = false
+      if (uid) {
+        let due: Date | null = null
+        let allDay = false
+        if (dueRaw) {
+          const parsed = parseDateTime(dueRaw, dueParams)
+          due = parsed.date
+          allDay = parsed.allDay
+        }
+        let completed: Date | null = null
+        if (completedRaw) {
+          completed = parseDateTime(completedRaw, {}).date
+        }
+        tasks.push({
+          uid,
+          title: title || '(No title)',
+          due,
+          allDay,
+          description,
+          location,
+          status,
+          priority,
+          percentComplete,
+          completed,
+        })
+      }
+      continue
+    }
+    if (!inTodo) continue
+
+    const { name, params, value } = parseLine(line)
+    switch (name) {
+      case 'UID': uid = value; break
+      case 'SUMMARY': title = decodeText(value); break
+      case 'DUE': dueRaw = value; dueParams = params; break
+      case 'COMPLETED': completedRaw = value; break
+      case 'DESCRIPTION': description = decodeText(value); break
+      case 'LOCATION': location = decodeText(value); break
+      case 'STATUS': status = value; break
+      case 'PRIORITY': priority = parseInt(value, 10) || 0; break
+      case 'PERCENT-COMPLETE': percentComplete = parseInt(value, 10) || 0; break
+    }
+  }
+
+  return tasks
+}
+
 function pad2(n: number): string { return String(n).padStart(2, '0') }
 
 function formatDateUTC(d: Date): string {
@@ -285,6 +366,7 @@ function formatDateLocal(d: Date): string {
 export function serializeEvent(event: {
   uid: string; title: string; start: Date; end: Date
   allDay: boolean; description?: string; location?: string
+  status?: string
 }): string {
   const lines = [
     'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//freenit//EN',
@@ -299,7 +381,95 @@ export function serializeEvent(event: {
   }
   if (event.description) lines.push(`DESCRIPTION:${encodeText(event.description)}`)
   if (event.location) lines.push(`LOCATION:${encodeText(event.location)}`)
+  if (event.status) lines.push(`STATUS:${event.status}`)
   lines.push('END:VEVENT', 'END:VCALENDAR')
+  return lines.join('\r\n')
+}
+
+export function serializeEvents(events: { uid: string; title: string; start: Date; end: Date; allDay: boolean; description?: string; location?: string; status?: string }[]): string {
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//freenit//EN']
+  for (const event of events) {
+    lines.push('BEGIN:VEVENT', `UID:${event.uid}`, `SUMMARY:${encodeText(event.title)}`)
+    if (event.allDay) {
+      lines.push(`DTSTART;VALUE=DATE:${formatDateLocal(event.start)}`)
+      lines.push(`DTEND;VALUE=DATE:${formatDateLocal(event.end)}`)
+    } else {
+      lines.push(`DTSTART:${formatDateUTC(event.start)}`)
+      lines.push(`DTEND:${formatDateUTC(event.end)}`)
+    }
+    if (event.description) lines.push(`DESCRIPTION:${encodeText(event.description)}`)
+    if (event.location) lines.push(`LOCATION:${encodeText(event.location)}`)
+    if (event.status) lines.push(`STATUS:${event.status}`)
+    lines.push('END:VEVENT')
+  }
+  lines.push('END:VCALENDAR')
+  return lines.join('\r\n')
+}
+
+function serializeTaskLines(task: {
+  uid: string
+  title: string
+  due: Date | null
+  allDay: boolean
+  description?: string
+  location?: string
+  status?: string
+  priority?: number
+  percentComplete?: number
+  completed?: Date | null
+}): string[] {
+  const lines = [
+    'BEGIN:VTODO', `UID:${task.uid}`, `SUMMARY:${encodeText(task.title)}`,
+  ]
+  if (task.due) {
+    if (task.allDay) {
+      lines.push(`DUE;VALUE=DATE:${formatDateLocal(task.due)}`)
+    } else {
+      lines.push(`DUE:${formatDateUTC(task.due)}`)
+    }
+  }
+  if (task.description) lines.push(`DESCRIPTION:${encodeText(task.description)}`)
+  if (task.location) lines.push(`LOCATION:${encodeText(task.location)}`)
+  if (task.status) lines.push(`STATUS:${task.status}`)
+  if (task.priority) lines.push(`PRIORITY:${task.priority}`)
+  if (task.percentComplete) lines.push(`PERCENT-COMPLETE:${task.percentComplete}`)
+  if (task.completed) lines.push(`COMPLETED:${formatDateUTC(task.completed)}`)
+  lines.push('END:VTODO')
+  return lines
+}
+
+export function serializeTask(task: {
+  uid: string
+  title: string
+  due: Date | null
+  allDay: boolean
+  description?: string
+  location?: string
+  status?: string
+  priority?: number
+  percentComplete?: number
+  completed?: Date | null
+}): string {
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//freenit//EN', ...serializeTaskLines(task), 'END:VCALENDAR'].join('\r\n')
+}
+
+export function serializeTasks(tasks: {
+  uid: string
+  title: string
+  due: Date | null
+  allDay: boolean
+  description?: string
+  location?: string
+  status?: string
+  priority?: number
+  percentComplete?: number
+  completed?: Date | null
+}[]): string {
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//freenit//EN']
+  for (const task of tasks) {
+    lines.push(...serializeTaskLines(task))
+  }
+  lines.push('END:VCALENDAR')
   return lines.join('\r\n')
 }
 

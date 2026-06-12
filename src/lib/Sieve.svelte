@@ -13,10 +13,12 @@
     deactivate,
     newScript,
   } from './sieve/store'
+  import RuleBuilder from './components/sieve/RuleBuilder.svelte'
 
   let editName = $state('')
   let editContent = $state('')
   let isNew = $state(false)
+  let hasUnsavedChanges = $state(false)
 
   onMount(async () => { await fetchScripts() })
 
@@ -26,11 +28,20 @@
       editName = s.name
       editContent = s.content
       isNew = s.name === ''
+      hasUnsavedChanges = false
     }
   })
 
   async function handleSelect(name: string) {
+    if (hasUnsavedChanges) {
+      if (!confirm('You have unsaved changes. Discard them?')) return
+    }
     await fetchScript(name)
+  }
+
+  function handleContentChange(content: string) {
+    editContent = content
+    hasUnsavedChanges = true
   }
 
   async function handleSave() {
@@ -117,12 +128,7 @@
       {#if $sieveError}
         <div class="error-bar">{$sieveError}</div>
       {/if}
-      <textarea
-        class="editor-area"
-        bind:value={editContent}
-        placeholder="# Sieve script&#10;require [&quot;fileinto&quot;];&#10;"
-        spellcheck={false}
-      ></textarea>
+      <RuleBuilder content={editContent} onChange={handleContentChange} />
     {:else}
       <div class="empty-state">Select a script or create a new one</div>
     {/if}
@@ -275,17 +281,6 @@
     color: var(--color-error, #d43939);
     font-size: 0.85rem;
     flex-shrink: 0;
-  }
-
-  .editor-area {
-    flex: 1;
-    padding: 1rem;
-    border: none;
-    resize: none;
-    font-family: var(--font-family-mono, monospace);
-    font-size: 0.9rem;
-    line-height: 1.5;
-    outline: none;
   }
 
   .empty-state, .status, .error {

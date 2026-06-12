@@ -16,3 +16,19 @@ export interface CalendarEvent {
   location: string
   status: string
 }
+
+export interface CalendarTask {
+  uid: string
+  href: string
+  etag: string
+  calendarName: string
+  title: string
+  due: Date | null
+  allDay: boolean
+  description: string
+  location: string
+  status: string        // NEEDS-ACTION, IN-PROCESS, COMPLETED, CANCELLED
+  priority: number      // 0-9, where 1 is highest
+  percentComplete: number
+  completed: Date | null
+}

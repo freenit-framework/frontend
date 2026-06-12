@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { addressbooks, saveContact, selectContact } from '$lib/contacts/store'
+  import { addressbooks, selectedAddressbookName, saveContact, selectContact } from '$lib/contacts/store'
   import type { Contact } from '$lib/contacts/types'
 
   let {
@@ -19,7 +19,7 @@
   let phonesRaw = $state(contact?.phones.join(', ') ?? '')
   let org = $state(contact?.org ?? '')
   let note = $state(contact?.note ?? '')
-  let addressbook = $state(contact?.addressbook ?? $addressbooks[0]?.name ?? '')
+  let addressbook = $state(contact?.addressbook ?? $selectedAddressbookName ?? $addressbooks[0]?.name ?? '')
 
   let saving = $state(false)
   let error = $state('')
@@ -128,12 +128,12 @@
       <textarea bind:value={note} rows="3" placeholder="Notes…"></textarea>
     </label>
 
-    {#if isNew && $addressbooks.length > 1}
+    {#if $addressbooks.length > 0}
       <label>
         <span class="label">Addressbook</span>
-        <select bind:value={addressbook}>
+        <select bind:value={addressbook} disabled={!isNew}>
           {#each $addressbooks as book}
-            <option value={book.name}>{book.displayName}</option>
+            <option value={book.name}>{book.displayName || book.name}</option>
           {/each}
         </select>
       </label>
