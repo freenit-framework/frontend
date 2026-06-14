@@ -1,4 +1,5 @@
-import { methods, utils } from '..'
+import methods from '../methods'
+import * as utils from '../utils'
 
 export default class AuthStore {
   store: any

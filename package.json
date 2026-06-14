@@ -1,6 +1,6 @@
 {
   "name": "freenit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "author": "Goran Mekić <meka@tilda.center>",
   "license": "BSD-2-Clause",
@@ -10,8 +10,8 @@
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",
     "prepublishOnly": "npm run package",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --compiler-warnings \"a11y_autofocus:ignore\"",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --compiler-warnings \"a11y_autofocus:ignore\" --watch",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
     "test:unit": "vitest",

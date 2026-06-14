@@ -13,31 +13,39 @@
     onCancel: () => void
   } = $props()
 
-  const isNew = !event
-  const base = defaultDate ?? new Date()
+  const isNew = $derived(!event)
 
-  // Round default start to next hour
-  const defaultStart = new Date(base)
-  defaultStart.setMinutes(0, 0, 0)
-  defaultStart.setHours(defaultStart.getHours() + 1)
-  const defaultEnd = new Date(defaultStart.getTime() + 3600000)
-
-  let title = $state(event?.title ?? '')
-  let allDay = $state(event?.allDay ?? false)
-  let startInput = $state(
-    event ? (event.allDay ? dateToDateInput(event.start) : dateToLocalInput(event.start))
-          : dateToLocalInput(defaultStart)
-  )
-  let endInput = $state(
-    event ? (event.allDay ? dateToDateInput(event.end) : dateToLocalInput(event.end))
-          : dateToLocalInput(defaultEnd)
-  )
-  let description = $state(event?.description ?? '')
-  let location = $state(event?.location ?? '')
-  let calendarName = $state(event?.calendarName ?? $selectedCalendarName ?? $calendars[0]?.name ?? '')
+  // Form state; synced from the event prop so selecting a different event resets the form.
+  let title = $state('')
+  let allDay = $state(false)
+  let startInput = $state('')
+  let endInput = $state('')
+  let description = $state('')
+  let location = $state('')
+  let calendarName = $state('')
 
   let saving = $state(false)
   let error = $state('')
+
+  $effect(() => {
+    const base = defaultDate ?? new Date()
+    const defaultStart = new Date(base)
+    defaultStart.setMinutes(0, 0, 0)
+    defaultStart.setHours(defaultStart.getHours() + 1)
+    const defaultEnd = new Date(defaultStart.getTime() + 3600000)
+
+    title = event?.title ?? ''
+    allDay = event?.allDay ?? false
+    startInput = event
+      ? (event.allDay ? dateToDateInput(event.start) : dateToLocalInput(event.start))
+      : dateToLocalInput(defaultStart)
+    endInput = event
+      ? (event.allDay ? dateToDateInput(event.end) : dateToLocalInput(event.end))
+      : dateToLocalInput(defaultEnd)
+    description = event?.description ?? ''
+    location = event?.location ?? ''
+    calendarName = event?.calendarName ?? $selectedCalendarName ?? $calendars[0]?.name ?? ''
+  })
 
   async function handleSave() {
     if (!title.trim()) {

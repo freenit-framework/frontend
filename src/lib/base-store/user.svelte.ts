@@ -1,4 +1,4 @@
-import { methods } from '..'
+import methods from '../methods'
 
 export default class UserStore {
   store: any

@@ -6,6 +6,10 @@ const config = {
   // Consult https://svelte.dev/docs/kit/integrations
   // for more information about preprocessors
   preprocess: vitePreprocess(),
+  onwarn(warning, handler) {
+    if (warning.code === 'a11y_autofocus') return
+    handler(warning)
+  },
 
   kit: {
     // adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.

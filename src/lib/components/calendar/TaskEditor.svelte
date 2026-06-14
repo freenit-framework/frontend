@@ -11,24 +11,37 @@
     onCancel: () => void
   } = $props()
 
-  const isNew = !task
-  const baseDue = task?.due ?? new Date()
+  const isNew = $derived(!task)
 
-  let title = $state(task?.title ?? '')
-  let allDay = $state(task?.allDay ?? true)
-  let dueInput = $state(
-    task ? (task.allDay ? dateToDateInput(task.due ?? new Date()) : dateToLocalInput(task.due ?? new Date()))
-         : dateToDateInput(baseDue),
-  )
-  let description = $state(task?.description ?? '')
-  let location = $state(task?.location ?? '')
-  let status = $state(task?.status ?? 'NEEDS-ACTION')
-  let priority = $state(task?.priority ?? 0)
-  let percentComplete = $state(task?.percentComplete ?? 0)
-  let calendarName = $state(task?.calendarName ?? $selectedCalendarName ?? $calendars[0]?.name ?? '')
+  // Form state; synced from the task prop so selecting a different task resets the form.
+  let title = $state('')
+  let allDay = $state(true)
+  let dueInput = $state('')
+  let description = $state('')
+  let location = $state('')
+  let status = $state('NEEDS-ACTION')
+  let priority = $state(0)
+  let percentComplete = $state(0)
+  let calendarName = $state('')
 
   let saving = $state(false)
   let error = $state('')
+
+  $effect(() => {
+    const baseDue = task?.due ?? new Date()
+
+    title = task?.title ?? ''
+    allDay = task?.allDay ?? true
+    dueInput = task
+      ? (task.allDay ? dateToDateInput(task.due ?? new Date()) : dateToLocalInput(task.due ?? new Date()))
+      : dateToDateInput(baseDue)
+    description = task?.description ?? ''
+    location = task?.location ?? ''
+    status = task?.status ?? 'NEEDS-ACTION'
+    priority = task?.priority ?? 0
+    percentComplete = task?.percentComplete ?? 0
+    calendarName = task?.calendarName ?? $selectedCalendarName ?? $calendars[0]?.name ?? ''
+  })
 
   async function handleSave() {
     if (!title.trim()) {

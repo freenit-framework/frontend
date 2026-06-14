@@ -10,19 +10,31 @@
     onCancel: () => void
   } = $props()
 
-  const isNew = !contact
+  const isNew = $derived(!contact)
 
-  let displayName = $state(contact?.displayName ?? '')
-  let firstName = $state(contact?.firstName ?? '')
-  let lastName = $state(contact?.lastName ?? '')
-  let emailsRaw = $state(contact?.emails.join(', ') ?? '')
-  let phonesRaw = $state(contact?.phones.join(', ') ?? '')
-  let org = $state(contact?.org ?? '')
-  let note = $state(contact?.note ?? '')
-  let addressbook = $state(contact?.addressbook ?? $selectedAddressbookName ?? $addressbooks[0]?.name ?? '')
+  // Form state; synced from the contact prop so selecting a different contact resets the form.
+  let displayName = $state('')
+  let firstName = $state('')
+  let lastName = $state('')
+  let emailsRaw = $state('')
+  let phonesRaw = $state('')
+  let org = $state('')
+  let note = $state('')
+  let addressbook = $state('')
 
   let saving = $state(false)
   let error = $state('')
+
+  $effect(() => {
+    displayName = contact?.displayName ?? ''
+    firstName = contact?.firstName ?? ''
+    lastName = contact?.lastName ?? ''
+    emailsRaw = contact?.emails.join(', ') ?? ''
+    phonesRaw = contact?.phones.join(', ') ?? ''
+    org = contact?.org ?? ''
+    note = contact?.note ?? ''
+    addressbook = contact?.addressbook ?? $selectedAddressbookName ?? $addressbooks[0]?.name ?? ''
+  })
 
   function splitField(raw: string): string[] {
     return raw
