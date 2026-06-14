@@ -13,6 +13,11 @@
     deactivate,
     newScript,
   } from './sieve/store'
+  import {
+    mailboxTree,
+    fetchMailFolders,
+    flattenMailboxOptions,
+  } from '$lib/mail/store'
   import RuleBuilder from './components/sieve/RuleBuilder.svelte'
 
   let editName = $state('')
@@ -20,7 +25,9 @@
   let isNew = $state(false)
   let hasUnsavedChanges = $state(false)
 
-  onMount(async () => { await fetchScripts() })
+  onMount(async () => { await Promise.all([fetchScripts(), fetchMailFolders()]) })
+
+  let folderOptions = $derived(flattenMailboxOptions($mailboxTree))
 
   $effect(() => {
     const s = $selectedScript
@@ -128,7 +135,7 @@
       {#if $sieveError}
         <div class="error-bar">{$sieveError}</div>
       {/if}
-      <RuleBuilder content={editContent} onChange={handleContentChange} />
+      <RuleBuilder content={editContent} onChange={handleContentChange} folders={folderOptions} />
     {:else}
       <div class="empty-state">Select a script or create a new one</div>
     {/if}

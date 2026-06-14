@@ -165,6 +165,19 @@ export const mailboxTree = derived(mailboxes, ($mailboxes) => {
   return sortMailboxes(roots)
 })
 
+export function flattenMailboxOptions(
+  nodes: MailboxNode[],
+  prefix = '',
+): { value: string; label: string }[] {
+  const options: { value: string; label: string }[] = []
+  for (const node of nodes) {
+    const path = prefix ? `${prefix}/${node.name}` : node.name
+    options.push({ value: path, label: path })
+    options.push(...flattenMailboxOptions(node.children, path))
+  }
+  return options.sort((a, b) => a.value.localeCompare(b.value))
+}
+
 // JMAP request — auth is handled server-side via the freenit session cookie
 async function jmapRequest(methodCalls: unknown[]): Promise<{
   methodResponses: Array<[string, Record<string, unknown>, string]>
@@ -226,6 +239,35 @@ export async function initMail(): Promise<void> {
     mailError.set(e instanceof Error ? e.message : 'Failed to connect to mail server')
   } finally {
     mailLoading.set(false)
+  }
+}
+
+export async function fetchMailFolders(): Promise<void> {
+  mailError.set(null)
+  try {
+    const response = await fetch('/api/v1/mail/jmap/session', {
+      headers: { Accept: 'application/json' },
+    })
+    if (!response.ok) throw new Error(`Session error: ${response.status}`)
+    const session: JMAPSession = await response.json()
+    jmapSession.set(session)
+
+    const accountId =
+      session.primaryAccounts['urn:ietf:params:jmap:mail'] ??
+      Object.keys(session.accounts)[0] ??
+      null
+    if (!accountId) return
+
+    const result = await jmapRequest([['Mailbox/get', { accountId, ids: null }, 'mailboxes']])
+    const list = getResponseList<Mailbox>(result, 'Mailbox/get')
+    const sorted = list.sort((a, b) => {
+      const ap = ROLE_ORDER[a.role ?? ''] ?? 10
+      const bp = ROLE_ORDER[b.role ?? ''] ?? 10
+      return ap !== bp ? ap - bp : a.sortOrder - b.sortOrder
+    })
+    mailboxes.set(sorted)
+  } catch (e) {
+    mailError.set(e instanceof Error ? e.message : 'Failed to load mail folders')
   }
 }
 

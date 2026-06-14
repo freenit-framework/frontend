@@ -12,9 +12,10 @@
   interface Props {
     content: string
     onChange: (content: string) => void
+    folders?: { value: string; label: string }[]
   }
 
-  let { content, onChange }: Props = $props()
+  let { content, onChange, folders = [] }: Props = $props()
 
   let rules = $state<SieveRule[]>([])
   let rawMode = $state(false)
@@ -291,13 +292,19 @@
             </select>
 
             {#if rule.action.type === 'fileinto'}
-              <input
-                type="text"
+              <select
                 value={rule.action.folder}
-                placeholder={actionPlaceholder(rule.action)}
-                oninput={(e) =>
+                onchange={(e) =>
                   updateAction(index, { type: 'fileinto', folder: e.currentTarget.value })}
-              />
+              >
+                <option value="" disabled>Select folder</option>
+                {#each folders as folder (folder.value)}
+                  <option value={folder.value}>{folder.label}</option>
+                {/each}
+                {#if rule.action.folder && !folders.some((f) => f.value === rule.action.folder)}
+                  <option value={rule.action.folder}>{rule.action.folder}</option>
+                {/if}
+              </select>
             {:else if rule.action.type === 'redirect'}
               <input
                 type="email"
@@ -583,6 +590,7 @@
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 4px;
     font-size: 0.85rem;
+    min-width: 180px;
   }
 
   .rule-action input,
