@@ -35,6 +35,10 @@
     return addrs.map(a => (a.name ? `${a.name} <${a.email}>` : a.email)).join(', ')
   }
 
+  const listId = $derived.by(() => {
+    return email?.['header:List-ID']?.trim() || ''
+  })
+
   const htmlBody = $derived.by(() => {
     if (!email?.bodyValues || !email.htmlBody?.length) return null
     const part = email.htmlBody[0]
@@ -190,6 +194,12 @@
           <span class="meta-label">Date:</span>
           <span class="meta-value">{formatDate(email.receivedAt)}</span>
         </div>
+        {#if listId}
+          <div class="meta-row">
+            <span class="meta-label">List-ID:</span>
+            <span class="meta-value">{listId}</span>
+          </div>
+        {/if}
       </div>
 
       {#if email.attachments?.length}
@@ -329,8 +339,9 @@
   .meta-label {
     color: var(--color-grey, #60708a);
     font-weight: 600;
-    width: 3.5rem;
+    width: 4.5rem;
     flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .meta-value {

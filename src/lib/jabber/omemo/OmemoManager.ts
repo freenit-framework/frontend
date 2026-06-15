@@ -9,8 +9,6 @@ import { OmemoWasm } from './wasm'
 import { OmemoIndexedDbStore } from './store'
 import type { OmemoBundle, OmemoEncryptedPayload, OmemoDeviceList } from './types'
 
-const IV_SIZE = 12
-
 const PUBSUB_PUBLISH_OPTIONS = {
   type: 'submit' as const,
   fields: [
@@ -39,10 +37,6 @@ function concat(...parts: Uint8Array[]): Uint8Array {
     off += p.length
   }
   return out
-}
-
-function getRandomBytes(n: number): Uint8Array {
-  return crypto.getRandomValues(new Uint8Array(n))
 }
 
 export class OmemoManager {
@@ -302,14 +296,9 @@ export class OmemoManager {
     console.log('OMEMO encrypt for', toJid, 'devices:', deviceList.devices)
     if (deviceList.devices.length === 0) return null
 
-    const iv = getRandomBytes(IV_SIZE)
-    const aesKey = getRandomBytes(16)
     const plaintextBytes = new TextEncoder().encode(plaintext)
-    const paddedLen = plaintextBytes.length + ((16 - (plaintextBytes.length % 16)) % 16)
-    const padded = new Uint8Array(paddedLen)
-    padded.set(plaintextBytes)
-    const { ciphertext, tag } = this.wasm.encryptMessage(padded, iv, aesKey)
-    const key = concat(aesKey, tag)
+    const { ciphertext, key: aesKey, authTag, iv } = this.wasm.encryptPayload(plaintextBytes)
+    const key = concat(aesKey, authTag)
 
     const keys: { rid: number; preKey: boolean; value: Uint8Array }[] = []
     for (const rid of deviceList.devices) {
@@ -324,10 +313,7 @@ export class OmemoManager {
 
     console.log('OMEMO encrypt keys:', {
       sid: this.deviceId,
-      iv: u8ToBase64(iv),
-      aesKey: u8ToBase64(aesKey),
-      tag: u8ToBase64(tag),
-      keys: keys.map((k) => ({ rid: k.rid, preKey: k.preKey, value: u8ToBase64(k.value) })),
+      keys: keys.map((k) => ({ rid: k.rid, preKey: k.preKey })),
     })
 
     if (keys.length === 0) return null
@@ -360,11 +346,8 @@ export class OmemoManager {
         sid: payload.sid,
         rid: this.deviceId,
         preKey: keyHeader.preKey,
-        decryptedKey: u8ToBase64(decryptedKey),
       })
-      const padded = this.wasm.decryptMessage(payload.payload, payload.iv, decryptedKey)
-      const padLen = padded[padded.length - 1] || 0
-      const plaintext = padded.slice(0, padded.length - padLen)
+      const plaintext = this.wasm.decryptPayload(payload.payload, payload.iv, decryptedKey)
       await this.persistStore()
       return new TextDecoder().decode(plaintext)
     } catch (e) {

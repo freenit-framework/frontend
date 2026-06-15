@@ -214,6 +214,7 @@
             {#each rule.conditions as condition, condIndex (condIndex)}
               <div class="condition-row">
                 <select
+                  class="condition-field"
                   value={condition.field}
                   onchange={(e) =>
                     updateCondition(index, condIndex, {
@@ -225,6 +226,7 @@
                   {/each}
                 </select>
                 <select
+                  class="condition-operator"
                   value={condition.op}
                   onchange={(e) =>
                     updateCondition(index, condIndex, {
@@ -236,6 +238,7 @@
                   {/each}
                 </select>
                 <input
+                  class="condition-value"
                   type="text"
                   value={condition.value}
                   placeholder={condition.field === 'x-spam-flag' ? 'YES' : 'value'}
@@ -554,12 +557,22 @@
   }
 
   .condition-row select {
-    min-width: 100px;
+    flex: 0 0 auto;
+    width: auto;
   }
 
-  .condition-row input {
-    flex: 1;
-    min-width: 80px;
+  .condition-field {
+    min-width: 7rem;
+  }
+
+  .condition-operator {
+    min-width: 6rem;
+  }
+
+  .condition-row .condition-value {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
   }
 
   .add-condition-btn {

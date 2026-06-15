@@ -9,17 +9,16 @@ export class OmemoCrypto {
      */
     bundle(): any;
     /**
-     * Decrypt a key slot.  `is_prekey` is the hint from the incoming OMEMO header;
-     * the actual message type is determined from the serialized bytes.
+     * Decrypt a key slot.  `is_prekey` is the hint from the incoming OMEMO header.
      */
-    decrypt_key(jid: string, device_id: number, _is_prekey: boolean, value: Uint8Array): Promise<Uint8Array>;
-    decrypt_message(ciphertext: Uint8Array, iv: Uint8Array, key: Uint8Array): Uint8Array;
+    decrypt_key(jid: string, device_id: number, _is_prekey: boolean, value: Uint8Array): Uint8Array;
+    decrypt_payload(ciphertext: Uint8Array, iv: Uint8Array, key_and_tag: Uint8Array): Uint8Array;
     /**
      * Encrypt a 32-byte payload key for a recipient device.  If no session exists
      * yet, `bundle` must contain the recipient's OMEMO bundle.
      */
-    encrypt_key(jid: string, device_id: number, bundle_js: any, key: Uint8Array): Promise<any>;
-    encrypt_message(plaintext: Uint8Array, iv: Uint8Array, key: Uint8Array): any;
+    encrypt_key(jid: string, device_id: number, bundle_js: any, key: Uint8Array): any;
+    encrypt_payload(plaintext: Uint8Array): any;
     /**
      * Load a previously serialized store.
      */
@@ -39,26 +38,23 @@ export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly __wbg_omemocrypto_free: (a: number, b: number) => void;
     readonly omemocrypto_bundle: (a: number) => [number, number, number];
-    readonly omemocrypto_decrypt_key: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => any;
-    readonly omemocrypto_decrypt_message: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number, number];
+    readonly omemocrypto_decrypt_key: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number, number];
+    readonly omemocrypto_decrypt_payload: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number, number];
     readonly omemocrypto_device_id: (a: number) => number;
-    readonly omemocrypto_encrypt_key: (a: number, b: number, c: number, d: number, e: any, f: number, g: number) => any;
-    readonly omemocrypto_encrypt_message: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number];
+    readonly omemocrypto_encrypt_key: (a: number, b: number, c: number, d: number, e: any, f: number, g: number) => [number, number, number];
+    readonly omemocrypto_encrypt_payload: (a: number, b: number, c: number) => [number, number, number];
     readonly omemocrypto_load: (a: number, b: number, c: number) => [number, number, number];
     readonly omemocrypto_new: (a: number) => number;
     readonly omemocrypto_refill_prekeys: (a: number) => void;
     readonly omemocrypto_rotate_signed_prekey: (a: number) => void;
     readonly omemocrypto_serialize: (a: number) => [number, number, number, number];
     readonly start: () => void;
-    readonly wasm_bindgen__convert__closures_____invoke__h7080ed45759025dd: (a: number, b: number, c: any) => [number, number];
-    readonly wasm_bindgen__convert__closures_____invoke__h106ea314296beb26: (a: number, b: number, c: any, d: any) => void;
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_exn_store: (a: number) => void;
     readonly __externref_table_alloc: () => number;
     readonly __wbindgen_externrefs: WebAssembly.Table;
     readonly __wbindgen_free: (a: number, b: number, c: number) => void;
-    readonly __wbindgen_destroy_closure: (a: number, b: number) => void;
     readonly __externref_table_dealloc: (a: number) => void;
     readonly __wbindgen_start: () => void;
 }

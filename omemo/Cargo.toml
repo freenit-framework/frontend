@@ -9,27 +9,18 @@ license = "BSD-2-Clause"
 crate-type = ["cdylib"]
 
 [dependencies]
-wasm-bindgen = "0.2.123"
-wasm-bindgen-futures = "0.4"
+wasm-bindgen = "0.2.125"
 serde = { version = "1.0", features = ["derive"] }
 serde-wasm-bindgen = "0.6"
-wa-rs-libsignal = "0.2.0"
-aes-gcm = "0.10"
-hkdf = "0.12"
-sha2 = "0.10"
-rand = "0.9"
-rand_core = "0.9"
-chrono = "0.4"
+dziber-omemo = "0.0.3"
+rand = "0.8"
 base64 = "0.22"
-thiserror = "2"
-async-trait = "0.1"
 bincode = "1"
 console_error_panic_hook = "0.1"
 
-# The dependency graph pulls in getrandom 0.2 (via wa-rs-libsignal -> rand 0.8?)
-# and 0.3 (via rand 0.9).  Both must be configured for wasm32-unknown-unknown.
+# getrandom 0.2 is pulled in via dziber-omemo -> rand 0.8 -> rand_core -> getrandom.
+# The "js" feature is required for wasm32-unknown-unknown.
 getrandom = { version = "0.2", features = ["js"] }
-getrandom-v03 = { package = "getrandom", version = "0.3", features = ["wasm_js"] }
 
 [profile.release]
 opt-level = 3

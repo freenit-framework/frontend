@@ -49,6 +49,7 @@ export interface Email {
   inReplyTo?: string[]
   references?: string[]
   subject?: string
+  'header:List-ID'?: string
   bodyValues?: Record<string, EmailBodyValue>
   textBody?: EmailBodyPart[]
   htmlBody?: EmailBodyPart[]

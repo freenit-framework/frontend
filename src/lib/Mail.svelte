@@ -1,12 +1,52 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte'
-  import { initMail, disconnectMailWebSocket } from './mail/store'
+  import { onMount } from 'svelte'
+  import {
+    initMail,
+    disconnectMailWebSocket,
+    deleteEmail,
+    selectedEmailId,
+  } from './mail/store'
   import MailSidebar from './components/mail/MailSidebar.svelte'
   import EmailList from './components/mail/EmailList.svelte'
   import EmailViewer from './components/mail/EmailViewer.svelte'
 
-  onMount(async () => { await initMail() })
-  onDestroy(() => { disconnectMailWebSocket() })
+  function handleKeydown(event: KeyboardEvent) {
+    if (
+      event.key !== 'Delete' ||
+      event.repeat ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.altKey ||
+      event.shiftKey
+    ) {
+      return
+    }
+
+    const target = event.target
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement ||
+      (target instanceof HTMLElement && target.isContentEditable)
+    ) {
+      return
+    }
+
+    if ($selectedEmailId) {
+      event.preventDefault()
+      void deleteEmail($selectedEmailId)
+    }
+  }
+
+  onMount(() => {
+    void initMail()
+    window.addEventListener('keydown', handleKeydown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeydown)
+      disconnectMailWebSocket()
+    }
+  })
 </script>
 
 <div class="mail-shell">

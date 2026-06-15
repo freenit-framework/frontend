@@ -1,6 +1,12 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
-  import { mailboxTree, selectedMailboxId, selectMailbox, mailLoading } from '$lib/mail/store'
+  import {
+    mailboxTree,
+    selectedMailboxId,
+    selectMailbox,
+    deleteMailbox,
+    mailLoading,
+  } from '$lib/mail/store'
   import type { MailboxNode } from '$lib/mail/types'
 
   const ROLE_ICONS: Record<string, string> = {
@@ -16,6 +22,10 @@
 
   function icon(mailbox: MailboxNode): string {
     return ROLE_ICONS[mailbox.role ?? ''] ?? '📁'
+  }
+
+  function showUnreadCount(mailbox: MailboxNode): boolean {
+    return mailbox.unreadEmails > 0 && mailbox.role !== 'junk' && mailbox.name !== 'Junk Mail'
   }
 
   function handleCompose() {
@@ -41,6 +51,12 @@
       await selectMailbox(node.id)
     }
   }
+
+  async function handleDelete(event: MouseEvent, node: MailboxNode) {
+    event.stopPropagation()
+    if (!confirm(`Delete folder "${node.name}"?`)) return
+    await deleteMailbox(node.id)
+  }
 </script>
 
 {#snippet folderItem(node: MailboxNode, depth: number)}
@@ -60,10 +76,18 @@
       >
         <span class="mailbox-icon">{icon(node)}</span>
         <span class="mailbox-name">{node.name}</span>
-        {#if node.unreadEmails > 0}
+        {#if showUnreadCount(node)}
           <span class="unread-badge">{node.unreadEmails}</span>
         {/if}
       </button>
+      {#if !node.role}
+        <button
+          class="delete-folder"
+          title={`Delete ${node.name}`}
+          aria-label={`Delete ${node.name}`}
+          onclick={(event) => handleDelete(event, node)}
+        >×</button>
+      {/if}
     </div>
     {#if hasChildren && isExpanded}
       {#each node.children as child (child.id)}
@@ -141,6 +165,7 @@
   .mailbox-line {
     display: flex;
     align-items: center;
+    position: relative;
   }
 
   .mailbox-item {
@@ -167,6 +192,35 @@
     background: rgba(47, 99, 240, 0.12);
     color: var(--color-primary, #2f63f0);
     font-weight: 600;
+  }
+
+  .delete-folder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--color-error, #d43939);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .mailbox-line:hover .delete-folder,
+  .delete-folder:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .delete-folder:hover {
+    background: var(--bg-error, #fef2f2);
   }
 
   .expand-icon {

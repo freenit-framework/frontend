@@ -376,6 +376,7 @@ export async function fetchEmailContent(emailId: string): Promise<Email | null> 
             'inReplyTo',
             'references',
             'subject',
+            'header:List-ID',
             'receivedAt',
             'preview',
             'hasAttachment',
@@ -393,8 +394,9 @@ export async function fetchEmailContent(emailId: string): Promise<Email | null> 
     ])
     const list = getResponseList<Email>(result, 'Email/get')
     if (list.length > 0) {
-      emailContent.update((cache) => ({ ...cache, [list[0].id]: list[0] }))
-      return list[0]
+      const message = list[0]
+      emailContent.update((cache) => ({ ...cache, [message.id]: message }))
+      return message
     }
   } catch (e) {
     mailError.set(e instanceof Error ? e.message : 'Failed to load email')
@@ -480,6 +482,41 @@ export async function deleteEmail(emailId: string): Promise<void> {
     selectedEmailId.update((id) => (id === emailId ? null : id))
   } catch (e) {
     mailError.set(e instanceof Error ? e.message : 'Failed to delete email')
+  }
+}
+
+export async function deleteMailbox(mailboxId: string): Promise<void> {
+  const accountId = get(primaryAccountId)
+  if (!accountId) return
+
+  const mailbox = get(mailboxes).find((item) => item.id === mailboxId)
+  if (!mailbox || mailbox.role) return
+
+  try {
+    const result = await jmapRequest([
+      ['Mailbox/set', { accountId, destroy: [mailboxId] }, 'destroyMailbox'],
+    ])
+    const response = result.methodResponses.find((item) => item[2] === 'destroyMailbox')
+    if (response?.[0] === 'error') {
+      throw new Error(String(response[1].description ?? response[1].type ?? 'Mailbox deletion failed'))
+    }
+    const notDestroyed = (response?.[1] as { notDestroyed?: Record<string, { description?: string; type?: string }> })
+      ?.notDestroyed?.[mailboxId]
+    if (notDestroyed) {
+      throw new Error(notDestroyed.description ?? notDestroyed.type ?? 'Mailbox deletion failed')
+    }
+
+    mailboxes.update((list) => list.filter((item) => item.id !== mailboxId))
+
+    if (get(selectedMailboxId) === mailboxId) {
+      const fallback = get(mailboxes).find((item) => item.role === 'inbox') ?? get(mailboxes)[0]
+      selectedEmailId.set(null)
+      emails.set([])
+      if (fallback) await selectMailbox(fallback.id)
+      else selectedMailboxId.set(null)
+    }
+  } catch (e) {
+    mailError.set(e instanceof Error ? e.message : 'Failed to delete mailbox')
   }
 }
 

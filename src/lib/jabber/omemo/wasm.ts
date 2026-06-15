@@ -77,18 +77,21 @@ export class OmemoWasm {
     return this.ensure().decrypt_key(jid, deviceId, isPreKey, value)
   }
 
-  encryptMessage(
-    plaintext: Uint8Array,
-    iv: Uint8Array,
-    key: Uint8Array,
-  ): { ciphertext: Uint8Array; tag: Uint8Array } {
-    return this.ensure().encrypt_message(plaintext, iv, key) as {
+  encryptPayload(plaintext: Uint8Array): {
+    ciphertext: Uint8Array
+    key: Uint8Array
+    authTag: Uint8Array
+    iv: Uint8Array
+  } {
+    return this.ensure().encrypt_payload(plaintext) as {
       ciphertext: Uint8Array
-      tag: Uint8Array
+      key: Uint8Array
+      authTag: Uint8Array
+      iv: Uint8Array
     }
   }
 
-  decryptMessage(ciphertext: Uint8Array, iv: Uint8Array, key: Uint8Array): Uint8Array {
-    return this.ensure().decrypt_message(ciphertext, iv, key)
+  decryptPayload(ciphertext: Uint8Array, iv: Uint8Array, keyAndTag: Uint8Array): Uint8Array {
+    return this.ensure().decrypt_payload(ciphertext, iv, keyAndTag)
   }
 }

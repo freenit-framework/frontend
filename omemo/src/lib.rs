@@ -1,6 +1,5 @@
 use wasm_bindgen::prelude::*;
 
-pub mod crypto;
 pub mod store;
 pub mod wasm;
 
