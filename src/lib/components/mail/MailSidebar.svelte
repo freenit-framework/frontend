@@ -136,7 +136,7 @@
     width: 100%;
     padding: 0.6rem 1rem;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -251,7 +251,7 @@
 
   .unread-badge {
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border-radius: 10px;
     font-size: 0.75rem;
     font-weight: 700;

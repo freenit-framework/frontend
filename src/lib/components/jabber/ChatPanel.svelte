@@ -153,7 +153,7 @@
   .chat-badge {
     font-size: 0.7rem;
     background: var(--color-primary, #2f63f0);
-    color: white;
+    color: var(--color-darkGrey);
     padding: 0.1rem 0.4rem;
     border-radius: 4px;
     align-self: flex-start;
@@ -222,7 +222,7 @@
 
   .outgoing .bubble {
     background: var(--color-primary, #2f63f0);
-    color: white;
+    color: var(--color-darkGrey);
     border-bottom-right-radius: 4px;
   }
 
@@ -283,7 +283,7 @@
     border: none;
     border-radius: 8px;
     background: var(--color-primary, #2f63f0);
-    color: white;
+    color: var(--color-darkGrey);
     font-size: 0.9rem;
     cursor: pointer;
     transition: background 0.1s;

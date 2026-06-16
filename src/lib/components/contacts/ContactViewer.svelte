@@ -104,7 +104,7 @@
     height: 3.5rem;
     border-radius: 50%;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -154,7 +154,7 @@
   .btn-danger {
     padding: 0.4rem 0.9rem;
     background: none;
-    border: 1px solid #f0c0c0;
+    border: 1px solid var(--color-error);
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.88rem;
@@ -163,7 +163,7 @@
   }
 
   .btn-danger:hover:not(:disabled) {
-    background: #fff0f0;
+    background: var(--bg-error);
   }
 
   .btn-danger:disabled {

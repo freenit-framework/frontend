@@ -177,13 +177,13 @@
     padding: 0.25rem 0.6rem;
     font-size: 0.8rem;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 4px;
     cursor: pointer;
   }
 
-  .new-btn:hover { background: #1e50d8; }
+  .new-btn:hover { filter: brightness(0.9); }
 
   .script-list {
     flex: 1;
@@ -218,7 +218,7 @@
   .active-badge {
     font-size: 0.7rem;
     background: var(--color-success, #28bd14);
-    color: #fff;
+    color: var(--color-darkGrey);
     padding: 0.1rem 0.4rem;
     border-radius: 10px;
     flex-shrink: 0;
@@ -258,7 +258,7 @@
   .save-btn {
     padding: 0.35rem 0.8rem;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -266,7 +266,7 @@
   }
 
   .save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-  .save-btn:not(:disabled):hover { background: #1e50d8; }
+  .save-btn:not(:disabled):hover { filter: brightness(0.9); }
 
   .toggle-btn, .delete-btn {
     padding: 0.35rem 0.8rem;
@@ -274,17 +274,18 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.85rem;
-    background: #fff;
+    background: var(--bg-color);
+    color: var(--font-color);
   }
 
   .toggle-btn:disabled, .delete-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .delete-btn { color: var(--color-error, #d43939); border-color: var(--color-error, #d43939); }
-  .delete-btn:not(:disabled):hover { background: var(--color-error, #d43939); color: #fff; }
+  .delete-btn:not(:disabled):hover { background: var(--color-error, #d43939); color: var(--color-darkGrey); }
 
   .error-bar {
     padding: 0.5rem 1rem;
-    background: #fef2f2;
+    background: var(--bg-error, #fef2f2);
     color: var(--color-error, #d43939);
     font-size: 0.85rem;
     flex-shrink: 0;

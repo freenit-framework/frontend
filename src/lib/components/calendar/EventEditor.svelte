@@ -196,7 +196,7 @@
   .btn-primary {
     padding: 0.4rem 1rem;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -206,7 +206,7 @@
   }
 
   .btn-primary:hover:not(:disabled) {
-    background: #1e50d8;
+    filter: brightness(0.9);
   }
 
   .btn-primary:disabled {
@@ -239,7 +239,7 @@
     font-size: 0.88rem;
     margin-bottom: 1rem;
     padding: 0.5rem 0.75rem;
-    background: #fff0f0;
+    background: var(--bg-error);
     border-radius: 5px;
   }
 

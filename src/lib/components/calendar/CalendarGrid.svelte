@@ -365,7 +365,7 @@
 
   .view-btn.active {
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border-color: var(--color-primary, #2f63f0);
   }
 
@@ -421,7 +421,7 @@
 
   .today-num {
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border-radius: 50%;
     width: 1.4rem;
     height: 1.4rem;
@@ -440,7 +440,7 @@
 
   .ev-pill {
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 4px;
     padding: 0.15rem 0.4rem;
@@ -521,7 +521,7 @@
 
   .day-header.today .day-header-date {
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border-radius: 50%;
     width: 1.4rem;
     height: 1.4rem;
@@ -574,7 +574,7 @@
     left: 0.15rem;
     right: 0.15rem;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 4px;
     padding: 0.15rem 0.3rem;

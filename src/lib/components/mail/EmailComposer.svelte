@@ -259,7 +259,7 @@
 
   .send-btn {
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 5px;
     padding: 0.45rem 1rem;

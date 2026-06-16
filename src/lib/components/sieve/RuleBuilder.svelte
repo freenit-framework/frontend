@@ -398,7 +398,7 @@
   .mode-btn {
     padding: 0.3rem 0.7rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
-    background: #fff;
+    background: var(--bg-color);
     color: var(--font-color, #333);
     font-size: 0.85rem;
     cursor: pointer;
@@ -407,14 +407,14 @@
 
   .mode-btn.active {
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border-color: var(--color-primary, #2f63f0);
   }
 
   .add-rule-btn {
     padding: 0.35rem 0.8rem;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -422,12 +422,12 @@
   }
 
   .add-rule-btn:hover {
-    background: #1e50d8;
+    filter: brightness(0.9);
   }
 
   .parse-error {
     padding: 0.5rem 1rem;
-    background: #fef2f2;
+    background: var(--bg-error, #fef2f2);
     color: var(--color-error, #d43939);
     font-size: 0.85rem;
     flex-shrink: 0;
@@ -498,7 +498,7 @@
     align-items: center;
     justify-content: center;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
-    background: #fff;
+    background: var(--bg-color);
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.85rem;
@@ -517,7 +517,7 @@
 
   .icon-btn.delete:hover:not(:disabled) {
     background: var(--color-error, #d43939);
-    color: #fff;
+    color: var(--color-darkGrey);
   }
 
   .rule-match {

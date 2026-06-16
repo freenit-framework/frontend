@@ -229,7 +229,7 @@
   .btn-primary {
     padding: 0.35rem 0.9rem;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -238,7 +238,7 @@
     transition: background 0.15s;
   }
 
-  .btn-primary:hover:not(:disabled) { background: #1e50d8; }
+  .btn-primary:hover:not(:disabled) { filter: brightness(0.9); }
   .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .btn-secondary {
@@ -283,8 +283,8 @@
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
     color: var(--color-error, #d43939);
-    background: #fff0f0;
-    border-bottom: 1px solid #f0c0c0;
+    background: var(--bg-error);
+    border-bottom: 1px solid var(--color-error);
     flex-shrink: 0;
   }
 

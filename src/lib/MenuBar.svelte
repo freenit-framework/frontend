@@ -44,13 +44,13 @@
     align-items: center;
     justify-content: flex-start;
     background-color: var(--color-primary);
-    color: white;
+    color: var(--color-darkGrey);
   }
 
   .icon {
     width: 26px;
     height: 26px;
-    fill: white;
+    fill: var(--color-darkGrey);
   }
 
   .menu-icon {
@@ -60,7 +60,7 @@
   .title {
     padding: 0;
     margin: 0;
-    color: white;
+    color: var(--color-darkGrey);
     font-size: 3rem;
     flex: 1;
   }

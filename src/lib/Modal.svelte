@@ -24,8 +24,9 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: #fff;
-    filter: drop-shadow(0 0 20px #333);
+    background: var(--bg-color);
+    color: var(--font-color);
+    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
     border-radius: 5px;
     padding: 10px;
   }

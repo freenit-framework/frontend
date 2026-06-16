@@ -226,7 +226,7 @@
   .new-btn {
     padding: 0.35rem 0.9rem;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -235,7 +235,7 @@
     transition: background 0.15s;
   }
 
-  .new-btn:hover:not(:disabled) { background: #1e50d8; }
+  .new-btn:hover:not(:disabled) { filter: brightness(0.9); }
   .new-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .import-btn {
@@ -312,7 +312,7 @@
   .btn-primary {
     padding: 0.4rem 1rem;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -322,7 +322,7 @@
     transition: background 0.15s;
   }
 
-  .btn-primary:hover:not(:disabled) { background: #1e50d8; }
+  .btn-primary:hover:not(:disabled) { filter: brightness(0.9); }
   .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .btn-sm { padding: 0.25rem 0.65rem; font-size: 0.82rem; }
@@ -331,15 +331,15 @@
     color: var(--color-error, #d43939);
     font-size: 0.85rem;
     padding: 0.4rem 0.6rem;
-    background: #fff0f0;
+    background: var(--bg-error);
     border-radius: 4px;
   }
 
   .import-success {
-    color: #2a7a2a;
+    color: var(--color-success);
     font-size: 0.85rem;
     padding: 0.4rem 0.6rem;
-    background: #f0fff0;
+    background: var(--bg-success);
     border-radius: 4px;
   }
 

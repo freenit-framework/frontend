@@ -1,6 +1,7 @@
 import AuthStore from './auth.svelte'
 import DomainStore from './domain.svelte'
 import GroupStore from './group.svelte'
+import MailingListStore from './mailinglist.svelte'
 import RoleStore from './role.svelte'
 import ThemeStore from './theme.svelte'
 import UserStore from './user.svelte'
@@ -10,6 +11,7 @@ export default class BaseStore {
   auth: AuthStore
   domain: DomainStore
   group: GroupStore
+  mailinglist: MailingListStore
   role: RoleStore
   theme: ThemeStore
   user: UserStore
@@ -19,6 +21,7 @@ export default class BaseStore {
     this.auth = new AuthStore(this, prefix)
     this.domain = new DomainStore(this, prefix)
     this.group = new GroupStore(this, prefix)
+    this.mailinglist = new MailingListStore(this, prefix)
     this.role = new RoleStore(this, prefix)
     this.theme = new ThemeStore(this, prefix)
     this.user = new UserStore(this, prefix)

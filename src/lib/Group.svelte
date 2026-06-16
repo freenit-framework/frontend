@@ -88,7 +88,7 @@
 
 <style>
   .table {
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-lightGrey);
     border-radius: 5px;
     padding: 10px;
     display: grid;
@@ -97,7 +97,7 @@
 
   .heading {
     font-weight: bold;
-    background-color: #eee;
+    background-color: var(--bg-secondary-color);
     padding: 5px;
   }
 
@@ -107,7 +107,7 @@
 
   .border {
     grid-column: 1 / 3;
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--color-lightGrey);
   }
 
   .actions {

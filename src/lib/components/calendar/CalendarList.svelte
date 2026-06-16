@@ -337,7 +337,7 @@
     flex: 1;
     padding: 0.35rem 0.5rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
-    background: #fff;
+    background: var(--bg-color);
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.8rem;
@@ -362,7 +362,7 @@
 
   .action-btn.danger:hover:not(:disabled) {
     background: var(--color-error, #d43939);
-    color: #fff;
+    color: var(--color-darkGrey);
   }
 
   .section-title {
@@ -380,7 +380,7 @@
     align-items: center;
     justify-content: center;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
-    background: #fff;
+    background: var(--bg-color);
     border-radius: 50%;
     cursor: pointer;
     font-size: 1rem;
@@ -420,7 +420,7 @@
   .form-actions button {
     padding: 0.35rem 0.7rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
-    background: #fff;
+    background: var(--bg-color);
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.8rem;
@@ -428,7 +428,7 @@
 
   .save-btn {
     background: var(--color-primary, #2f63f0) !important;
-    color: #fff;
+    color: var(--color-darkGrey);
     border-color: var(--color-primary, #2f63f0) !important;
   }
 
@@ -441,14 +441,14 @@
     padding: 0.5rem 0.75rem;
     font-size: 0.8rem;
     color: var(--color-success, #28bd14);
-    background: #f0fdf0;
+    background: var(--bg-success);
     border-bottom: 1px solid var(--color-lightGrey, #d9e0eb);
     flex-shrink: 0;
   }
 
   .message.error {
     color: var(--color-error, #d43939);
-    background: #fdf2f2;
+    background: var(--bg-error);
   }
 
   .file-input {
@@ -508,7 +508,7 @@
   .edit-actions button {
     padding: 0.25rem 0.6rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
-    background: #fff;
+    background: var(--bg-color);
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.78rem;
@@ -516,7 +516,7 @@
 
   .edit-actions .save-btn {
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border-color: var(--color-primary, #2f63f0);
   }
 
@@ -563,12 +563,12 @@
 
   .edit-cal:hover {
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
   }
 
   .delete-cal:hover {
     background: var(--color-error, #d43939);
-    color: #fff;
+    color: var(--color-darkGrey);
   }
 
   .state-msg {

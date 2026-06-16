@@ -98,7 +98,7 @@
   .new-task-btn {
     padding: 0.3rem 0.7rem;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -107,7 +107,7 @@
   }
 
   .new-task-btn:hover:not(:disabled) {
-    background: #1e50d8;
+    filter: brightness(0.9);
   }
 
   .new-task-btn:disabled {
@@ -215,6 +215,6 @@
 
   .delete-task:hover {
     background: var(--color-error, #d43939);
-    color: #fff;
+    color: var(--color-darkGrey);
   }
 </style>

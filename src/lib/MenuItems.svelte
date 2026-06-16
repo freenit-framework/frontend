@@ -14,6 +14,7 @@
     mdiFolder,
     mdiFilterOutline,
     mdiChatOutline,
+    mdiEmailNewsletter,
   } from '@mdi/js'
   import MenuItem from '$lib/MenuItem.svelte'
   import { dbtype } from './utils.js'
@@ -26,6 +27,7 @@
     <MenuItem href="/users" {toggle} icon={mdiAccount}>Users</MenuItem>
     <MenuItem href="/roles" {toggle} icon={mdiAccountGroup}>Roles</MenuItem>
     <MenuItem href="/themes" {toggle} icon={mdiCookieEditOutline}>Themes</MenuItem>
+    <MenuItem href="/mailinglists" {toggle} icon={mdiEmailNewsletter}>Mailing Lists</MenuItem>
     {#if dbtype(store.user.profile) === "ldap"}
       <MenuItem href="/domains" {toggle} icon={mdiSitemap}>Domains</MenuItem>
     {/if}
@@ -39,6 +41,7 @@
   <MenuItem href="/jabber" {toggle} icon={mdiChatOutline}>Jabber</MenuItem>
   <MenuItem href="/" toggle={logout} icon={mdiLogoutVariant}>Logout</MenuItem>
 {:else}
+  <MenuItem href="/mailinglists/public" {toggle} icon={mdiEmailNewsletter}>Mailing Lists</MenuItem>
   <MenuItem href="/register" {toggle} icon={mdiArrowDownBoldCircleOutline}>Register</MenuItem>
   <MenuItem href="/login" {toggle} icon={mdiLoginVariant}>Login</MenuItem>
 {/if}

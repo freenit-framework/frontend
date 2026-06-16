@@ -210,7 +210,7 @@
 
   .join-btn {
     background: var(--color-primary, #2f63f0);
-    color: white;
+    color: var(--color-darkGrey);
     border: none;
     border-radius: 50%;
     width: 24px;
@@ -256,7 +256,7 @@
 
   .join-actions button:first-child {
     background: var(--color-primary, #2f63f0);
-    color: white;
+    color: var(--color-darkGrey);
     border-color: var(--color-primary, #2f63f0);
   }
 

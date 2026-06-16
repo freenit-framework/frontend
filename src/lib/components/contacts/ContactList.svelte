@@ -376,7 +376,7 @@
     align-items: center;
     justify-content: center;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
-    background: #fff;
+    background: var(--bg-color);
     border-radius: 50%;
     cursor: pointer;
     font-size: 1rem;
@@ -421,7 +421,7 @@
 
   .form-actions .save-btn {
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border-color: var(--color-primary, #2f63f0);
   }
 
@@ -478,7 +478,7 @@
   .edit-actions button {
     padding: 0.25rem 0.6rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
-    background: #fff;
+    background: var(--bg-color);
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.78rem;
@@ -486,7 +486,7 @@
 
   .edit-actions .save-btn {
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     border-color: var(--color-primary, #2f63f0);
   }
 
@@ -578,11 +578,11 @@
     font-weight: 600;
     transition: background 0.15s;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
   }
 
   .new-btn:hover:not(:disabled), .import-btn:hover:not(:disabled), .export-btn:hover:not(:disabled) {
-    background: #1e50d8;
+    filter: brightness(0.9);
   }
 
   .new-btn:disabled, .import-btn:disabled, .export-btn:disabled {
@@ -598,14 +598,14 @@
     padding: 0.5rem 0.75rem;
     font-size: 0.8rem;
     color: var(--color-success, #28bd14);
-    background: #f0fdf0;
+    background: var(--bg-success);
     border-bottom: 1px solid var(--color-lightGrey, #d9e0eb);
     flex-shrink: 0;
   }
 
   .import-msg.error {
     color: var(--color-error, #d43939);
-    background: #fef2f2;
+    background: var(--bg-error);
   }
 
   .search-bar {
@@ -672,7 +672,7 @@
     height: 2rem;
     border-radius: 50%;
     background: var(--color-primary, #2f63f0);
-    color: #fff;
+    color: var(--color-darkGrey);
     display: flex;
     align-items: center;
     justify-content: center;
