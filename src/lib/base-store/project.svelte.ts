@@ -12,6 +12,9 @@ export default class ProjectStore {
 
   columns = $state([] as any[])
   tasks = $state([] as any[])
+  groupList = $state({ page: 0, perpage: 0, data: [] as any[], total: 0 })
+  groupDetail = $state<any>({ id: 0, project_id: 0, name: '', description: '' })
+  groupMembers = $state([] as any[])
 
   constructor(store: any, prefix: string) {
     this.store = store
@@ -226,6 +229,127 @@ export default class ProjectStore {
     const response = await methods.delete(`${this.prefix}/tasks/${id}`)
     if (response.ok) {
       this.tasks = this.tasks.filter((task: any) => task.id !== id)
+      return { ok: true }
+    }
+    return response
+  }
+
+  // Project Groups
+
+  fetchGroups = async (projectId: number, page = 1, perpage = 10) => {
+    await this.store.auth.refresh_token()
+    const response = await methods.get(`${this.prefix}/projects/${projectId}/groups`, {
+      page,
+      perpage,
+    })
+    if (response.ok) {
+      const data = await response.json()
+      this.groupList = data
+      return { ...data, ok: true }
+    }
+    return response
+  }
+
+  createGroup = async (projectId: number, fields: Record<string, any>) => {
+    await this.store.auth.refresh_token()
+    const response = await methods.post(`${this.prefix}/projects/${projectId}/groups`, fields)
+    if (response.ok) {
+      const data = await response.json()
+      this.groupList.data.push(data)
+      this.groupList.total += 1
+      return { ...data, ok: true }
+    }
+    return response
+  }
+
+  setGroupPermissions = async (groupId: number, permissions: string[]) => {
+    await this.store.auth.refresh_token()
+    const response = await methods.patch(`${this.prefix}/project-groups/${groupId}`, {
+      permissions,
+    })
+    if (response.ok) {
+      const data = await response.json()
+      this.groupDetail = data
+      this.groupList.data = this.groupList.data.map((group: any) =>
+        group.id === groupId ? data : group,
+      )
+      return { ...data, ok: true }
+    }
+    return response
+  }
+
+  fetchGroup = async (id: number) => {
+    await this.store.auth.refresh_token()
+    const response = await methods.get(`${this.prefix}/project-groups/${id}`)
+    if (response.ok) {
+      const data = await response.json()
+      this.groupDetail = data
+      return { ...data, ok: true }
+    }
+    return response
+  }
+
+  editGroup = async (id: number, fields: Record<string, any>) => {
+    await this.store.auth.refresh_token()
+    const response = await methods.patch(`${this.prefix}/project-groups/${id}`, fields)
+    if (response.ok) {
+      const data = await response.json()
+      this.groupDetail = data
+      this.groupList.data = this.groupList.data.map((group: any) =>
+        group.id === id ? data : group,
+      )
+      return { ...data, ok: true }
+    }
+    return response
+  }
+
+  destroyGroup = async (id: number) => {
+    await this.store.auth.refresh_token()
+    const response = await methods.delete(`${this.prefix}/project-groups/${id}`)
+    if (response.ok) {
+      this.groupList.data = this.groupList.data.filter((group: any) => group.id !== id)
+      this.groupList.total -= 1
+      return { ok: true }
+    }
+    return response
+  }
+
+  // Project Group Members
+
+  fetchGroupMembers = async (groupId: number, page = 1, perpage = 10) => {
+    await this.store.auth.refresh_token()
+    const response = await methods.get(`${this.prefix}/project-groups/${groupId}/members`, {
+      page,
+      perpage,
+    })
+    if (response.ok) {
+      const data = await response.json()
+      this.groupMembers = data.data
+      return { ...data, ok: true }
+    }
+    return response
+  }
+
+  addGroupMember = async (groupId: number, userId: number) => {
+    await this.store.auth.refresh_token()
+    const response = await methods.post(`${this.prefix}/project-groups/${groupId}/members`, {
+      user_id: userId,
+    })
+    if (response.ok) {
+      const data = await response.json()
+      this.groupMembers.push(data)
+      return { ...data, ok: true }
+    }
+    return response
+  }
+
+  removeGroupMember = async (groupId: number, userId: number) => {
+    await this.store.auth.refresh_token()
+    const response = await methods.delete(
+      `${this.prefix}/project-groups/${groupId}/members/${userId}`,
+    )
+    if (response.ok) {
+      this.groupMembers = this.groupMembers.filter((member: any) => member.user_id !== userId)
       return { ok: true }
     }
     return response

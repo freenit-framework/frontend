@@ -19,6 +19,7 @@
   let selectedTaskId = $state<number | null>(null)
   let selectedDescription = $state('')
   let selectedParentId = $state<string | null>(null)
+  let selectedAssigneeId = $state<string | null>(null)
 
   const selectedTask = $derived(
     selectedTaskId ? store.project.tasks.find((t: any) => t.id === selectedTaskId) : null,
@@ -36,6 +37,7 @@
     selectedTaskId = task.id
     selectedDescription = task.description || ''
     selectedParentId = task.parent_id ? String(task.parent_id) : null
+    selectedAssigneeId = task.assignee_id ? String(task.assignee_id) : null
   }
 
   function openTask(task: any) {
@@ -47,6 +49,7 @@
     selectedTaskId = null
     selectedDescription = ''
     selectedParentId = null
+    selectedAssigneeId = null
     goto(`/projects/${projectId}/boards/${boardId}`)
   }
 
@@ -66,6 +69,10 @@
     if (parentId !== (selectedTask.parent_id ?? null)) {
       fields.parent_id = parentId
     }
+    const assigneeId = normalizeParentId(selectedAssigneeId)
+    if (assigneeId !== (selectedTask.assignee_id ?? null)) {
+      fields.assignee_id = assigneeId
+    }
     if (Object.keys(fields).length === 0) return
 
     const response = await store.project.editTask(selectedTask.id, fields)
@@ -74,6 +81,7 @@
     } else {
       selectedDescription = response.description || ''
       selectedParentId = response.parent_id ? String(response.parent_id) : null
+      selectedAssigneeId = response.assignee_id ? String(response.assignee_id) : null
     }
   }
 
@@ -84,12 +92,22 @@
       .sort((a: any, b: any) => a.title.localeCompare(b.title))
   }
 
+  function userOptions() {
+    return [...store.user.list.data].sort((a: any, b: any) =>
+      (a.fullname || a.email).localeCompare(b.fullname || b.email),
+    )
+  }
+
   onMount(async () => {
     loading = true
-    const [boardResponse, columnsResponse] = await Promise.all([
+    const [boardResponse, columnsResponse, usersResponse] = await Promise.all([
       store.project.fetchBoard(boardId),
       store.project.fetchColumns(boardId),
+      store.user.fetchAll(),
     ])
+    if (!usersResponse.ok) {
+      notification.error(usersResponse.statusText)
+    }
     if (!boardResponse.ok) {
       notification.error(boardResponse.statusText)
     }
@@ -248,6 +266,15 @@
         <option value={null}>-- None --</option>
         {#each parentOptions() as task (task.id)}
           <option value={task.id}>{task.title}</option>
+        {/each}
+      </select>
+    </div>
+    <div class="field">
+      <label for="assignee">Assignee</label>
+      <select id="assignee" bind:value={selectedAssigneeId}>
+        <option value={null}>-- Unassigned --</option>
+        {#each userOptions() as user (user.id)}
+          <option value={user.id}>{user.fullname || user.email}</option>
         {/each}
       </select>
     </div>
