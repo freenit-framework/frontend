@@ -1,8 +1,8 @@
 {
   "name": "freenit",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "private": false,
-  "author": "Goran Mekić <meka@tilda.center>",
+  "author": "Goran Mekić <meka@sys.it.com>",
   "license": "BSD-2-Clause",
   "scripts": {
     "dev": "vite dev",
