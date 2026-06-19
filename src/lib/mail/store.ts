@@ -498,10 +498,13 @@ export async function deleteMailbox(mailboxId: string): Promise<void> {
     ])
     const response = result.methodResponses.find((item) => item[2] === 'destroyMailbox')
     if (response?.[0] === 'error') {
-      throw new Error(String(response[1].description ?? response[1].type ?? 'Mailbox deletion failed'))
+      throw new Error(
+        String(response[1].description ?? response[1].type ?? 'Mailbox deletion failed'),
+      )
     }
-    const notDestroyed = (response?.[1] as { notDestroyed?: Record<string, { description?: string; type?: string }> })
-      ?.notDestroyed?.[mailboxId]
+    const notDestroyed = (
+      response?.[1] as { notDestroyed?: Record<string, { description?: string; type?: string }> }
+    )?.notDestroyed?.[mailboxId]
     if (notDestroyed) {
       throw new Error(notDestroyed.description ?? notDestroyed.type ?? 'Mailbox deletion failed')
     }

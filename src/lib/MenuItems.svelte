@@ -32,6 +32,7 @@
       <MenuItem href="/domains" {toggle} icon={mdiSitemap}>Domains</MenuItem>
     {/if}
   {/if}
+  <MenuItem href="/projects" {toggle} icon={mdiSitemap}>Projects</MenuItem>
   <MenuItem href="/profile" {toggle} icon={mdiFaceManProfile}>Profile</MenuItem>
   <MenuItem href="/mail" {toggle} icon={mdiEmailOutline}>Mail</MenuItem>
   <MenuItem href="/calendar" {toggle} icon={mdiCalendarBlank}>Calendar</MenuItem>
