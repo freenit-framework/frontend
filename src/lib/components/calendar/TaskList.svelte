@@ -88,7 +88,7 @@
   }
 
   .task-title {
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     font-weight: 600;
     color: var(--color-grey, #60708a);
     text-transform: uppercase;
@@ -102,7 +102,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     font-weight: 600;
   }
 
@@ -117,7 +117,7 @@
 
   .empty {
     padding: 1rem;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     color: var(--color-grey, #60708a);
     text-align: center;
   }
@@ -169,7 +169,7 @@
   }
 
   .task-name {
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     color: var(--color-darkGrey, #1b2433);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -178,7 +178,7 @@
   }
 
   .task-due {
-    font-size: 0.75rem;
+    font-size: 0.86rem;
   }
 
   .task-due.needs-action {
@@ -207,7 +207,7 @@
     border: none;
     background: none;
     color: var(--color-grey, #60708a);
-    font-size: 1.1rem;
+    font-size: 1.26rem;
     cursor: pointer;
     border-radius: 50%;
     flex-shrink: 0;

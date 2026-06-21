@@ -305,7 +305,7 @@
   }
 
   .month-title {
-    font-size: 1rem;
+    font-size: 1.15rem;
     color: var(--color-darkGrey, #1b2433);
     min-width: 10rem;
     text-align: center;
@@ -317,7 +317,7 @@
     border-radius: 5px;
     cursor: pointer;
     padding: 0.2rem 0.6rem;
-    font-size: 1.2rem;
+    font-size: 1.38rem;
     color: var(--color-darkGrey, #1b2433);
     line-height: 1.4;
     transition: background 0.15s;
@@ -333,7 +333,7 @@
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     color: var(--color-darkGrey, #1b2433);
     transition: background 0.15s;
   }
@@ -354,7 +354,7 @@
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     color: var(--color-darkGrey, #1b2433);
     transition: background 0.15s;
   }
@@ -381,7 +381,7 @@
   .day-name {
     padding: 0.4rem;
     text-align: center;
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--color-grey, #60708a);
     text-transform: uppercase;
@@ -412,7 +412,7 @@
   }
 
   .day-num {
-    font-size: 0.82rem;
+    font-size: 0.94rem;
     color: var(--color-grey, #60708a);
     font-weight: 500;
     align-self: flex-end;
@@ -444,7 +444,7 @@
     border: none;
     border-radius: 4px;
     padding: 0.15rem 0.4rem;
-    font-size: 0.75rem;
+    font-size: 0.86rem;
     cursor: pointer;
     text-align: left;
     overflow: hidden;
@@ -457,7 +457,7 @@
   }
 
   .more {
-    font-size: 0.72rem;
+    font-size: 0.83rem;
     color: var(--color-grey, #60708a);
     padding: 0 0.3rem;
   }
@@ -505,12 +505,12 @@
     padding: 0.3rem;
     border-right: 1px solid var(--color-lightGrey, #d9e0eb);
     background: var(--bg-secondary-color, #f5f7fb);
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     color: var(--color-darkGrey, #1b2433);
   }
 
   .day-header-day {
-    font-size: 0.75rem;
+    font-size: 0.86rem;
     color: var(--color-grey, #60708a);
     text-transform: uppercase;
   }
@@ -546,7 +546,7 @@
 
   .hour-label {
     height: 3rem;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     color: var(--color-grey, #60708a);
     text-align: right;
     padding-right: 0.4rem;
@@ -578,7 +578,7 @@
     border: none;
     border-radius: 4px;
     padding: 0.15rem 0.3rem;
-    font-size: 0.75rem;
+    font-size: 0.86rem;
     cursor: pointer;
     text-align: left;
     overflow: hidden;

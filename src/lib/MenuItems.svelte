@@ -15,6 +15,7 @@
     mdiChatOutline,
     mdiEmailNewsletter,
     mdiSchool,
+    mdiSourceBranch,
   } from '@mdi/js'
   import MenuItem from '$lib/MenuItem.svelte'
   import { dbtype } from './utils.js'
@@ -34,6 +35,9 @@
     {/if}
     {#if has('mailinglist')}
       <MenuItem href="/mailinglists" {toggle} icon={mdiEmailNewsletter}>Mailing Lists</MenuItem>
+    {/if}
+    {#if has('git')}
+      <MenuItem href="/git" {toggle} icon={mdiSourceBranch}>Git</MenuItem>
     {/if}
     {#if has('domain') && dbtype(store.user.profile) === "ldap"}
       <MenuItem href="/domains" {toggle} icon={mdiSitemap}>Domains</MenuItem>

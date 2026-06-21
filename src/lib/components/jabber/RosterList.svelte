@@ -197,14 +197,14 @@
 
   h3 {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 600;
     color: var(--font-color, #333333);
     flex: 1;
   }
 
   .count {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     color: var(--color-grey, #60708a);
   }
 
@@ -215,7 +215,7 @@
     border-radius: 50%;
     width: 24px;
     height: 24px;
-    font-size: 1rem;
+    font-size: 1.15rem;
     line-height: 1;
     cursor: pointer;
     display: flex;
@@ -235,7 +235,7 @@
     padding: 0.35rem 0.5rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 4px;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
   }
 
   .join-actions {
@@ -250,7 +250,7 @@
     border-radius: 4px;
     background: var(--bg-color);
     color: var(--font-color, #333333);
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     cursor: pointer;
   }
 
@@ -271,7 +271,7 @@
     padding: 0.4rem 0.6rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 4px;
-    font-size: 0.875rem;
+    font-size: 1.01rem;
     box-sizing: border-box;
     background: var(--bg-secondary-color, #f5f7fb);
   }
@@ -285,7 +285,7 @@
     padding: 0.5rem 1rem;
     background: var(--bg-error);
     color: var(--color-error, #d43939);
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     border-bottom: 1px solid var(--color-error);
     flex-shrink: 0;
   }
@@ -294,12 +294,12 @@
     padding: 2rem 1rem;
     text-align: center;
     color: var(--color-grey, #60708a);
-    font-size: 0.9rem;
+    font-size: 1.03rem;
   }
 
   .status.small {
     padding: 1rem;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
   }
 
   .list-body {
@@ -331,7 +331,7 @@
   }
 
   .presence {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     line-height: 1.4rem;
     flex-shrink: 0;
   }
@@ -342,7 +342,7 @@
   }
 
   .name {
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     font-weight: 600;
     color: var(--font-color, #333333);
     white-space: nowrap;
@@ -351,7 +351,7 @@
   }
 
   .jid {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     color: var(--color-grey, #60708a);
     white-space: nowrap;
     overflow: hidden;
@@ -359,7 +359,7 @@
   }
 
   .status-text {
-    font-size: 0.75rem;
+    font-size: 0.86rem;
     color: var(--color-grey, #60708a);
     font-style: italic;
     white-space: nowrap;
@@ -370,7 +370,7 @@
   .leave-btn {
     display: none;
     color: var(--color-error, #d43939);
-    font-size: 1.1rem;
+    font-size: 1.26rem;
     cursor: pointer;
     padding: 0 0.2rem;
     line-height: 1;

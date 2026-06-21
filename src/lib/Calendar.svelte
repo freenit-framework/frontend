@@ -230,7 +230,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     font-weight: 600;
     transition: background 0.15s;
   }
@@ -244,7 +244,7 @@
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     color: var(--color-darkGrey, #1b2433);
     transition: background 0.15s;
   }
@@ -270,14 +270,14 @@
 
   h3 {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: var(--color-darkGrey, #1b2433);
   }
 
   .import-hint {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     color: var(--color-grey, #60708a);
   }
 
@@ -288,7 +288,7 @@
   }
 
   .label {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     font-weight: 600;
     color: var(--color-grey, #60708a);
     text-transform: uppercase;
@@ -299,7 +299,7 @@
     padding: 0.45rem 0.65rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     background: var(--bg-color, #fff);
     color: var(--color-darkGrey, #1b2433);
   }
@@ -316,7 +316,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     font-weight: 600;
     align-self: flex-start;
     transition: background 0.15s;
@@ -325,11 +325,11 @@
   .btn-primary:hover:not(:disabled) { filter: brightness(0.9); }
   .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
-  .btn-sm { padding: 0.25rem 0.65rem; font-size: 0.82rem; }
+  .btn-sm { padding: 0.25rem 0.65rem; font-size: 0.94rem; }
 
   .import-error {
     color: var(--color-error, #d43939);
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     padding: 0.4rem 0.6rem;
     background: var(--bg-error);
     border-radius: 4px;
@@ -337,7 +337,7 @@
 
   .import-success {
     color: var(--color-success);
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     padding: 0.4rem 0.6rem;
     background: var(--bg-success);
     border-radius: 4px;
@@ -349,7 +349,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     font-weight: 600;
     color: var(--color-darkGrey, #1b2433);
   }
@@ -373,7 +373,7 @@
   }
 
   .ev-title {
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     color: var(--color-darkGrey, #1b2433);
     white-space: nowrap;
     overflow: hidden;
@@ -381,12 +381,12 @@
   }
 
   .ev-date {
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     color: var(--color-grey, #60708a);
   }
 
   li.more {
-    font-size: 0.82rem;
+    font-size: 0.94rem;
     color: var(--color-grey, #60708a);
     border: none;
   }

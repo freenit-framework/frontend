@@ -70,7 +70,7 @@
     justify-content: center;
     height: 100%;
     color: var(--color-grey, #60708a);
-    font-size: 0.95rem;
+    font-size: 1.09rem;
   }
 
   @media (max-width: 640px) {

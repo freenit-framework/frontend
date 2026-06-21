@@ -72,3 +72,8 @@ export * as contactsTypes from './contacts/types'
 
 export { default as Files } from './Files.svelte'
 export * as filesStore from './files/store'
+
+export { default as Git } from './Git.svelte'
+export { default as GitBrowser } from './GitBrowser.svelte'
+export { default as GitDetail } from './GitDetail.svelte'
+export * as gitStore from './base-store/git.svelte'

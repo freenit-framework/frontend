@@ -362,7 +362,7 @@
   }
 
   .section-title {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     font-weight: 600;
     color: var(--color-grey, #60708a);
     text-transform: uppercase;
@@ -379,7 +379,7 @@
     background: var(--bg-color);
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.15rem;
     line-height: 1;
     color: var(--color-darkGrey, #1b2433);
   }
@@ -400,7 +400,7 @@
     padding: 0.35rem 0.5rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 4px;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
   }
 
   .form-actions {
@@ -415,7 +415,7 @@
     border-radius: 4px;
     background: var(--bg-color);
     color: var(--font-color, #333333);
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     cursor: pointer;
   }
 
@@ -440,7 +440,7 @@
     border: none;
     cursor: pointer;
     text-align: left;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     color: var(--color-darkGrey, #1b2433);
     position: relative;
   }
@@ -465,7 +465,7 @@
     padding: 0.35rem 0.5rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
   }
 
   .edit-actions {
@@ -481,7 +481,7 @@
     background: var(--bg-color);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.78rem;
+    font-size: 0.9rem;
   }
 
   .edit-actions .save-btn {
@@ -498,7 +498,7 @@
   }
 
   .book-count {
-    font-size: 0.75rem;
+    font-size: 0.86rem;
     color: var(--color-grey, #60708a);
     background: var(--bg-color, #fff);
     padding: 0.1rem 0.4rem;
@@ -512,7 +512,7 @@
   .edit-book,
   .delete-book {
     display: none;
-    font-size: 1rem;
+    font-size: 1.15rem;
     padding: 0 0.2rem;
     line-height: 1;
     cursor: pointer;
@@ -524,7 +524,7 @@
 
   .delete-book {
     color: var(--color-error, #d43939);
-    font-size: 1.1rem;
+    font-size: 1.26rem;
   }
 
   .book-item:hover .edit-book,
@@ -553,7 +553,7 @@
   }
 
   .list-title {
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     font-weight: 600;
     color: var(--color-grey, #60708a);
     text-transform: uppercase;
@@ -574,7 +574,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     font-weight: 600;
     transition: background 0.15s;
     background: var(--color-primary, #2f63f0);
@@ -596,7 +596,7 @@
 
   .import-msg {
     padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     color: var(--color-success, #28bd14);
     background: var(--bg-success);
     border-bottom: 1px solid var(--color-lightGrey, #d9e0eb);
@@ -619,7 +619,7 @@
     padding: 0.4rem 0.6rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     background: var(--bg-color, #fff);
     box-sizing: border-box;
   }
@@ -633,7 +633,7 @@
     padding: 2rem 1rem;
     text-align: center;
     color: var(--color-grey, #60708a);
-    font-size: 0.9rem;
+    font-size: 1.03rem;
   }
 
   .state-msg.error {
@@ -676,7 +676,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
+    font-size: 0.86rem;
     font-weight: 700;
     flex-shrink: 0;
   }
@@ -688,7 +688,7 @@
   }
 
   .name {
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     font-weight: 500;
     color: var(--color-darkGrey, #1b2433);
     white-space: nowrap;
@@ -701,7 +701,7 @@
   }
 
   .email {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     color: var(--color-grey, #60708a);
     white-space: nowrap;
     overflow: hidden;

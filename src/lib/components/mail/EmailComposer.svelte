@@ -248,7 +248,7 @@
 
   .composer-title {
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.15rem;
     color: var(--color-darkGrey, #1b2433);
   }
 
@@ -264,7 +264,7 @@
     border-radius: 5px;
     padding: 0.45rem 1rem;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     font-weight: 600;
     transition: background 0.15s;
   }
@@ -284,7 +284,7 @@
     border-radius: 5px;
     color: var(--color-grey, #60708a);
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     padding: 0.45rem 0.75rem;
     transition: color 0.15s, border-color 0.15s;
   }
@@ -298,7 +298,7 @@
     background: var(--bg-error);
     border-bottom: 1px solid var(--color-error);
     color: var(--color-error, #d43939);
-    font-size: 0.875rem;
+    font-size: 1.01rem;
     padding: 0.5rem 1rem;
     flex-shrink: 0;
   }
@@ -322,7 +322,7 @@
   label, .field-label {
     width: 4.5rem;
     flex-shrink: 0;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     font-weight: 600;
     color: var(--color-grey, #60708a);
     padding: 0.6rem 0;
@@ -332,7 +332,7 @@
     flex: 1;
     border: none;
     outline: none;
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     padding: 0.6rem 0;
     background: transparent;
     color: var(--font-color, #333333);
@@ -340,7 +340,7 @@
 
   .field-static {
     flex: 1;
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     color: var(--font-color, #333333);
     padding: 0.6rem 0;
   }
@@ -356,7 +356,7 @@
     border-radius: 3px;
     color: var(--color-grey, #60708a);
     cursor: pointer;
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     padding: 0.15rem 0.4rem;
     transition: color 0.1s, border-color 0.1s;
   }
@@ -378,7 +378,7 @@
     outline: none;
     resize: none;
     padding: 1rem;
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     font-family: inherit;
     line-height: 1.6;
     color: var(--font-color, #333333);
@@ -402,7 +402,7 @@
     border-radius: 4px;
     color: var(--color-grey, #60708a);
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     padding: 0.3rem 0.6rem;
     transition: color 0.1s, border-color 0.1s;
     flex-shrink: 0;
@@ -427,7 +427,7 @@
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 4px;
     padding: 0.2rem 0.5rem;
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     color: var(--font-color, #333333);
   }
 
@@ -436,7 +436,7 @@
     border: none;
     cursor: pointer;
     color: var(--color-grey, #60708a);
-    font-size: 0.75rem;
+    font-size: 0.86rem;
     padding: 0 0.1rem;
     line-height: 1;
   }

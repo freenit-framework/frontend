@@ -124,14 +124,14 @@
 
   h3 {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 600;
     color: var(--color-darkGrey, #1b2433);
     flex: 1;
   }
 
   .count {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     color: var(--color-grey, #60708a);
   }
 
@@ -146,7 +146,7 @@
     padding: 0.4rem 0.6rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 4px;
-    font-size: 0.875rem;
+    font-size: 1.01rem;
     box-sizing: border-box;
     background: var(--bg-secondary-color, #f5f7fb);
   }
@@ -160,7 +160,7 @@
     padding: 0.5rem 1rem;
     background: var(--bg-error);
     color: var(--color-error, #d43939);
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     border-bottom: 1px solid var(--color-error);
     flex-shrink: 0;
   }
@@ -169,7 +169,7 @@
     padding: 2rem 1rem;
     text-align: center;
     color: var(--color-grey, #60708a);
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     flex: 1;
   }
 
@@ -205,7 +205,7 @@
     cursor: pointer;
     padding: 0.2rem 0.3rem;
     border-radius: 3px;
-    font-size: 0.875rem;
+    font-size: 1.01rem;
     opacity: 0.7;
     transition: opacity 0.1s, background 0.1s;
   }

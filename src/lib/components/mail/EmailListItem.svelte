@@ -80,7 +80,7 @@
   }
 
   .sender {
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     color: var(--color-darkGrey, #1b2433);
     white-space: nowrap;
     overflow: hidden;
@@ -93,14 +93,14 @@
   }
 
   .date {
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     color: var(--color-grey, #60708a);
     white-space: nowrap;
     flex-shrink: 0;
   }
 
   .subject {
-    font-size: 0.875rem;
+    font-size: 1.01rem;
     color: var(--color-darkGrey, #1b2433);
     white-space: nowrap;
     overflow: hidden;
@@ -109,7 +109,7 @@
   }
 
   .preview {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     color: var(--color-grey, #60708a);
     white-space: nowrap;
     overflow: hidden;
@@ -120,7 +120,7 @@
     position: absolute;
     right: 0.5rem;
     bottom: 0.5rem;
-    font-size: 0.75rem;
+    font-size: 0.86rem;
     display: flex;
     gap: 0.2rem;
   }

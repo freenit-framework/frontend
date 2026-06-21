@@ -93,7 +93,7 @@
   }
 
   .connection-status {
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     font-weight: 600;
     min-width: 7rem;
   }
@@ -122,7 +122,7 @@
     padding: 0.4rem 0.6rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 4px;
-    font-size: 0.875rem;
+    font-size: 1.01rem;
     font-family: monospace;
   }
 
@@ -137,7 +137,7 @@
     border-radius: 4px;
     background: var(--bg-color);
     color: var(--font-color, #333333);
-    font-size: 0.875rem;
+    font-size: 1.01rem;
     cursor: pointer;
     transition: background 0.1s;
   }
@@ -155,14 +155,14 @@
     padding: 0.5rem 1rem;
     background: var(--bg-error);
     color: var(--color-error, #d43939);
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     border-bottom: 1px solid var(--color-error);
     flex-shrink: 0;
   }
 
   .global-error .url {
     font-family: monospace;
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     margin-top: 0.2rem;
     opacity: 0.8;
   }

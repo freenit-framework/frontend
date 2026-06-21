@@ -140,7 +140,7 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.95rem;
+    font-size: 1.09rem;
     font-weight: 600;
     text-align: left;
     transition: background 0.15s;
@@ -179,7 +179,7 @@
     border-radius: 0;
     cursor: pointer;
     text-align: left;
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     color: var(--font-color, #333333);
     transition: background 0.1s;
   }
@@ -207,7 +207,7 @@
     background: transparent;
     color: var(--color-error, #d43939);
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.15rem;
     line-height: 1;
     opacity: 0;
     pointer-events: none;
@@ -224,7 +224,7 @@
   }
 
   .expand-icon {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     width: 1rem;
     text-align: center;
     flex-shrink: 0;
@@ -238,7 +238,7 @@
   }
 
   .mailbox-icon {
-    font-size: 1rem;
+    font-size: 1.15rem;
     flex-shrink: 0;
   }
 
@@ -253,7 +253,7 @@
     background: var(--color-primary, #2f63f0);
     color: var(--color-darkGrey);
     border-radius: 10px;
-    font-size: 0.75rem;
+    font-size: 0.86rem;
     font-weight: 700;
     padding: 0.1rem 0.45rem;
     min-width: 1.4rem;
@@ -265,6 +265,6 @@
     padding: 1rem;
     text-align: center;
     color: var(--color-grey, #60708a);
-    font-size: 0.85rem;
+    font-size: 0.98rem;
   }
 </style>

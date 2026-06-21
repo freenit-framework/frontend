@@ -171,7 +171,7 @@
 
   h2 {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.38rem;
     font-weight: 700;
     color: var(--color-darkGrey, #1b2433);
   }
@@ -188,7 +188,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     font-weight: 600;
     transition: background 0.15s;
   }
@@ -208,7 +208,7 @@
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     color: var(--color-darkGrey, #1b2433);
     transition: background 0.15s;
   }
@@ -224,7 +224,7 @@
 
   .error {
     color: var(--color-error, #d43939);
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     margin-bottom: 1rem;
     padding: 0.5rem 0.75rem;
     background: var(--bg-error);
@@ -253,7 +253,7 @@
   }
 
   .label {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     font-weight: 600;
     color: var(--color-grey, #60708a);
     text-transform: uppercase;
@@ -266,7 +266,7 @@
     padding: 0.5rem 0.7rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     font-family: inherit;
     background: var(--bg-color, #fff);
     color: var(--color-darkGrey, #1b2433);

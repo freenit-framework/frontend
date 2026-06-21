@@ -127,7 +127,7 @@
     justify-content: center;
     height: 100%;
     color: var(--color-grey, #60708a);
-    font-size: 0.95rem;
+    font-size: 1.09rem;
   }
 
   .chat-header {
@@ -141,17 +141,17 @@
 
   .chat-with {
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.15rem;
     color: var(--font-color, #333333);
   }
 
   .chat-jid {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     color: var(--color-grey, #60708a);
   }
 
   .chat-badge {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     background: var(--color-primary, #2f63f0);
     color: var(--color-darkGrey);
     padding: 0.1rem 0.4rem;
@@ -167,7 +167,7 @@
     border-radius: 5px;
     padding: 0.2rem 0.4rem;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     margin-top: 0.2rem;
   }
 
@@ -190,7 +190,7 @@
     text-align: center;
     color: var(--color-grey, #60708a);
     padding: 2rem;
-    font-size: 0.9rem;
+    font-size: 1.03rem;
   }
 
   .message {
@@ -209,7 +209,7 @@
     max-width: 70%;
     padding: 0.6rem 0.9rem;
     border-radius: 12px;
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     line-height: 1.4;
     word-break: break-word;
   }
@@ -227,7 +227,7 @@
   }
 
   .bubble .sender {
-    font-size: 0.75rem;
+    font-size: 0.86rem;
     font-weight: 600;
     color: var(--color-primary, #2f63f0);
     margin-bottom: 0.2rem;
@@ -238,7 +238,7 @@
   }
 
   .bubble .meta {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     margin-top: 0.3rem;
     opacity: 0.7;
     text-align: right;
@@ -246,7 +246,7 @@
 
   .bubble .body .lock {
     margin-left: 0.3rem;
-    font-size: 0.75rem;
+    font-size: 0.86rem;
   }
 
   .bubble .body.failed {
@@ -269,7 +269,7 @@
     padding: 0.5rem 0.75rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     font-family: inherit;
   }
 
@@ -284,7 +284,7 @@
     border-radius: 8px;
     background: var(--color-primary, #2f63f0);
     color: var(--color-darkGrey);
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     cursor: pointer;
     transition: background 0.1s;
   }

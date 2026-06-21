@@ -340,7 +340,7 @@
     background: var(--bg-color);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     font-weight: 600;
     color: var(--color-darkGrey, #1b2433);
     transition: background 0.15s, color 0.15s;
@@ -366,7 +366,7 @@
   }
 
   .section-title {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     font-weight: 600;
     color: var(--color-grey, #60708a);
     text-transform: uppercase;
@@ -383,7 +383,7 @@
     background: var(--bg-color);
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.15rem;
     line-height: 1;
     color: var(--color-darkGrey, #1b2433);
   }
@@ -409,7 +409,7 @@
     padding: 0.4rem 0.6rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
   }
 
   .form-actions {
@@ -423,7 +423,7 @@
     background: var(--bg-color);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.92rem;
   }
 
   .save-btn {
@@ -439,7 +439,7 @@
 
   .message {
     padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     color: var(--color-success, #28bd14);
     background: var(--bg-success);
     border-bottom: 1px solid var(--color-lightGrey, #d9e0eb);
@@ -471,7 +471,7 @@
     background: none;
     cursor: pointer;
     text-align: left;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     color: var(--color-darkGrey, #1b2433);
     border-bottom: 1px solid var(--color-lightGrey, #d9e0eb);
     transition: background 0.1s;
@@ -496,7 +496,7 @@
     padding: 0.35rem 0.5rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
   }
 
   .edit-actions {
@@ -511,7 +511,7 @@
     background: var(--bg-color);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.78rem;
+    font-size: 0.9rem;
   }
 
   .edit-actions .save-btn {
@@ -528,7 +528,7 @@
   }
 
   .calendar-count {
-    font-size: 0.75rem;
+    font-size: 0.86rem;
     color: var(--color-grey, #60708a);
     background: var(--bg-secondary-color, #f5f7fb);
     padding: 0.1rem 0.4rem;
@@ -542,7 +542,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    font-size: 1rem;
+    font-size: 1.15rem;
     line-height: 1;
     color: var(--color-grey, #60708a);
     cursor: pointer;
@@ -555,7 +555,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     line-height: 1;
     color: var(--color-grey, #60708a);
     cursor: pointer;
@@ -573,7 +573,7 @@
 
   .state-msg {
     padding: 0.75rem 1rem;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     color: var(--color-grey, #60708a);
     text-align: center;
   }

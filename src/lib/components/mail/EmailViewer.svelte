@@ -261,13 +261,13 @@
   }
 
   .empty-icon {
-    font-size: 3rem;
+    font-size: 3.45rem;
     opacity: 0.4;
   }
 
   .empty p {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 1.09rem;
   }
 
   .viewer-header {
@@ -286,7 +286,7 @@
   .subject {
     flex: 1;
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.26rem;
     font-weight: 700;
     color: var(--font-color, #333333);
     line-height: 1.3;
@@ -306,7 +306,7 @@
     border-radius: 4px;
     color: var(--font-color, #333333);
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     padding: 0.3rem 0.6rem;
     transition: background 0.1s, border-color 0.1s;
     white-space: nowrap;
@@ -332,7 +332,7 @@
   .meta-row {
     display: flex;
     gap: 0.5rem;
-    font-size: 0.875rem;
+    font-size: 1.01rem;
     line-height: 1.4;
   }
 
@@ -358,7 +358,7 @@
   }
 
   .attach-label {
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     color: var(--color-grey, #60708a);
     font-weight: 600;
   }
@@ -367,7 +367,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     padding: 0.25rem 0.6rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 4px;
@@ -382,7 +382,7 @@
 
   .attach-size {
     color: var(--color-grey, #60708a);
-    font-size: 0.8rem;
+    font-size: 0.92rem;
   }
 
   .body-area {
@@ -396,7 +396,7 @@
   .loading-body {
     padding: 2rem;
     color: var(--color-grey, #60708a);
-    font-size: 0.9rem;
+    font-size: 1.03rem;
   }
 
   .html-frame {
@@ -412,7 +412,7 @@
     padding: 1.25rem;
     margin: 0;
     font-family: var(--font-family-mono, monospace);
-    font-size: 0.875rem;
+    font-size: 1.01rem;
     line-height: 1.6;
     white-space: pre-wrap;
     word-break: break-word;
@@ -423,6 +423,6 @@
   .no-body {
     padding: 2rem;
     color: var(--color-grey, #60708a);
-    font-size: 0.9rem;
+    font-size: 1.03rem;
   }
 </style>

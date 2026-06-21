@@ -108,7 +108,7 @@
   .title {
     flex: 1;
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.38rem;
     font-weight: 700;
     color: var(--color-darkGrey, #1b2433);
     word-break: break-word;
@@ -126,7 +126,7 @@
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     color: var(--color-darkGrey, #1b2433);
     transition: background 0.15s;
   }
@@ -141,7 +141,7 @@
     border: 1px solid var(--color-error);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     color: var(--color-error, #d43939);
     transition: background 0.15s;
   }
@@ -161,7 +161,7 @@
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
     color: var(--color-grey, #60708a);
     transition: background 0.15s;
   }
@@ -172,7 +172,7 @@
 
   .error {
     color: var(--color-error, #d43939);
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     margin-bottom: 1rem;
   }
 
@@ -191,7 +191,7 @@
   .field-label {
     width: 6rem;
     flex-shrink: 0;
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     font-weight: 600;
     color: var(--color-grey, #60708a);
     text-transform: uppercase;
@@ -200,7 +200,7 @@
   }
 
   .field-value {
-    font-size: 0.92rem;
+    font-size: 1.06rem;
     color: var(--color-darkGrey, #1b2433);
   }
 

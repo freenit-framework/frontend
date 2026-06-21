@@ -108,7 +108,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.38rem;
     font-weight: 700;
     flex-shrink: 0;
   }
@@ -120,13 +120,13 @@
 
   h2 {
     margin: 0 0 0.2rem;
-    font-size: 1.3rem;
+    font-size: 1.49rem;
     font-weight: 700;
     color: var(--color-darkGrey, #1b2433);
   }
 
   .org {
-    font-size: 0.9rem;
+    font-size: 1.03rem;
     color: var(--color-grey, #60708a);
   }
 
@@ -142,7 +142,7 @@
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     color: var(--color-darkGrey, #1b2433);
     transition: background 0.15s;
   }
@@ -157,7 +157,7 @@
     border: 1px solid var(--color-error);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     color: var(--color-error, #d43939);
     transition: background 0.15s;
   }
@@ -173,7 +173,7 @@
 
   .error {
     color: var(--color-error, #d43939);
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     margin-bottom: 1rem;
   }
 
@@ -192,7 +192,7 @@
   .field-label {
     width: 7rem;
     flex-shrink: 0;
-    font-size: 0.82rem;
+    font-size: 0.94rem;
     font-weight: 600;
     color: var(--color-grey, #60708a);
     text-transform: uppercase;
@@ -207,7 +207,7 @@
   }
 
   .field-value {
-    font-size: 0.92rem;
+    font-size: 1.06rem;
     color: var(--color-darkGrey, #1b2433);
   }
 
@@ -216,7 +216,7 @@
   }
 
   .field-link {
-    font-size: 0.92rem;
+    font-size: 1.06rem;
     color: var(--color-primary, #2f63f0);
     text-decoration: none;
   }

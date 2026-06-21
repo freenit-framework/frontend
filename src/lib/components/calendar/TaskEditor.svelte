@@ -183,7 +183,7 @@
 
   h2 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.26rem;
     font-weight: 700;
     color: var(--color-darkGrey, #1b2433);
   }
@@ -200,7 +200,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     font-weight: 600;
     transition: background 0.15s;
   }
@@ -214,7 +214,7 @@
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     color: var(--color-darkGrey, #1b2433);
     transition: background 0.15s;
   }
@@ -228,7 +228,7 @@
     padding: 0.5rem 0.75rem;
     border-radius: 5px;
     margin-bottom: 1rem;
-    font-size: 0.85rem;
+    font-size: 0.98rem;
   }
 
   .form {
@@ -244,7 +244,7 @@
   }
 
   .label {
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     font-weight: 600;
     color: var(--color-grey, #60708a);
     text-transform: uppercase;
@@ -255,7 +255,7 @@
     padding: 0.45rem 0.65rem;
     border: 1px solid var(--color-lightGrey, #d9e0eb);
     border-radius: 5px;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     background: var(--bg-color, #fff);
     color: var(--color-darkGrey, #1b2433);
   }
@@ -273,7 +273,7 @@
     flex-direction: row;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.88rem;
+    font-size: 1.01rem;
     color: var(--color-darkGrey, #1b2433);
   }
 

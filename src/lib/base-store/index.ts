@@ -1,6 +1,7 @@
 import methods from '../methods'
 import AuthStore from './auth.svelte'
 import DomainStore from './domain.svelte'
+import GitStore from './git.svelte'
 import GroupStore from './group.svelte'
 import LMSStore from './lms.svelte'
 import MailingListStore from './mailinglist.svelte'
@@ -15,6 +16,7 @@ export default class BaseStore {
   modulesLoaded: boolean = $state(false)
   auth: AuthStore
   domain: DomainStore
+  git: GitStore
   group: GroupStore
   lms: LMSStore
   mailinglist: MailingListStore
@@ -26,6 +28,7 @@ export default class BaseStore {
     this.prefix = prefix
     this.auth = new AuthStore(this, prefix)
     this.domain = new DomainStore(this, prefix)
+    this.git = new GitStore(this, prefix)
     this.group = new GroupStore(this, prefix)
     this.lms = new LMSStore(this, prefix)
     this.mailinglist = new MailingListStore(this, prefix)
