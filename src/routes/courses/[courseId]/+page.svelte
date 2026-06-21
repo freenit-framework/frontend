@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Theme from '$lib/Theme.svelte'
+  import Course from '$lib/Course.svelte'
   import store from '$lib/store'
 
   let { data: props } = $props()
 </script>
 
-<Theme name={props.name} store={store} />
+<Course courseId={props.courseId} {store} />

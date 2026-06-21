@@ -23,6 +23,7 @@
   }
 
   onMount(async () => {
+    await store.loadModules()
     await store.auth.refresh_token()
   })
 </script>

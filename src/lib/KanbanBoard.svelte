@@ -7,6 +7,7 @@
   import Modal from './Modal.svelte'
   import Input from './Input.svelte'
   import RightPane from './RightPane.svelte'
+  import TaskDetail from './TaskDetail.svelte'
 
   let { projectId, boardId, taskId = null, store } = $props()
   let loading = $state(true)
@@ -17,9 +18,6 @@
   let taskDescription = $state('')
   let columnName = $state('')
   let selectedTaskId = $state<number | null>(null)
-  let selectedDescription = $state('')
-  let selectedParentId = $state<string | null>(null)
-  let selectedAssigneeId = $state<string | null>(null)
 
   const selectedTask = $derived(
     selectedTaskId ? store.project.tasks.find((t: any) => t.id === selectedTaskId) : null,
@@ -33,69 +31,19 @@
       : [],
   )
 
+  const selectedParentTask = $derived(
+    selectedTask && selectedTask.parent_id
+      ? store.project.tasks.find((t: any) => t.id === selectedTask.parent_id) || null
+      : null,
+  )
+
   function selectTask(task: any) {
     selectedTaskId = task.id
-    selectedDescription = task.description || ''
-    selectedParentId = task.parent_id ? String(task.parent_id) : null
-    selectedAssigneeId = task.assignee_id ? String(task.assignee_id) : null
-  }
-
-  function openTask(task: any) {
-    selectTask(task)
-    goto(`/projects/${projectId}/boards/${boardId}/tasks/${task.id}`)
   }
 
   function closeTask() {
     selectedTaskId = null
-    selectedDescription = ''
-    selectedParentId = null
-    selectedAssigneeId = null
     goto(`/projects/${projectId}/boards/${boardId}`)
-  }
-
-  function normalizeParentId(value: string | null): number | null {
-    if (value === null || value === '') return null
-    const parsed = parseInt(value, 10)
-    return Number.isNaN(parsed) ? null : parsed
-  }
-
-  async function saveTask() {
-    if (!selectedTask) return
-    const fields: Record<string, any> = {}
-    if (selectedDescription !== (selectedTask.description || '')) {
-      fields.description = selectedDescription || null
-    }
-    const parentId = normalizeParentId(selectedParentId)
-    if (parentId !== (selectedTask.parent_id ?? null)) {
-      fields.parent_id = parentId
-    }
-    const assigneeId = normalizeParentId(selectedAssigneeId)
-    if (assigneeId !== (selectedTask.assignee_id ?? null)) {
-      fields.assignee_id = assigneeId
-    }
-    if (Object.keys(fields).length === 0) return
-
-    const response = await store.project.editTask(selectedTask.id, fields)
-    if (!response.ok) {
-      notification.error(response.statusText)
-    } else {
-      selectedDescription = response.description || ''
-      selectedParentId = response.parent_id ? String(response.parent_id) : null
-      selectedAssigneeId = response.assignee_id ? String(response.assignee_id) : null
-    }
-  }
-
-  function parentOptions() {
-    if (!selectedTask) return []
-    return store.project.tasks
-      .filter((t: any) => t.id !== selectedTask.id)
-      .sort((a: any, b: any) => a.title.localeCompare(b.title))
-  }
-
-  function userOptions() {
-    return [...store.user.list.data].sort((a: any, b: any) =>
-      (a.fullname || a.email).localeCompare(b.fullname || b.email),
-    )
   }
 
   onMount(async () => {
@@ -190,7 +138,6 @@
       notification.error(response.statusText)
     }
   }
-
 </script>
 
 {#if loading}
@@ -210,7 +157,7 @@
             tasks={tasksForColumn(column.id)}
             {selectedTaskId}
             onDropTask={handleDropTask}
-            onSelect={openTask}
+            onSelect={selectTask}
             onDelete={deleteColumn}
           />
           <button class="button small" onclick={() => openCreateTask(column.id)}>
@@ -255,47 +202,14 @@
 
 <RightPane open={selectedTaskId !== null} toggle={closeTask}>
   {#if selectedTask}
-    <h3>{selectedTask.title}</h3>
-    <div class="field">
-      <label for="description">Description</label>
-      <textarea id="description" bind:value={selectedDescription} rows="5"></textarea>
-    </div>
-    <div class="field">
-      <label for="parent">Parent task</label>
-      <select id="parent" bind:value={selectedParentId}>
-        <option value={null}>-- None --</option>
-        {#each parentOptions() as task (task.id)}
-          <option value={task.id}>{task.title}</option>
-        {/each}
-      </select>
-    </div>
-    <div class="field">
-      <label for="assignee">Assignee</label>
-      <select id="assignee" bind:value={selectedAssigneeId}>
-        <option value={null}>-- Unassigned --</option>
-        {#each userOptions() as user (user.id)}
-          <option value={user.id}>{user.fullname || user.email}</option>
-        {/each}
-      </select>
-    </div>
-    {#if selectedTaskChildren.length > 0}
-      <div class="field">
-        <span class="label">Child tickets</span>
-        <ul class="child-list">
-          {#each selectedTaskChildren as child (child.id)}
-            <li>
-              <button class="button link" onclick={() => openTask(child)} type="button">
-                {child.title}
-              </button>
-            </li>
-          {/each}
-        </ul>
-      </div>
-    {/if}
-    <div class="actions">
-      <button class="button primary" onclick={saveTask} type="button">Save</button>
-      <button class="button error" onclick={closeTask} type="button">Close</button>
-    </div>
+    <TaskDetail
+      task={selectedTask}
+      children={selectedTaskChildren}
+      parent={selectedParentTask}
+      {projectId}
+      {boardId}
+      showLink={true}
+    />
   {/if}
 </RightPane>
 
@@ -338,66 +252,5 @@
   .actions button {
     margin-left: 10px;
     margin-right: 10px;
-  }
-
-  .field {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .field label {
-    font-size: 0.875rem;
-    margin-bottom: 6px;
-    color: var(--color-grey);
-  }
-
-  .field select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid var(--color-lightGrey);
-    border-radius: 4px;
-    background-color: var(--bg-color);
-    color: var(--font-color);
-  }
-
-  .field textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid var(--color-lightGrey);
-    border-radius: 4px;
-    background-color: var(--bg-color);
-    color: var(--font-color);
-    resize: vertical;
-    font-family: inherit;
-  }
-
-  .field .label {
-    font-size: 0.875rem;
-    margin-bottom: 6px;
-    color: var(--color-grey);
-  }
-
-  .child-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .child-list li {
-    margin-bottom: 4px;
-  }
-
-  .button.link {
-    background: none;
-    border: none;
-    color: var(--color-primary);
-    text-align: left;
-    padding: 0;
-    cursor: pointer;
-  }
-
-  .button.link:hover {
-    text-decoration: underline;
   }
 </style>

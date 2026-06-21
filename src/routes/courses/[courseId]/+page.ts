@@ -1,5 +1,5 @@
 export const load = ({ params }) => {
   return {
-    name: params.name,
+    courseId: Number(params.courseId),
   }
 }

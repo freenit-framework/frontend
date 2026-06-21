@@ -213,6 +213,16 @@ export default class ProjectStore {
     return response
   }
 
+  fetchTask = async (id: number) => {
+    await this.store.auth.refresh_token()
+    const response = await methods.get(`${this.prefix}/tasks/${id}`)
+    if (response.ok) {
+      const data = await response.json()
+      return { ...data, ok: true }
+    }
+    return response
+  }
+
   editTask = async (id: number, fields: Record<string, any>) => {
     await this.store.auth.refresh_token()
     const response = await methods.patch(`${this.prefix}/tasks/${id}`, fields)
