@@ -16,6 +16,7 @@
     mdiEmailNewsletter,
     mdiSchool,
     mdiSourceBranch,
+    mdiBookOutline,
   } from '@mdi/js'
   import MenuItem from '$lib/MenuItem.svelte'
   import { dbtype } from './utils.js'
@@ -63,13 +64,19 @@
   {#if has('sieve')}
     <MenuItem href="/sieve" {toggle} icon={mdiFilterOutline}>Filters</MenuItem>
   {/if}
-  {#if has('jabber')}
-    <MenuItem href="/jabber" {toggle} icon={mdiChatOutline}>Jabber</MenuItem>
+  {#if has('chat')}
+    <MenuItem href="/chat" {toggle} icon={mdiChatOutline}>Chat</MenuItem>
+  {/if}
+  {#if has('blog')}
+    <MenuItem href="/blog" {toggle} icon={mdiBookOutline}>Blog</MenuItem>
   {/if}
   <MenuItem href="/" toggle={logout} icon={mdiLogoutVariant}>Logout</MenuItem>
 {:else}
   {#if has('mailinglist')}
     <MenuItem href="/mailinglists/public" {toggle} icon={mdiEmailNewsletter}>Mailing Lists</MenuItem>
+  {/if}
+  {#if has('blog')}
+    <MenuItem href="/blog" {toggle} icon={mdiBookOutline}>Blog</MenuItem>
   {/if}
   <MenuItem href="/register" {toggle} icon={mdiArrowDownBoldCircleOutline}>Register</MenuItem>
   <MenuItem href="/login" {toggle} icon={mdiLoginVariant}>Login</MenuItem>

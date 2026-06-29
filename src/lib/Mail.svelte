@@ -1,11 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import {
-    initMail,
-    disconnectMailWebSocket,
-    deleteEmail,
-    selectedEmailId,
-  } from './mail/store'
+  import { deleteEmail, selectedEmailId } from './mail/store'
   import MailSidebar from './components/mail/MailSidebar.svelte'
   import EmailList from './components/mail/EmailList.svelte'
   import EmailViewer from './components/mail/EmailViewer.svelte'
@@ -39,12 +34,10 @@
   }
 
   onMount(() => {
-    void initMail()
     window.addEventListener('keydown', handleKeydown)
 
     return () => {
       window.removeEventListener('keydown', handleKeydown)
-      disconnectMailWebSocket()
     }
   })
 </script>

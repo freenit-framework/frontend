@@ -6,7 +6,7 @@ set -e
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CRATE="$ROOT/omemo"
-OUTDIR="$ROOT/src/lib/jabber/omemo/wasm"
+OUTDIR="$ROOT/src/lib/chat/omemo/wasm"
 WASM_BINDGEN_ROOT="$CRATE/.cargo-bin"
 WASM_BINDGEN="$WASM_BINDGEN_ROOT/bin/wasm-bindgen"
 

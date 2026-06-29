@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { jabberStore } from '$lib/jabber/store.svelte'
-  import type { RosterItem } from '$lib/jabber/types'
+  import { chatStore } from '$lib/chat/store.svelte'
+  import type { RosterItem } from '$lib/chat/types'
 
   let searchQuery = $state('')
   let showJoinRoom = $state(false)
@@ -9,14 +9,14 @@
 
   const filteredRoster = $derived.by(() => {
     const query = searchQuery.trim().toLowerCase()
-    const selfJid = jabberStore.myJid
+    const selfJid = chatStore.myJid
     let items = query
-      ? jabberStore.roster.filter(
+      ? chatStore.roster.filter(
           r =>
             r.jid.toLowerCase().includes(query) ||
             (r.name && r.name.toLowerCase().includes(query))
         )
-      : [...jabberStore.roster]
+      : [...chatStore.roster]
 
     if (selfJid && !items.some((r) => r.jid === selfJid)) {
       items.push({ jid: selfJid, name: 'Me', subscription: 'both', presence: 'available', status: '' })
@@ -35,12 +35,12 @@
 
   const filteredRooms = $derived(
     searchQuery.trim()
-      ? jabberStore.rooms.filter(
+      ? chatStore.rooms.filter(
           r =>
             r.jid.toLowerCase().includes(searchQuery.toLowerCase()) ||
             (r.name && r.name.toLowerCase().includes(searchQuery.toLowerCase()))
         )
-      : jabberStore.rooms
+      : chatStore.rooms
   )
 
   function presenceDot(presence?: string): string {
@@ -60,14 +60,14 @@
   function toggleJoinRoom() {
     showJoinRoom = !showJoinRoom
     if (showJoinRoom) {
-      const localpart = jabberStore.myJid.split('@')[0]
+      const localpart = chatStore.myJid.split('@')[0]
       roomNick = localpart || 'user'
     }
   }
 
   async function doJoinRoom() {
     if (!roomJid.trim() || !roomNick.trim()) return
-    await jabberStore.joinRoom(roomJid.trim(), roomNick.trim())
+    await chatStore.joinRoom(roomJid.trim(), roomNick.trim())
     showJoinRoom = false
     roomJid = ''
   }
@@ -88,21 +88,21 @@
     />
   </div>
 
-  {#if jabberStore.error && !jabberStore.connected}
-    <div class="error-bar">{jabberStore.error}</div>
+  {#if chatStore.error && !chatStore.connected}
+    <div class="error-bar">{chatStore.error}</div>
   {/if}
 
   {#if filteredRoster.length === 0}
     <div class="status">
-      {jabberStore.connected ? 'No contacts' : 'Not connected'}
+      {chatStore.connected ? 'No contacts' : 'Not connected'}
     </div>
   {:else}
     <div class="list-body">
       {#each filteredRoster as item (item.jid)}
         <button
           class="roster-item"
-          class:selected={jabberStore.selectedJid === item.jid && !jabberStore.selectedIsRoom}
-          onclick={() => jabberStore.selectJid(item.jid, false)}
+          class:selected={chatStore.selectedJid === item.jid && !chatStore.selectedIsRoom}
+          onclick={() => chatStore.selectJid(item.jid, false)}
         >
           <span class="presence">{presenceDot(item.presence)}</span>
           <div class="info">
@@ -148,8 +148,8 @@
       {#each filteredRooms as room (room.jid)}
         <button
           class="roster-item"
-          class:selected={jabberStore.selectedJid === room.jid && jabberStore.selectedIsRoom}
-          onclick={() => jabberStore.selectJid(room.jid, true)}
+          class:selected={chatStore.selectedJid === room.jid && chatStore.selectedIsRoom}
+          onclick={() => chatStore.selectJid(room.jid, true)}
         >
           <span class="presence">{room.joined ? '🟢' : '🟡'}</span>
           <div class="info">
@@ -158,8 +158,8 @@
           </div>
           <span
             class="leave-btn"
-            onclick={(e) => { e.stopPropagation(); jabberStore.leaveRoom(room.jid) }}
-            onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); jabberStore.leaveRoom(room.jid) } }}
+            onclick={(e) => { e.stopPropagation(); chatStore.leaveRoom(room.jid) }}
+            onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); chatStore.leaveRoom(room.jid) } }}
             role="button"
             tabindex={0}
             title="Leave room"

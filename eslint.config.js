@@ -16,7 +16,7 @@ export default ts.config(
   prettier,
   ...svelte.configs['flat/prettier'],
   {
-    ignores: ['src/lib/jabber/omemo/wasm/freenit_omemo*'],
+    ignores: ['src/lib/chat/omemo/wasm/freenit_omemo*'],
   },
   {
     files: ['**/*.svelte.ts', '**/*.svelte.js'],

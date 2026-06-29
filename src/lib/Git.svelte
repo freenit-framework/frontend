@@ -11,6 +11,7 @@
   let path = $state('')
   let description = $state('')
   let isPublic = $state(false)
+  let webhookUrl = $state('')
   let projectId = $state<number | ''>('', )
   let { store } = $props()
 
@@ -62,6 +63,7 @@
       project_id: projectId,
       description: description || undefined,
       public: isPublic,
+      webhook_url: webhookUrl || undefined,
     })
     if (!response.ok) {
       notification.error(response.statusText)
@@ -70,6 +72,7 @@
       path = ''
       description = ''
       isPublic = false
+      webhookUrl = ''
       projectId = store.project.list.data[0]?.id ?? ''
       showCreate = false
     }
@@ -131,6 +134,7 @@
       {/each}
     </select>
     <Input bind:value={description} type="text" name="description" label="Description" />
+    <Input bind:value={webhookUrl} type="url" name="webhook_url" label="Webhook URL" />
     <label class="checkbox-label">
       <input type="checkbox" bind:checked={isPublic} />
       Public

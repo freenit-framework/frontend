@@ -1,12 +1,7 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte'
-  import { initMail, disconnectMailWebSocket } from './mail/store'
   import MailSidebar from './components/mail/MailSidebar.svelte'
 
   let { children } = $props()
-
-  onMount(async () => { await initMail() })
-  onDestroy(() => { disconnectMailWebSocket() })
 </script>
 
 <div class="mail-shell">

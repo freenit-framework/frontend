@@ -15,6 +15,7 @@ export default class GitStore {
     default_branch: 'main',
     tests_enabled: false,
     test_command: '',
+    webhook_url: '',
     created_at: '',
     updated_at: '',
   })

@@ -1,5 +1,6 @@
 import methods from '../methods'
 import AuthStore from './auth.svelte'
+import BlogStore from './blog.svelte'
 import DomainStore from './domain.svelte'
 import GitStore from './git.svelte'
 import GroupStore from './group.svelte'
@@ -15,6 +16,7 @@ export default class BaseStore {
   modules: string[] = $state(['auth', 'user', 'role'])
   modulesLoaded: boolean = $state(false)
   auth: AuthStore
+  blog: BlogStore
   domain: DomainStore
   git: GitStore
   group: GroupStore
@@ -27,6 +29,7 @@ export default class BaseStore {
   constructor(prefix = '/api/v1') {
     this.prefix = prefix
     this.auth = new AuthStore(this, prefix)
+    this.blog = new BlogStore(this, prefix)
     this.domain = new DomainStore(this, prefix)
     this.git = new GitStore(this, prefix)
     this.group = new GroupStore(this, prefix)

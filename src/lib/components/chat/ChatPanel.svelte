@@ -1,31 +1,31 @@
 <script lang="ts">
-  import { jabberStore } from '$lib/jabber/store.svelte'
+  import { chatStore } from '$lib/chat/store.svelte'
 
   let messageText = $state('')
 
   const messages = $derived.by(() => {
-    if (!jabberStore.selectedJid) return []
-    return jabberStore.getMessages(jabberStore.selectedJid)
+    if (!chatStore.selectedJid) return []
+    return chatStore.getMessages(chatStore.selectedJid)
   })
 
   async function send() {
     const text = messageText.trim()
-    if (!text || !jabberStore.selectedJid) return
-    if (jabberStore.selectedIsRoom) {
-      await jabberStore.sendRoomMessage(jabberStore.selectedJid, text)
+    if (!text || !chatStore.selectedJid) return
+    if (chatStore.selectedIsRoom) {
+      await chatStore.sendRoomMessage(chatStore.selectedJid, text)
     } else {
-      await jabberStore.sendMessage(jabberStore.selectedJid, text)
+      await chatStore.sendMessage(chatStore.selectedJid, text)
     }
     messageText = ''
   }
 
   function isOmemoEnabled(): boolean {
-    return jabberStore.selectedJid ? jabberStore.isOmemoEnabled(jabberStore.selectedJid) : false
+    return chatStore.selectedJid ? chatStore.isOmemoEnabled(chatStore.selectedJid) : false
   }
 
   function toggleOmemo() {
-    if (!jabberStore.selectedJid) return
-    jabberStore.toggleOmemo(jabberStore.selectedJid)
+    if (!chatStore.selectedJid) return
+    chatStore.toggleOmemo(chatStore.selectedJid)
   }
 
   function handleKey(e: KeyboardEvent) {
@@ -40,27 +40,41 @@
   }
 
   function chatTitle(): string {
-    if (!jabberStore.selectedJid) return ''
-    if (jabberStore.selectedIsRoom) {
-      return jabberStore.rooms.find(r => r.jid === jabberStore.selectedJid)?.name || jabberStore.selectedJid
+    if (!chatStore.selectedJid) return ''
+    if (chatStore.selectedIsRoom) {
+      return chatStore.rooms.find(r => r.jid === chatStore.selectedJid)?.name || chatStore.selectedJid
     }
-    return jabberStore.roster.find(r => r.jid === jabberStore.selectedJid)?.name || jabberStore.selectedJid
+    return chatStore.roster.find(r => r.jid === chatStore.selectedJid)?.name || chatStore.selectedJid
+  }
+
+  function startCall() {
+    if (chatStore.selectedJid && !chatStore.selectedIsRoom) {
+      chatStore.startAudioCall(chatStore.selectedJid)
+    }
   }
 </script>
 
 <div class="chat-panel">
-  {#if !jabberStore.selectedJid}
+  {#if !chatStore.selectedJid}
     <div class="empty">
       <p>Select a contact or room to start chatting</p>
     </div>
   {:else}
     <div class="chat-header">
       <span class="chat-with">{chatTitle()}</span>
-      <span class="chat-jid">{jabberStore.selectedJid}</span>
-      {#if jabberStore.selectedIsRoom}
+      <span class="chat-jid">{chatStore.selectedJid}</span>
+      {#if chatStore.selectedIsRoom}
         <span class="chat-badge">room</span>
       {/if}
-      {#if !jabberStore.selectedIsRoom}
+      {#if !chatStore.selectedIsRoom}
+        <button
+          class="call-button"
+          onclick={startCall}
+          disabled={chatStore.callState.status !== 'idle'}
+          title="Start audio call"
+        >
+          📞
+        </button>
         <button
           class="omemo-toggle"
           class:active={isOmemoEnabled()}
@@ -73,7 +87,7 @@
     </div>
 
     <div class="messages">
-      {#if jabberStore.isHistoryLoading(jabberStore.selectedJid)}
+      {#if chatStore.isHistoryLoading(chatStore.selectedJid)}
         <div class="loading-history">Loading history…</div>
       {:else if messages.length === 0}
         <div class="no-messages">No messages yet</div>
@@ -103,9 +117,9 @@
         onkeydown={handleKey}
         placeholder="Type a message…"
         rows={2}
-        disabled={!jabberStore.connected}
+        disabled={!chatStore.connected}
       ></textarea>
-      <button onclick={send} disabled={!jabberStore.connected || !messageText.trim()}>
+      <button onclick={send} disabled={!chatStore.connected || !messageText.trim()}>
         Send
       </button>
     </div>
@@ -174,6 +188,22 @@
   .omemo-toggle.active {
     background: var(--color-success, #28bd14);
     border-color: var(--color-success, #28bd14);
+  }
+
+  .call-button {
+    align-self: flex-start;
+    background: none;
+    border: 1px solid var(--color-lightGrey, #d9e0eb);
+    border-radius: 5px;
+    padding: 0.2rem 0.4rem;
+    cursor: pointer;
+    font-size: 1.03rem;
+    margin-top: 0.2rem;
+  }
+
+  .call-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   .messages {

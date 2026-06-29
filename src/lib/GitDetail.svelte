@@ -50,6 +50,7 @@
       default_branch: store.git.detail.default_branch,
       tests_enabled: store.git.detail.tests_enabled,
       test_command: store.git.detail.test_command || undefined,
+      webhook_url: store.git.detail.webhook_url || undefined,
     })
     saving = false
     if (!response.ok) {
@@ -133,6 +134,12 @@
         type="text"
         name="test_command"
         label="Test command"
+      />
+      <Input
+        bind:value={store.git.detail.webhook_url}
+        type="url"
+        name="webhook_url"
+        label="Webhook URL"
       />
       <div class="actions">
         <button class="button primary" type="submit" disabled={saving}>Save</button>

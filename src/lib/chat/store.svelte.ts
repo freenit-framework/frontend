@@ -1,14 +1,17 @@
 import * as XMPP from 'stanza'
 import type { Agent, Stanzas } from 'stanza'
-import type { ChatMessage, OmemoBundle, RosterItem, Room } from './types'
+import type { CallSignal, CallState, ChatMessage, OmemoBundle, RosterItem, Room } from './types'
+import { CallManager } from './calls/CallManager'
 import { OmemoManager } from './omemo/OmemoManager'
 import { error, notification } from '../notification'
+
+const CALL_SIGNAL_PREFIX = '__call__:'
 
 function bareJid(jid: string): string {
   return jid.split('/')[0]
 }
 
-class JabberStore {
+class ChatStore {
   client: Agent | null = $state(null)
   connected = $state(false)
   connecting = $state(false)
@@ -25,6 +28,22 @@ class JabberStore {
   historyLoading = $state<Set<string>>(new Set())
   omemoManager = $state<OmemoManager | null>(null)
   omemoEnabled = $state<Record<string, boolean>>({})
+  currentPath = $state('')
+
+  // Audio calls
+  callState = $state<CallState>({
+    status: 'idle',
+    peerJid: null,
+    error: null,
+    localStream: null,
+    remoteStream: null,
+  })
+  private callManager = new CallManager(
+    (state) => {
+      this.callState = state
+    },
+    (peerJid, signal) => this.sendCallSignal(peerJid, signal),
+  )
 
   // Reconnect state
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null
@@ -40,7 +59,7 @@ class JabberStore {
 
   async fetchConfig(): Promise<void> {
     try {
-      const response = await fetch('/api/v1/jabber/config', {
+      const response = await fetch('/api/v1/chat/config', {
         headers: { Accept: 'application/json' },
       })
       if (response.ok) {
@@ -193,7 +212,7 @@ class JabberStore {
       this.client = null
       if (reason) {
         const msg = reason.message || String(reason)
-        console.error('Jabber disconnected:', msg, 'URL:', this.attemptedURL)
+        console.error('Chat disconnected:', msg, 'URL:', this.attemptedURL)
         this.error = `Disconnected: ${msg} (${this.attemptedURL})`
       }
       if (wasConnected) {
@@ -212,7 +231,7 @@ class JabberStore {
       const condition = err?.condition || 'Stream error'
       const text = err?.text || ''
       this.error = `${condition}${text ? ': ' + text : ''} (${this.attemptedURL})`
-      console.error('Jabber stream error:', condition, text, 'URL:', this.attemptedURL)
+      console.error('Chat stream error:', condition, text, 'URL:', this.attemptedURL)
       this.connecting = false
     })
 
@@ -238,6 +257,14 @@ class JabberStore {
 
       const hasPayload = msg.body || msg.omemo
       if (hasPayload && (msg.type === 'chat' || msg.type === 'normal' || !msg.type)) {
+        if (msg.body?.startsWith(CALL_SIGNAL_PREFIX)) {
+          const signal = this.parseCallSignal(msg.body)
+          if (signal) {
+            const from = bareJid(msg.from || '')
+            await this.callManager.handleSignal(from, signal)
+          }
+          return
+        }
         await this.handleChatMessage(msg)
       }
     })
@@ -306,7 +333,7 @@ class JabberStore {
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Connection failed'
       this.error = `${msg} (${this.attemptedURL})`
-      console.error('Jabber connect error:', msg, 'URL:', this.attemptedURL)
+      console.error('Chat connect error:', msg, 'URL:', this.attemptedURL)
       this.connecting = false
       this.client = null
       this.scheduleReconnect(email)
@@ -328,7 +355,7 @@ class JabberStore {
     this.reconnectDelay = Math.min(this.reconnectDelay * 2, this.maxReconnectDelay)
     this.reconnectAttempts++
     if (this.reconnectAttempts > 1) {
-      error(`Jabber disconnected. Reconnecting in ${this.reconnectDelay / 1000}s…`)
+      error(`Chat disconnected. Reconnecting in ${this.reconnectDelay / 1000}s…`)
     }
   }
 
@@ -410,6 +437,15 @@ class JabberStore {
   }
 
   private async handleChatMessage(msg: Stanzas.ReceivedMessage) {
+    if (msg.body?.startsWith(CALL_SIGNAL_PREFIX)) {
+      const signal = this.parseCallSignal(msg.body)
+      if (signal) {
+        const from = bareJid(msg.from || '')
+        await this.callManager.handleSignal(from, signal)
+      }
+      return
+    }
+
     const from = bareJid(msg.from || '')
     const to = bareJid(msg.to || '')
     const isOutgoing = from === bareJid(this.myJid)
@@ -465,11 +501,9 @@ class JabberStore {
       ...(decryptionFailed ? { decryptionFailed: true } : {}),
     })
 
-    if (!isOutgoing) {
+    if (!isOutgoing && this.currentPath !== '/chat') {
       const name = this.roster.find((r) => r.jid === from)?.name
-      if (!this.selectedJid || this.selectedJid !== from) {
-        notification(`Message from ${name || msg.from}: ${body.substring(0, 60)}`)
-      }
+      notification(`Message from ${name || msg.from}: ${body.substring(0, 60)}`)
     }
 
     if (isOutgoing && to === from && !this.selectedJid) {
@@ -654,6 +688,38 @@ class JabberStore {
     this.omemoEnabled = { ...this.omemoEnabled, [jid]: !this.isOmemoEnabled(jid) }
   }
 
+  private async sendCallSignal(peerJid: string, signal: CallSignal) {
+    if (!this.client || !this.connected) return
+    const body = `${CALL_SIGNAL_PREFIX}${JSON.stringify(signal)}`
+    this.client.sendMessage({ to: peerJid, body })
+  }
+
+  private parseCallSignal(body: string): CallSignal | null {
+    if (!body.startsWith(CALL_SIGNAL_PREFIX)) return null
+    try {
+      return JSON.parse(body.slice(CALL_SIGNAL_PREFIX.length)) as CallSignal
+    } catch (e) {
+      console.error('Invalid call signal:', e)
+      return null
+    }
+  }
+
+  startAudioCall(jid: string) {
+    return this.callManager.startCall(jid)
+  }
+
+  acceptAudioCall(jid: string) {
+    return this.callManager.acceptCall(jid)
+  }
+
+  rejectAudioCall(jid: string) {
+    return this.callManager.rejectCall(jid)
+  }
+
+  endAudioCall() {
+    return this.callManager.endCall()
+  }
+
   selectJid(jid: string | null, isRoom = false) {
     this.selectedJid = jid
     this.selectedIsRoom = isRoom
@@ -667,4 +733,4 @@ class JabberStore {
   }
 }
 
-export const jabberStore = new JabberStore()
+export const chatStore = new ChatStore()

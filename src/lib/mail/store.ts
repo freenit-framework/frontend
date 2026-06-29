@@ -1,4 +1,5 @@
 import { writable, derived, get } from 'svelte/store'
+import { notification } from '../notification'
 import type {
   Mailbox,
   MailboxNode,
@@ -13,6 +14,11 @@ import type {
 let ws: WebSocket | null = null
 let wsReconnectTimer: ReturnType<typeof setTimeout> | null = null
 let wsReconnectDelay = 1000
+let currentPath = ''
+
+export function setMailCurrentPath(path: string) {
+  currentPath = path
+}
 
 async function refreshSession() {
   try {
@@ -86,6 +92,10 @@ async function handleStateChange(changed: Record<string, Record<string, string>>
 
   const mailboxId = get(selectedMailboxId)
   if ('Email' in changes && mailboxId) await fetchEmails(mailboxId)
+
+  if ('EmailDelivery' in changes && currentPath !== '/mail') {
+    notification('New email received')
+  }
 }
 
 // Data

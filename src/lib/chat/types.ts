@@ -32,3 +32,19 @@ export interface OmemoBundle {
   registrationId: number
   deviceId: number
 }
+
+export type CallStatus = 'idle' | 'incoming' | 'outgoing' | 'connected' | 'rejected' | 'ended'
+
+export interface CallSignal {
+  type: 'offer' | 'answer' | 'candidate' | 'reject' | 'end'
+  sdp?: string
+  candidate?: RTCIceCandidateInit | null
+}
+
+export interface CallState {
+  status: CallStatus
+  peerJid: string | null
+  error: string | null
+  localStream: MediaStream | null
+  remoteStream: MediaStream | null
+}

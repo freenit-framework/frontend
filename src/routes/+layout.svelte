@@ -7,7 +7,10 @@
   import LeftPane from '$lib/LeftPane.svelte'
   import MenuBar from '$lib/MenuBar.svelte'
   import MenuItems from '$lib/MenuItems.svelte'
+  import { initConnectivity } from '$lib/connectivity.svelte'
   import '$lib/theme.svelte'
+
+  initConnectivity()
 
   const options = {}
   let open = $state(false)
