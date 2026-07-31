@@ -40,11 +40,22 @@ export async function fetchScript(name: string): Promise<void> {
   }
 }
 
-export async function saveScript(name: string, content: string): Promise<void> {
+export async function saveScript(
+  name: string,
+  content: string,
+  previousName = '',
+  wasActive = false,
+): Promise<void> {
+  const isRename = Boolean(previousName) && previousName !== name
+  if (get(scripts).some((script) => script.name === name && script.name !== previousName)) {
+    sieveError.set('Script already exists')
+    return
+  }
+
   sieveLoading.set(true)
   sieveError.set(null)
   try {
-    const response = await fetch(`/api/v1/mail/sieve/scripts/${encodeURIComponent(name)}`, {
+    let response = await fetch(`/api/v1/mail/sieve/scripts/${encodeURIComponent(name)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content }),
@@ -53,7 +64,29 @@ export async function saveScript(name: string, content: string): Promise<void> {
       sieveError.set(response.statusText)
       return
     }
+
+    if (isRename && wasActive) {
+      response = await fetch(`/api/v1/mail/sieve/scripts/${encodeURIComponent(name)}/active`, {
+        method: 'POST',
+      })
+      if (!response.ok) {
+        sieveError.set(response.statusText)
+        return
+      }
+    }
+
+    if (isRename) {
+      response = await fetch(`/api/v1/mail/sieve/scripts/${encodeURIComponent(previousName)}`, {
+        method: 'DELETE',
+      })
+      if (!response.ok) {
+        sieveError.set(response.statusText)
+        return
+      }
+    }
+
     await fetchScripts()
+    await fetchScript(name)
   } catch (e) {
     sieveError.set(e instanceof Error ? e.message : 'Failed to save script')
   } finally {

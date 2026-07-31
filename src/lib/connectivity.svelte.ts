@@ -4,6 +4,7 @@ import { chatStore } from '$lib/chat/store.svelte'
 import { initMail, disconnectMailWebSocket, setMailCurrentPath } from '$lib/mail/store'
 
 let mailStarted = false
+let chatAutoConnectEmail: string | null = null
 
 export function initConnectivity() {
   // Keep mail/chat stores aware of the current route so notifications are
@@ -24,13 +25,17 @@ export function initConnectivity() {
     const modulesLoaded = store.modulesLoaded
     const email = store.user.profile?.email
 
-    if (loggedIn && modulesLoaded && modules.includes('chat') && email) {
-      if (!chatStore.connected && !chatStore.connecting) {
+    const chatEnabled = modulesLoaded && modules.includes('chat')
+
+    if (loggedIn && chatEnabled && email) {
+      if (!chatStore.connected && !chatStore.connecting && chatAutoConnectEmail !== email) {
+        chatAutoConnectEmail = email
         chatStore.connect(email)
       }
     }
 
-    if (!loggedIn) {
+    if (!loggedIn || !chatEnabled || !email) {
+      chatAutoConnectEmail = null
       chatStore.disconnect()
     }
 

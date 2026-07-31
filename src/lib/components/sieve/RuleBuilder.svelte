@@ -20,8 +20,11 @@
   let rules = $state<SieveRule[]>([])
   let rawMode = $state(false)
   let parseError = $state('')
+  let lastEmittedContent = ''
 
   $effect(() => {
+    if (content === lastEmittedContent) return
+
     const { rules: parsed, partial } = parseSieve(content)
     if (partial && content.trim().length > 0) {
       rawMode = true
@@ -33,7 +36,9 @@
   })
 
   function emit() {
-    onChange(generateSieve(rules))
+    const nextContent = generateSieve(rules)
+    lastEmittedContent = nextContent
+    onChange(nextContent)
   }
 
   function addRule() {
@@ -124,6 +129,7 @@
   }
 
   function handleRawChange(value: string) {
+    lastEmittedContent = value
     onChange(value)
   }
 </script>

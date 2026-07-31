@@ -21,6 +21,7 @@
   import RuleBuilder from './components/sieve/RuleBuilder.svelte'
 
   let editName = $state('')
+  let originalName = $state('')
   let editContent = $state('')
   let isNew = $state(false)
   let hasUnsavedChanges = $state(false)
@@ -33,6 +34,7 @@
     const s = $selectedScript
     if (s) {
       editName = s.name
+      originalName = s.name
       editContent = s.content
       isNew = s.name === ''
       hasUnsavedChanges = false
@@ -53,7 +55,7 @@
 
   async function handleSave() {
     if (!editName.trim()) return
-    await saveScript(editName.trim(), editContent)
+    await saveScript(editName.trim(), editContent, originalName, $selectedScript?.active ?? false)
   }
 
   async function handleDelete(name: string) {
@@ -100,25 +102,24 @@
   <div class="sieve-editor">
     {#if $selectedScript !== null}
       <div class="editor-toolbar">
-        {#if isNew}
-          <input
-            class="name-input"
-            type="text"
-            bind:value={editName}
-            placeholder="Script name…"
-          />
-        {:else}
-          <span class="script-title">{editName}</span>
+        <input
+          class="name-input"
+          type="text"
+          bind:value={editName}
+          oninput={() => (hasUnsavedChanges = true)}
+          placeholder="Script name…"
+        />
+        {#if !isNew}
           <button
             class="toggle-btn"
-            onclick={() => handleSetActive(editName, $selectedScript?.active ?? false)}
-            disabled={$sieveLoading}
+            onclick={() => handleSetActive(originalName, $selectedScript?.active ?? false)}
+            disabled={$sieveLoading || hasUnsavedChanges}
           >
             {$selectedScript?.active ? 'Deactivate' : 'Set Active'}
           </button>
           <button
             class="delete-btn"
-            onclick={() => handleDelete(editName)}
+            onclick={() => handleDelete(originalName)}
             disabled={$sieveLoading}
           >
             Delete
@@ -239,12 +240,6 @@
     border-bottom: 1px solid var(--color-lightGrey, #d9e0eb);
     background: var(--bg-secondary-color, #f5f7fb);
     flex-shrink: 0;
-  }
-
-  .script-title {
-    flex: 1;
-    font-weight: 600;
-    font-size: 0.95rem;
   }
 
   .name-input {
