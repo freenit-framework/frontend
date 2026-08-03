@@ -64,6 +64,22 @@ describe('generateSieve', () => {
     ])
     expect(script).toContain('header :contains "subject" "say \\"hello\\""')
   })
+
+  it('does not emit an empty require block', () => {
+    const script = generateSieve([
+      {
+        id: '1',
+        name: '',
+        all: false,
+        conditions: [{ field: 'subject', op: 'contains', value: 'news' }],
+        action: { type: 'discard' },
+        stop: false,
+      },
+    ])
+
+    expect(script).not.toContain('require [];')
+    expect(script).toContain('discard;')
+  })
 })
 
 describe('parseSieve', () => {

@@ -137,6 +137,10 @@ export function generateSieve(rules: SieveRule[]): string {
     return ''
   }
 
+  if (requires.size === 0) {
+    return `${body.join('\n')}\n`
+  }
+
   const header = `require [${Array.from(requires)
     .sort()
     .map((r) => `"${r}"`)
